@@ -12,22 +12,22 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "colors")
-public class Color {
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @Column(name = "code_color")
-    private String codeColor;
-
     @Column(name = "name")
     private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Category category;
 
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
@@ -37,6 +37,7 @@ public class Color {
     @UpdateTimestamp
     private ZonedDateTime updateAt;
 
-    @OneToMany(mappedBy = "color")
+
+    @OneToMany(mappedBy = "category")
     private List<Product> products;
 }
