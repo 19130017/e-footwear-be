@@ -1,13 +1,13 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -16,8 +16,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
+@ToString
 @Table(name = "categories")
-public class Category {
+public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,7 +29,7 @@ public class Category {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    private Category category;
+    private Category parentCategory;
 
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
@@ -36,7 +38,9 @@ public class Category {
     @Column(name = "update_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private ZonedDateTime updateAt;
-
+    @Column(name = "state")
+    @Enumerated(value = EnumType.STRING)
+    private EntityState state;
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;

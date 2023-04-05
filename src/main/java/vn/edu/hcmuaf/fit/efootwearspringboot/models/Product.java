@@ -1,12 +1,11 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -18,6 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SuperBuilder
 @Table(name = "products")
 
 public class Product implements Serializable {
@@ -34,9 +34,6 @@ public class Product implements Serializable {
 
     @Column(name = "slug")
     private String slug;
-
-    @Column(name = "discount_price")
-    private Integer discountPrice;
 
     @Column(name = "discount_rate")
     private Integer discountRate;
@@ -57,7 +54,9 @@ public class Product implements Serializable {
     @Column(name = "update_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private ZonedDateTime updateAt;
-
+    @Column(name = "state")
+    @Enumerated(value = EnumType.STRING)
+    private EntityState state;
     @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
@@ -78,4 +77,10 @@ public class Product implements Serializable {
     private List<ProductImage> productImage;
 
 
+    @Transient
+    private Integer discountPrice;
+
+    public Integer getDiscountPrice() {
+        return originPrice - (originPrice * discountRate / 100);
+    }
 }

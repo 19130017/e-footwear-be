@@ -9,9 +9,12 @@ import lombok.experimental.SuperBuilder;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.brand.BrandDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image.ProductImageDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,8 +35,11 @@ public class ProductDto {
     private ZonedDateTime createAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private ZonedDateTime updateAt;
-    private CategoryDto categoryDto;
-    private BrandDto brandDto;
-    private ColorDto colorDto;
-    private SizeDto sizeDto;
+
+    private EntityState state;
+    private CategoryDto category;
+    private BrandDto brand;
+    private ColorDto color;
+    private SizeDto size;
+
 }
