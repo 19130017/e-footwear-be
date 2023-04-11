@@ -18,12 +18,9 @@ public class HttpResponseSuccess extends HttpResponse {
         this.data = data;
     }
 
-    public HttpResponseSuccess(Boolean success, int httpStatusCode, HttpStatus httpStatus, ZonedDateTime timestamp) {
-        super(success, httpStatusCode, httpStatus, timestamp);
-    }
 
     public static HttpResponseSuccess success() {
-        return new HttpResponseSuccess(true, HttpStatus.OK.value(), HttpStatus.OK, ZonedDateTime.now());
+        return new HttpResponseSuccess(true, HttpStatus.OK.value(), HttpStatus.OK, ZonedDateTime.now(), "Success!");
     }
 
     public static HttpResponseSuccess success(Object data) {

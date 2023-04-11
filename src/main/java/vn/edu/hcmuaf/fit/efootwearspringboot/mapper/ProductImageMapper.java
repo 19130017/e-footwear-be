@@ -10,15 +10,13 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.models.ProductImage;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {ProductMapper.class})
+@Mapper(componentModel = "spring")
 @Component("productImageMapper")
 public interface ProductImageMapper {
     ProductImageMapper INSTANCE = Mappers.getMapper(ProductImageMapper.class);
 
-    @Mapping(source = "productImage.product", target = "product")
     ProductImageDto toDto(ProductImage productImage);
 
-    @InheritInverseConfiguration
     ProductImage toEntity(ProductImageDto productImageDto);
 
     List<ProductImage> toEntities(List<ProductImageDto> productImageDtos);

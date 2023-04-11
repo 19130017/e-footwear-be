@@ -13,7 +13,7 @@ import java.util.List;
 public interface SizeMapper {
     SizeMapper INSTANCE = Mappers.getMapper(SizeMapper.class);
 
-    SizeDto toDto(Size Size);
+    SizeDto toDto(Size size);
 
     Size toEntity(SizeDto sizeDto);
 

@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 public class DataResult extends AbstractResult {
     private Object data;
 
-
     public DataResult(Boolean success, HttpStatus httpStatus, String message, Object data) {
         super(success, httpStatus, message);
         this.data = data;

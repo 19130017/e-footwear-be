@@ -18,20 +18,16 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString
 @Table(name = "products")
-
 public class Product implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Column(name = "name")
     private String name;
-
-    @Column(name = "sku")
-    private String sku;
-
     @Column(name = "slug")
     private String slug;
 
@@ -41,29 +37,28 @@ public class Product implements Serializable {
     @Column(name = "origin_price")
     private Integer originPrice;
 
-    @Column(name = "quantity")
-    private Integer quantity;
+    @Column(name = "stock_quantity")
+    private Integer stockQuantity;
 
     @Column(name = "description")
     private String description;
-
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
     private ZonedDateTime createAt;
-
     @Column(name = "update_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private ZonedDateTime updateAt;
+
     @Column(name = "state")
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
-    @ManyToOne()
-    @JoinColumn(name = "category_id")
-    private Category category;
 
-    @OneToOne()
-    @JoinColumn(name = "brand_id")
-    private Brand brand;
+    @OneToMany(mappedBy = "product")
+    private List<ProductImage> productImage;
+
+    @ManyToOne()
+    @JoinColumn(name = "collection_id")
+    private Collection collection;
 
     @ManyToOne()
     @JoinColumn(name = "size_id")
@@ -73,12 +68,11 @@ public class Product implements Serializable {
     @JoinColumn(name = "color_id")
     private Color color;
 
-    @OneToMany(mappedBy = "product")
-    private List<ProductImage> productImage;
-
 
     @Transient
     private Integer discountPrice;
+    @Transient
+    private Integer importQuantity;
 
     public Integer getDiscountPrice() {
         return originPrice - (originPrice * discountRate / 100);

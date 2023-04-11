@@ -1,31 +1,23 @@
-package vn.edu.hcmuaf.fit.efootwearspringboot.models;
+package vn.edu.hcmuaf.fit.efootwearspringboot.dto.collection;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
-import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.List;
 
-@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @SuperBuilder
-@Table(name = "brands")
-public class Brand implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+public class CollectionDto {
     private Long id;
-    @Column(name = "name")
     private String name;
-
+    private EntityState state;
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
     private ZonedDateTime createAt;
@@ -33,11 +25,5 @@ public class Brand implements Serializable {
     @Column(name = "update_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private ZonedDateTime updateAt;
-    @Column(name = "state")
-    @Enumerated(value = EnumType.STRING)
-    private EntityState state;
-
-    @OneToOne(mappedBy = "brand")
-    private Product product;
-
+    private CategoryDto categoryDto;
 }

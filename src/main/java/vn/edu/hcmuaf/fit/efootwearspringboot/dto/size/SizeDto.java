@@ -22,6 +22,5 @@ public class SizeDto {
     private ZonedDateTime createAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private ZonedDateTime updateAt;
-
     private EntityState state;
 }

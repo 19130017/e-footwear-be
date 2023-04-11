@@ -17,6 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString
 @Table(name = "colors")
 public class Color implements Serializable {
     @Id
@@ -41,5 +42,5 @@ public class Color implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
     @OneToMany(mappedBy = "color")
-    private List<Product> products;
+    private List<Product> products ;
 }

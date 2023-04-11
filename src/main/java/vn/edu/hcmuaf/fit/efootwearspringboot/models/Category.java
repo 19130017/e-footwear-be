@@ -17,8 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString
-@Table(name = "categories")
+@Table(name = "categories", uniqueConstraints = @UniqueConstraint(columnNames = "slug"))
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,8 @@ public class Category implements Serializable {
     private Long id;
     @Column(name = "name")
     private String name;
+    @Column(name = "slug")
+    private String slug;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
@@ -43,5 +44,5 @@ public class Category implements Serializable {
     private EntityState state;
 
     @OneToMany(mappedBy = "category")
-    private List<Product> products;
+    private List<Collection> collections;
 }

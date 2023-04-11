@@ -13,10 +13,6 @@ import java.util.List;
 public interface CategoryMapper {
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
-    //    CategoryDto toDto(Category category);
-//
-//    @InheritInverseConfiguration
-//    Category toEntity(CategoryDto categoryDto);
     default CategoryDto toDto(Category category) {
         if (category == null) {
             return null;
