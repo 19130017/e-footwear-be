@@ -6,6 +6,8 @@ public class QUERY {
         public static final String FIND_CATEGORY = "select * from categories where state = 'ACTIVE' and id = ? ";
         public static final String FIND_CATEGORY_BY_SLUG = "select * from categories where state = 'ACTIVE' and slug = ? ";
 
+        public static final String FIND_PARENT_CATEGORY = "select * from categories where state = 'ACTIVE' and parent_id is null";
+        public static final String FIND_CHILDREN_CATEGORY = "select * from categories where state = 'ACTIVE' and parent_id = ?";
     }
 
     //product

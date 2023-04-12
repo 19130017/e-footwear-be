@@ -21,6 +21,8 @@ public interface CategoryMapper {
         categoryDto.category(toDto(category.getParentCategory()));
         categoryDto.id(category.getId());
         categoryDto.name(category.getName());
+        categoryDto.slug(category.getSlug());
+        categoryDto.state(category.getState());
         categoryDto.createAt(category.getCreateAt());
         categoryDto.updateAt(category.getUpdateAt());
 
@@ -36,6 +38,8 @@ public interface CategoryMapper {
         category.parentCategory(toEntity(categoryDto.getCategory()));
         category.id(categoryDto.getId());
         category.name(categoryDto.getName());
+        category.slug(categoryDto.getSlug());
+        category.state(categoryDto.getState());
         category.createAt(categoryDto.getCreateAt());
         category.updateAt(categoryDto.getUpdateAt());
 

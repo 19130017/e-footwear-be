@@ -18,4 +18,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query(value = QUERY.CATEGORY.FIND_CATEGORY_BY_SLUG, nativeQuery = true)
     Optional<Category> findCategoryBySlug(String slug);
+    @Query(value = QUERY.CATEGORY.FIND_PARENT_CATEGORY, nativeQuery = true)
+    Optional<List<Category>> findParentCategory();
+    @Query(value = QUERY.CATEGORY.FIND_CHILDREN_CATEGORY, nativeQuery = true)
+    Optional<List<Category>> findChildrenCategory(Long id);
 }

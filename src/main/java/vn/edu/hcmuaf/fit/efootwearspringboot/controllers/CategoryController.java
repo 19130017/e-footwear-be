@@ -23,8 +23,24 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    // get all category
-    @GetMapping
+    // get root category
+    @GetMapping("/parent")
+    public ResponseEntity findParentCategory() {
+        DataResult dataResult = categoryService.findParentCategory();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+    // get root category
+    @GetMapping("/parent/{id}")
+    public ResponseEntity findChildrenCategory(@PathVariable("id") Long id) {
+        DataResult dataResult = categoryService.findChildrenCategory(id);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+    @GetMapping()
     public ResponseEntity findCategories() {
         DataResult dataResult = categoryService.findCategories();
         return dataResult.getSuccess() ?

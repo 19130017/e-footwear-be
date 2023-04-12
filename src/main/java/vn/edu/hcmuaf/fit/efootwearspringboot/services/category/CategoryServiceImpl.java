@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.CategoryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Category;
@@ -15,7 +14,6 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.MyParser;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,6 +115,24 @@ public class CategoryServiceImpl implements CategoryService {
             }
         }
         throw new NotFoundException("Không tìm thấy danh mục");
+    }
+
+    @Override
+    public DataResult findParentCategory() {
+        Optional<List<Category>> optional = categoryRepository.findParentCategory();
+        if (optional.isPresent()) {
+            return DataResult.success(categoryMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+    }
+
+    @Override
+    public DataResult findChildrenCategory(Long id) {
+        Optional<List<Category>> optional = categoryRepository.findChildrenCategory(id);
+        if (optional.isPresent()) {
+            return DataResult.success(categoryMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
     }
 
 }

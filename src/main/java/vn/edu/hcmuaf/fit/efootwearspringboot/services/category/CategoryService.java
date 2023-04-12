@@ -9,7 +9,6 @@ public interface CategoryService {
 
     public DataResult findCategoryBySlug(String slug);
 
-    public DataResult findCategories();
 
     public BaseResult deleteCategory(Long id);
 
@@ -17,4 +16,9 @@ public interface CategoryService {
 
     public BaseResult updateCategory(CategoryDto CategoryDto);
 
+    public DataResult findParentCategory();
+
+    public DataResult findChildrenCategory(Long id);
+
+    public DataResult findCategories();
 }
