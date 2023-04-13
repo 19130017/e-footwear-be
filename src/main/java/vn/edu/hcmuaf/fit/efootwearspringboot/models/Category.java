@@ -32,6 +32,9 @@ public class Category implements Serializable {
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
+    @OneToMany(mappedBy = "parentCategory")
+    private List<Category> childrenCategory;
+
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
     private ZonedDateTime createAt;

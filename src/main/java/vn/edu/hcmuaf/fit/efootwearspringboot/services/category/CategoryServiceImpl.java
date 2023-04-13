@@ -121,18 +121,8 @@ public class CategoryServiceImpl implements CategoryService {
     public DataResult findParentCategory() {
         Optional<List<Category>> optional = categoryRepository.findParentCategory();
         if (optional.isPresent()) {
-            return DataResult.success(categoryMapper.toDtos(optional.get()));
+            return DataResult.success(categoryMapper.toChildrenDtos(optional.get()));
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
-
-    @Override
-    public DataResult findChildrenCategory(Long id) {
-        Optional<List<Category>> optional = categoryRepository.findChildrenCategory(id);
-        if (optional.isPresent()) {
-            return DataResult.success(categoryMapper.toDtos(optional.get()));
-        }
-        throw new NotFoundException("Không tìm thấy dữ liệu");
-    }
-
 }

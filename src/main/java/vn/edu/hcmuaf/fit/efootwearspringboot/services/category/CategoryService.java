@@ -18,7 +18,5 @@ public interface CategoryService {
 
     public DataResult findParentCategory();
 
-    public DataResult findChildrenCategory(Long id);
-
     public DataResult findCategories();
 }

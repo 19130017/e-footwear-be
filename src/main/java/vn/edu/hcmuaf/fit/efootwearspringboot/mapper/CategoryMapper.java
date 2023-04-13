@@ -4,6 +4,7 @@ import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryWithChildrenDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Category;
 
 import java.util.List;
@@ -12,6 +13,11 @@ import java.util.List;
 @Component("categoryMapper")
 public interface CategoryMapper {
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
+
+    @Mapping(target = "children", source = "category.childrenCategory")
+    public CategoryWithChildrenDto toChildrenDto(Category category);
+
+    public List<CategoryWithChildrenDto> toChildrenDtos(List<Category> categories);
 
     default CategoryDto toDto(Category category) {
         if (category == null) {
@@ -48,5 +54,5 @@ public interface CategoryMapper {
 
     List<Category> toEntities(List<CategoryDto> categoryDtos);
 
-    List<CategoryDto> toDtos(List<Category> categorys);
+    List<CategoryDto> toDtos(List<Category> categories);
 }
