@@ -30,7 +30,8 @@ public class Product implements Serializable {
     private String name;
     @Column(name = "slug")
     private String slug;
-
+    @Column(name = "description")
+    private String description;
     @Column(name = "discount_rate")
     private Integer discountRate;
 
@@ -40,8 +41,6 @@ public class Product implements Serializable {
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
-    @Column(name = "description")
-    private String description;
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
     private ZonedDateTime createAt;
@@ -54,7 +53,7 @@ public class Product implements Serializable {
     private EntityState state;
 
     @OneToMany(mappedBy = "product")
-    private List<ProductImage> productImage;
+    private List<ProductImage> images;
 
     @ManyToOne()
     @JoinColumn(name = "collection_id")
@@ -67,7 +66,6 @@ public class Product implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "color_id")
     private Color color;
-
 
     @Transient
     private Integer discountPrice;

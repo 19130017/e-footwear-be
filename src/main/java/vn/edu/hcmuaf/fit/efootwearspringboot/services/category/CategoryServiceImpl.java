@@ -8,7 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.CategoryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Category;
-import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.category.CategoryRepository;
+import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CategoryRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.MyParser;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -79,12 +79,9 @@ public class CategoryServiceImpl implements CategoryService {
                 slug = MyParser.convertToSlug(categoryDto.getName()) + "-" + optionalParent.get().getSlug();
             }
         }
-
-        Category category = Category.builder()
-                .parentCategory(categoryMapper.toEntity(categoryDto.getCategory()))
-                .name(categoryDto.getName())
-                .state(EntityState.ACTIVE)
-                .slug(slug).build();
+        categoryDto.setSlug(slug);
+        categoryDto.setState(EntityState.ACTIVE);
+        Category category = categoryMapper.toEntity(categoryDto);
         if (!ObjectUtils.isEmpty(categoryRepository.save(category))) {
             return BaseResult.success();
         }

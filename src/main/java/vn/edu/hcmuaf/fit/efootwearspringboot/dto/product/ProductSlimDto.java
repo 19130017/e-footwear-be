@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductDto {
+public class ProductSlimDto {
     public Long id;
     private String name;
     private String slug;
@@ -32,8 +32,10 @@ public class ProductDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private ZonedDateTime updateAt;
     private EntityState state;
-    private CollectionDto collection;
+
     private SizeDto size;
+
     private ColorDto color;
+
     private List<ProductImageDto> images;
 }
