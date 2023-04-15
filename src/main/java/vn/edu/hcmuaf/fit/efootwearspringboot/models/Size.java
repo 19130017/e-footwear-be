@@ -26,7 +26,7 @@ public class Size implements Serializable {
     private Long id;
 
     @Column(name = "value")
-    private String value;
+    private Integer value;
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
     private ZonedDateTime createAt;
@@ -35,11 +35,10 @@ public class Size implements Serializable {
     @UpdateTimestamp
     private ZonedDateTime updateAt;
 
-    @Column(name = "state")
+    @Column(name = "state", length = 10)
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
 
     @OneToMany(mappedBy = "size")
-    private List<Product> products;
-
+    private List<ProductDetail> details;
 }

@@ -3,7 +3,6 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.dto.product;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.collection.CollectionDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image.ProductImageDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;

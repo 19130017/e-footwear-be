@@ -11,13 +11,14 @@ public class QUERY {
         public static final String FIND_CHILDREN_CATEGORY = "select * from categories where state = 'ACTIVE' and parent_id = ?";
     }
 
-    public static class COLLECTION {
-        public static final String FIND_ALL = "select * from collections where state = 'ACTIVE'";
-        public static final String FIND_ALL_WITH_SLUG = "select c.id, c.name, c.state, c.category_id, c.create_at, c.update_at " +
-                "from collections c " +
-                "join categories cate on c.category_id = cate.id " +
-                "where c.state = 'ACTIVE' and cate.slug = ?";
-        public static final String FIND_COLLECTION = "select * from collections where state = 'ACTIVE' and id = ? ";
+    public static class COLOR {
+        public static final String FIND_ALL = "select * from colors where state = 'ACTIVE'";
+        public static final String FIND_COLOR = "select * from colors where state = 'ACTIVE' and id = ? ";
+    }
+
+    public static class SIZE {
+        public static final String FIND_ALL = "select * from sizes where state = 'ACTIVE'";
+        public static final String FIND_SIZE = "select * from sizes where state = 'ACTIVE' and id = ? ";
     }
 
     public static class PRODUCT {

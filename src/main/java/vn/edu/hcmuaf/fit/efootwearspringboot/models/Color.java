@@ -25,10 +25,10 @@ public class Color implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "code_color")
+    @Column(name = "code_color", length = 10)
     private String codeColor;
 
-    @Column(name = "name")
+    @Column(name = "name", length = 50)
     private String name;
 
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -38,7 +38,7 @@ public class Color implements Serializable {
     @Column(name = "update_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private ZonedDateTime updateAt;
-    @Column(name = "state")
+    @Column(name = "state", length = 10)
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
     @OneToMany(mappedBy = "color")

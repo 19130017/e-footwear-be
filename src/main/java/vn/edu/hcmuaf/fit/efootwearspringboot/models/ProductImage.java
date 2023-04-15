@@ -34,7 +34,7 @@ public class ProductImage implements Serializable {
     @Column(name = "update_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private ZonedDateTime updateAt;
-    @Column(name = "state")
+    @Column(name = "state", length = 10)
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
     @ManyToOne()

@@ -30,16 +30,13 @@ public class Product implements Serializable {
     private String name;
     @Column(name = "slug")
     private String slug;
-    @Column(name = "description")
+    @Column(name = "description" , length = 1000)
     private String description;
     @Column(name = "discount_rate")
     private Integer discountRate;
 
     @Column(name = "origin_price")
     private Integer originPrice;
-
-    @Column(name = "stock_quantity")
-    private Integer stockQuantity;
 
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
@@ -48,29 +45,23 @@ public class Product implements Serializable {
     @UpdateTimestamp
     private ZonedDateTime updateAt;
 
-    @Column(name = "state")
+    @Column(name = "state", length = 10)
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
 
     @OneToMany(mappedBy = "product")
     private List<ProductImage> images;
+    @OneToMany(mappedBy = "product")
+    private List<ProductDetail> details;
 
     @ManyToOne()
-    @JoinColumn(name = "collection_id")
-    private Collection collection;
-
-    @ManyToOne()
-    @JoinColumn(name = "size_id")
-    private Size size;
-
+    @JoinColumn(name = "category_id")
+    private Category category;
     @ManyToOne()
     @JoinColumn(name = "color_id")
     private Color color;
-
     @Transient
     private Integer discountPrice;
-    @Transient
-    private Integer importQuantity;
 
     public Integer getDiscountPrice() {
         return originPrice - (originPrice * discountRate / 100);

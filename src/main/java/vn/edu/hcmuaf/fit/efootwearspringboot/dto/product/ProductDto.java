@@ -3,7 +3,7 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.dto.product;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.collection.CollectionDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image.ProductImageDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
@@ -32,7 +32,7 @@ public class ProductDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private ZonedDateTime updateAt;
     private EntityState state;
-    private CollectionDto collection;
+    private CategoryDto categoryDto;
     private SizeDto size;
     private ColorDto color;
     private List<ProductImageDto> images;

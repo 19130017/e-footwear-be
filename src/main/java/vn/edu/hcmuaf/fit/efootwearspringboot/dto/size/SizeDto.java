@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 public class SizeDto {
     private Long id;
-    private String value;
+    private Integer value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private ZonedDateTime createAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")

@@ -23,9 +23,9 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "name")
+    @Column(name = "name", length = 50)
     private String name;
-    @Column(name = "slug")
+    @Column(name = "slug", length = 50)
     private String slug;
 
     @ManyToOne
@@ -42,10 +42,10 @@ public class Category implements Serializable {
     @Column(name = "update_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private ZonedDateTime updateAt;
-    @Column(name = "state")
+    @Column(name = "state", length = 10)
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
 
     @OneToMany(mappedBy = "category")
-    private List<Collection> collections;
+    private List<Product> products;
 }

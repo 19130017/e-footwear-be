@@ -1,93 +1,105 @@
 -- categories
-insert into categories(parent_id, name, slug, state)
-values (null, "Nam", "nam", "ACTIVE");
-insert into categories(parent_id, name, slug, state)
-values (null, "Nữ", "nu", "ACTIVE");
-insert into categories(parent_id, name, slug, state)
-values (null, "Trẻ em", "tre-em", "ACTIVE");
-insert into categories(parent_id, name, slug, state)
-values (1, "Giày thể thao", "giay-the-thao-nam", "ACTIVE");
-insert into categories(parent_id, name, slug, state)
-values (2, "Giày thể thao", "giay-the-thao-nu", "ACTIVE");
-insert into categories(parent_id, name, slug, state)
-values (2, "Giày búp bê", "giay-bup-be-nu", "ACTIVE");
---  collection
-insert into collections(name, state, category_id)
-values ("Test1", "ACTIVE", 1);
-insert into collections(name, state, category_id)
-values ("Test2", "ACTIVE", 2);
-insert into collections(name, state, category_id)
-values ("Hunter a", "ACTIVE", 1);
-insert into collections(name, state, category_id)
-values ("hunter b", "ACTIVE", 1);
-
--- color
-insert into colors(code_color, name, state)
-values ("yellow", "Vàng", "ACTIVE");
-insert into colors(code_color, name, state)
-values ("red", "Đỏ", "ACTIVE");
-insert into colors(code_color, name, state)
-values ("blue", "Xanh", "ACTIVE");
-
--- -- sizes
-insert into sizes(value, state)
-values ("38", "ACTIVE");
-insert into sizes(value, state)
-values ("39", "ACTIVE");
-insert into sizes(value, state)
-values ("40", "ACTIVE");
-insert into sizes(value, state)
-values ("41", "ACTIVE");
-
--- products
-insert into products(name, slug, description, origin_price, discount_rate, stock_quantity, state, collection_id,
-                     color_id, size_id)
-values ("Giày Thể Thao Nam Biti's Hunter X Wavy Collection HSM001400DEN",
-        "giay-the-thao-nam-biti-s-hunter-x-wavy-collection-hsm001400den-den", "description", 1069000, 2, 125, "ACTIVE",
-        1, 2,
-        1);
-insert into products(name, slug, description, origin_price, discount_rate, stock_quantity, state, collection_id,
-                     color_id, size_id)
-values ("Giày Thể Thao Nam Biti's Hunter X Wavy Collection HSM001400DEN",
-        "giay-the-thao-nam-biti-s-hunter-x-wavy-collection-hsm001400den-den", "description", 1069000, 2, 125, "ACTIVE",
-        3, 2,
-        1);
-insert into products(name, slug, description, origin_price, discount_rate, stock_quantity, state, collection_id,
-                     color_id, size_id)
-values ("Giày Thể Thao Nam Biti's Hunter X Wavy Collection HSM001400DEN",
-        "giay-the-thao-nam-biti-s-hunter-x-wavy-collection-hsm001400den-den", "description", 1069000, 2, 125, "ACTIVE",
-        2, 2,
-        1);
-insert into products(name, slug, description, origin_price, discount_rate, stock_quantity, state, collection_id,
-                     color_id, size_id)
-values ("Giày Thể Thao Nam Biti's Hunter X Wavy Collection HSM001400DEN",
-        "giay-the-thao-nam-biti-s-hunter-x-wavy-collection-hsm001400den-den", "description", 1069000, 2, 125, "ACTIVE",
-        1, 2,
-        1);
-
-
--- product images
-insert into product_images(image_url, product_id, state)
-values ("https://product.hstatic.net/1000230642/product/z4228019514433_4e24e88fd2a72c1c3fe36582ef218ac9_a6c478e1be634fff9d5507822a2e98f2.jpg",
-        1, "ACTIVE");
-insert into product_images(image_url, product_id, state)
-values ("https://product.hstatic.net/1000230642/product/00100vag_2dd5ae5608ad483e8ae78d00a89128c1_grande.jpg",
-        1, "ACTIVE");
-insert into product_images(image_url, product_id, state)
-values ("https://product.hstatic.net/1000230642/product/z4228019514433_4e24e88fd2a72c1c3fe36582ef218ac9_a6c478e1be634fff9d5507822a2e98f2.jpg",
-        4, "ACTIVE");
-insert into product_images(image_url, product_id, state)
-values ("https://product.hstatic.net/1000230642/product/00100vag_2dd5ae5608ad483e8ae78d00a89128c1_grande.jpg",
-        4, "ACTIVE");
-insert into product_images(image_url, product_id, state)
-values ("https://product.hstatic.net/1000230642/product/dsbh00300xam__3__03ca735d421042b0849810ada927032d_grande.jpg",
-        3, "ACTIVE");
-insert into product_images(image_url, product_id, state)
-values ("https://product.hstatic.net/1000230642/product/z4228019514433_4e24e88fd2a72c1c3fe36582ef218ac9_a6c478e1be634fff9d5507822a2e98f2.jpg",
-        3, "ACTIVE");
-insert into product_images(image_url, product_id, state)
-values ("https://product.hstatic.net/1000230642/product/z4228019514433_4e24e88fd2a72c1c3fe36582ef218ac9_a6c478e1be634fff9d5507822a2e98f2.jpg",
-        2, "ACTIVE");
-insert into product_images(image_url, product_id, state)
-values ("https://product.hstatic.net/1000230642/product/00100vag_2dd5ae5608ad483e8ae78d00a89128c1_grande.jpg",
-        2, "ACTIVE");
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Nam", "ACTIVE","nam", null);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Nữ", "ACTIVE","nu", null);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Giày Bóng đá", "ACTIVE","giay-bong-da-nam", 1);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Giày Thể Thao", "ACTIVE","giay-the-thao-nam", 1);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Hunter", "ACTIVE","hunter-nam", 1);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Sandal", "ACTIVE","sandal-nam", 1);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Giày Búp Bê", "ACTIVE","giay-bup-be-nu", 2);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Giày Thể Thao", "ACTIVE","giay-the-thao-nu", 2);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Giày Thời Trang", "ACTIVE","giay-thoi-trang-nu", 2);
+INSERT INTO categories (name, state, slug, parent_id)
+VALUES ("Hunter", "ACTIVE","hunter-nu", 2);
+-- colors
+INSERT INTO colors (code_color, name, state)
+VALUES ("#FF0000", "Đỏ", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#0000FF", "Xanh Dương", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#00FF00", "Xanh Mi Nơ", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#008000", "Xanh Nhớt", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#FFA500", "Cam", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#000000", "Đen", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#FFFF00", "Vàng", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#FFFFFF", "Trắng", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#B87333", "Đồng", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#808080", "Xám", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#008000", "Rêu", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#8B4513", "Nâu Lợt", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#FFFDD0", "Kem", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#A52A2A", "Nâu", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#A9A9A9", "Xám Đậm", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#00FF7F", "Xanh Ngọc", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#708090", "Xám Lợt", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#FFC0CB", "Hồng", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#008000", "Xanh Lá Cây", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#F5DEB3", "Kem Lợt", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#FF1493", "Hồng Đậm", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#FFB6C1", "Hồng Lợt", "ACTIVE");
+INSERT INTO colors (code_color, name, state)
+VALUES ("#EEE8AA", "Vàng Lợt", "ACTIVE");
+-- sizes
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 30);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 31);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 32);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 33);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 34);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 35);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 36);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 37);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 38);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 39);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 40);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 41);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 42);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 43);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 44);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 45);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 46);
+INSERT INTO sizes (state, value)
+VALUES ("ACTIVE", 47);

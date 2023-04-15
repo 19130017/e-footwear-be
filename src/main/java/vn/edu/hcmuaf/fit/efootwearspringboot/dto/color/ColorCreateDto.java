@@ -1,15 +1,15 @@
-package vn.edu.hcmuaf.fit.efootwearspringboot.dto.category;
+package vn.edu.hcmuaf.fit.efootwearspringboot.dto.color;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-
 
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryUpdateDto {
-    private CategoryDto category;
+@ToString
+public class ColorCreateDto {
     private String name;
+    private String codeColor;
 }
