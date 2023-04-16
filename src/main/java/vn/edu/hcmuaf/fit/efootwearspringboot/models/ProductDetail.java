@@ -11,7 +11,6 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString
 @Table(name = "product_details")
 public class ProductDetail {
     @Id
@@ -29,8 +28,4 @@ public class ProductDetail {
     @ManyToOne
     @JoinColumn(name = "size_id")
     private Size size;
-
-    @Column(name = "state", length = 10)
-    @Enumerated(value = EnumType.STRING)
-    private EntityState state;
 }

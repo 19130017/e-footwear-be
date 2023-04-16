@@ -18,7 +18,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString
 @Table(name = "products")
 public class Product implements Serializable {
     @Id
@@ -30,7 +29,7 @@ public class Product implements Serializable {
     private String name;
     @Column(name = "slug")
     private String slug;
-    @Column(name = "description" , length = 1000)
+    @Column(name = "description", length = 1000)
     private String description;
     @Column(name = "discount_rate")
     private Integer discountRate;
@@ -60,6 +59,11 @@ public class Product implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "color_id")
     private Color color;
+
+    @Transient
+    private Integer colorCounter;
+    @Transient
+    private Integer sizeCounter;
     @Transient
     private Integer discountPrice;
 

@@ -16,8 +16,9 @@ public interface ProductService {
 
     public DataResult findProducts();
 
-//    public BaseResult deleteProduct(Long id);
-//
-//    public BaseResult createProduct(ProductDto productDto);
-//    public BaseResult updateProduct(ProductDto productDto);
+    public BaseResult deleteProduct(Long id);
+    public BaseResult createProduct(ProductDto productDto);
+    public BaseResult updateProduct(ProductDto productDto);
+
+    public DataResult findProductsByCateSlug(String slug);
 }
