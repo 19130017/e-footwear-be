@@ -1,25 +1,24 @@
-package vn.edu.hcmuaf.fit.efootwearspringboot.dto.category;
+package vn.edu.hcmuaf.fit.efootwearspringboot.dto.type_gallery;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.gallery.GalleryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class CategoryWithChildrenDto {
+public class TypeGalleryDto {
     private Long id;
-    private List<CategoryWithChildrenDto> children;
-    private String name;
-    private String slug;
+    private String typeCode;
+    private String typeName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private ZonedDateTime createAt;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")

@@ -7,34 +7,25 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
-import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
-@Setter
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Table(name = "categories", uniqueConstraints = @UniqueConstraint(columnNames = "slug"))
-public class Category implements Serializable {
+@Table(name = "type_galleries")
+public class TypeGallery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "name", length = 50)
-    private String name;
-    @Column(name = "slug", length = 50)
-    private String slug;
-
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Category parentCategory;
-
-    @OneToMany(mappedBy = "parentCategory")
-    private List<Category> childrenCategory;
-
+    @Column(name = "type_code")
+    private String typeCode;
+    @Column(name = "type_name")
+    private String typeName;
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
     private ZonedDateTime createAt;
@@ -42,14 +33,14 @@ public class Category implements Serializable {
     @Column(name = "update_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @UpdateTimestamp
     private ZonedDateTime updateAt;
+
     @Column(name = "state", length = 10)
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
 
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
+    @OneToMany(mappedBy = "typeGallery")
+    private List<Gallery> galleries;
 
-    @OneToOne
-    @JoinColumn(name = "gallery_id")
-    private Gallery gallery;
+    @OneToMany(mappedBy = "typeGallery")
+    private List<ProductImage> images;
 }

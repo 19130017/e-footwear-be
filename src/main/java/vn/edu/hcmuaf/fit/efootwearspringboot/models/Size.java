@@ -40,5 +40,5 @@ public class Size implements Serializable {
     private EntityState state;
 
     @OneToMany(mappedBy = "size")
-    private List<ProductDetail> details;
+    private List<Detail> details;
 }

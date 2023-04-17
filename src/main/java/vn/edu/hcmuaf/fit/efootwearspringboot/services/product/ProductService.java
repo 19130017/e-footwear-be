@@ -12,12 +12,16 @@ import java.util.List;
 public interface ProductService {
     public DataResult findProduct(Long id);
 
-    public DataResult findProductBySlug(String slug);
+    public DataResult findProduct(String slug, Long color_id);
+
+    public DataResult findProductsBySlug(String slug);
 
     public DataResult findProducts();
 
     public BaseResult deleteProduct(Long id);
+
     public BaseResult createProduct(ProductDto productDto);
+
     public BaseResult updateProduct(ProductDto productDto);
 
     public DataResult findProductsByCateSlug(String slug);

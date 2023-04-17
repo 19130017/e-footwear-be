@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.constants;
 
 public class QUERY {
 
+
     public static class CATEGORY {
         public static final String FIND_ALL = "select * from categories where state = 'ACTIVE'";
         public static final String FIND_CATEGORY = "select * from categories where state = 'ACTIVE' and id = ? ";
@@ -27,9 +28,20 @@ public class QUERY {
                 "join products_sizes_colors psc on p.id = psc.product_id " +
                 "where p.state = 'ACTIVE' and p.id = ? ";
         public static final String FIND_PRODUCT_BY_SLUG = "select * from products where state = 'ACTIVE' and slug = ? ";
+        public static final String FIND_PRODUCT_BY_SLUG_COLOR = "select * from products where state = 'ACTIVE' and slug = ? and color_id = ? ";
 
         public static final String FIND_PRODUCT_BY_CATE_SLUG = "select p.* from products p join categories c on c.id = p.category_id where p.state = 'ACTIVE' and c.slug = ? ";
 
         public static final String COUNT_PRODUCT_BY_SLUG = "SELECT COUNT(*) from products where slug = ?";
+    }
+
+    public static class DETAIL {
+        public static final String FIND_DETAIL_BY_PRODUCT = "select d.* from product_details d join products p on d.product_id = p.id where p.state = 'ACTIVE' and d.size_id=? and p.slug=? and p.color_id=?";
+        public static final String FIND_DETAILS_BY_PRODUCT = "select d.* from product_details d join products p on d.product_id = p.id where p.state = 'ACTIVE' and p.slug=? and p.color_id=?";
+    }
+
+    public static class GALLERY {
+
+        public static final String FIND_GALLERIES_BY_TYPE = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = ?";
     }
 }

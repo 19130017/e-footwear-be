@@ -33,17 +33,38 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public DataResult findProduct(Long id) {
-        return null;
+        Optional<Product> optional = productRepository.findProductById(id);
+        if (optional.isPresent()) {
+            return DataResult.success(productMapper.toDto(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
     }
 
     @Override
-    public DataResult findProductBySlug(String slug) {
-        return null;
+    public DataResult findProduct(String slug, Long color_id) {
+        Optional<Product> optional = productRepository.findProduct(slug, color_id);
+        if (optional.isPresent()) {
+            return DataResult.success(productMapper.toDto(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+    }
+
+    @Override
+    public DataResult findProductsBySlug(String slug) {
+        Optional<List<Product>> optional = productRepository.findProductBySlug(slug);
+        if (optional.isPresent()) {
+            return DataResult.success(productMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
     }
 
     @Override
     public DataResult findProducts() {
-        return null;
+        Optional<List<Product>> optional = productRepository.findProducts();
+        if (optional.isPresent()) {
+            return DataResult.success(productMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
     }
 
     public List<Product> findProductsByCategory(Category category) {
@@ -62,8 +83,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Category> optional = categoryRepository.findCategoryBySlug(slug);
 
         if (optional.isPresent()) {
-            List<Product> products = new ArrayList<>();
-            products = findProductsByCategory(optional.get());
+            List<Product> products = findProductsByCategory(optional.get());
             for (Product product : products) {
                 System.out.println(product);
                 String productSlug = product.getSlug();

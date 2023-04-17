@@ -3,6 +3,7 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.dto.category;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.gallery.GalleryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
 import java.time.ZonedDateTime;
@@ -23,4 +24,6 @@ public class CategoryDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private ZonedDateTime updateAt;
     private EntityState state;
+    private GalleryDto gallery;
+
 }

@@ -18,8 +18,11 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = QUERY.PRODUCT.FIND_PRODUCT_BY_ID, nativeQuery = true)
     Optional<Product> findProductById(Long id);
 
+    @Query(value = QUERY.PRODUCT.FIND_PRODUCT_BY_SLUG_COLOR, nativeQuery = true)
+    Optional<Product> findProduct(String slug, Long color_id);
+
     @Query(value = QUERY.PRODUCT.FIND_PRODUCT_BY_SLUG, nativeQuery = true)
-    Optional<Product> findProductBySlug(String slug);
+    Optional<List<Product>> findProductBySlug(String slug);
 
     @Query(value = QUERY.PRODUCT.FIND_PRODUCT_BY_CATE_SLUG,
             nativeQuery = true)

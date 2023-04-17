@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
 
 @Getter
@@ -10,7 +11,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ProductDetailDto {
+public class DetailDto {
     private Long id;
     private Integer stockQuantity;
     private SizeDto size;

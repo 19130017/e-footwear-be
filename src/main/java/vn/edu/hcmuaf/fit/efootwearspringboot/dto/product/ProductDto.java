@@ -5,9 +5,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.ProductDetailDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image.ProductImageDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
 import java.time.ZonedDateTime;
@@ -35,5 +34,5 @@ public class ProductDto {
     private CategoryDto category;
     private ColorDto color;
     private List<ProductImageDto> images;
-    private List<ProductDetailDto> details;
+    private List<DetailDto> details;
 }

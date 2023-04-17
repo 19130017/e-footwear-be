@@ -51,7 +51,7 @@ public class Product implements Serializable {
     @OneToMany(mappedBy = "product")
     private List<ProductImage> images;
     @OneToMany(mappedBy = "product")
-    private List<ProductDetail> details;
+    private List<Detail> details;
 
     @ManyToOne()
     @JoinColumn(name = "category_id")

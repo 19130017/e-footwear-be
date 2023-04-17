@@ -40,10 +40,17 @@ public class ProductController {
     }
 
     // get slug & color
+    @GetMapping("/slug/{slug}/color/{id}")
+    public ResponseEntity getProduct(@PathVariable("slug") String slug, @PathVariable("id") Long color_id) {
+        DataResult dataResult = productService.findProduct(slug, color_id);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
 
     @GetMapping("/slug/{slug}")
-    public ResponseEntity getProductBySlug(@Valid @PathVariable("slug") String slug) {
-        DataResult dataResult = productService.findProductBySlug(slug);
+    public ResponseEntity getProductsBySlug(@Valid @PathVariable("slug") String slug) {
+        DataResult dataResult = productService.findProductsBySlug(slug);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));

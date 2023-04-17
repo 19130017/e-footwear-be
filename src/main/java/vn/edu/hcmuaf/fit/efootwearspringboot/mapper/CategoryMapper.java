@@ -15,9 +15,9 @@ public interface CategoryMapper {
     CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
     @Mapping(target = "children", source = "category.childrenCategory")
-    public CategoryWithChildrenDto toChildrenDto(Category category);
+    CategoryWithChildrenDto toChildrenDto(Category category);
 
-    public List<CategoryWithChildrenDto> toChildrenDtos(List<Category> categories);
+    List<CategoryWithChildrenDto> toChildrenDtos(List<Category> categories);
 
     default CategoryDto toDto(Category category) {
         if (category == null) {
@@ -25,6 +25,7 @@ public interface CategoryMapper {
         }
         CategoryDto.CategoryDtoBuilder<?, ?> categoryDto = CategoryDto.builder();
         categoryDto.category(toDto(category.getParentCategory()));
+        categoryDto.gallery(GalleryMapper.INSTANCE.toDto(category.getGallery()));
         categoryDto.id(category.getId());
         categoryDto.name(category.getName());
         categoryDto.slug(category.getSlug());
@@ -42,6 +43,7 @@ public interface CategoryMapper {
         Category.CategoryBuilder<?, ?> category = Category.builder();
 
         category.parentCategory(toEntity(categoryDto.getCategory()));
+        category.gallery(GalleryMapper.INSTANCE.toEntity(categoryDto.getGallery()));
         category.id(categoryDto.getId());
         category.name(categoryDto.getName());
         category.slug(categoryDto.getSlug());

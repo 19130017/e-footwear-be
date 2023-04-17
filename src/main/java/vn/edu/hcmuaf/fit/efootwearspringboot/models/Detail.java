@@ -3,7 +3,6 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.models;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
 @Entity
 @Getter
@@ -12,7 +11,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "product_details")
-public class ProductDetail {
+public class Detail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
