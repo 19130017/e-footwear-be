@@ -48,7 +48,6 @@ public class Category implements Serializable {
 
     @OneToMany(mappedBy = "category")
     private List<Product> products;
-
     @OneToOne
     @JoinColumn(name = "gallery_id")
     private Gallery gallery;

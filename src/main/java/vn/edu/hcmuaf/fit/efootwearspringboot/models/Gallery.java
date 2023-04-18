@@ -24,6 +24,11 @@ public class Gallery {
     private Long id;
     @Column(name = "image_url")
     private String imageURL;
+    @Column(name = "link")
+    private String link;
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "create_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @CreationTimestamp
     private ZonedDateTime createAt;

@@ -25,7 +25,7 @@ public interface CategoryMapper {
         }
         CategoryDto.CategoryDtoBuilder<?, ?> categoryDto = CategoryDto.builder();
         categoryDto.category(toDto(category.getParentCategory()));
-        categoryDto.gallery(GalleryMapper.INSTANCE.toDto(category.getGallery()));
+        categoryDto.gallery(GalleryMapper.INSTANCE.toSlimDto(category.getGallery()));
         categoryDto.id(category.getId());
         categoryDto.name(category.getName());
         categoryDto.slug(category.getSlug());
@@ -43,7 +43,6 @@ public interface CategoryMapper {
         Category.CategoryBuilder<?, ?> category = Category.builder();
 
         category.parentCategory(toEntity(categoryDto.getCategory()));
-        category.gallery(GalleryMapper.INSTANCE.toEntity(categoryDto.getGallery()));
         category.id(categoryDto.getId());
         category.name(categoryDto.getName());
         category.slug(categoryDto.getSlug());

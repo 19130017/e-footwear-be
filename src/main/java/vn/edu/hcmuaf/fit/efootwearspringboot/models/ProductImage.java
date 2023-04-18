@@ -43,5 +43,5 @@ public class ProductImage implements Serializable {
 
     @ManyToOne()
     @JoinColumn(name = "type_gallery_id")
-    private TypeGallery typeGallery;
+    private TypeGallery type;
 }

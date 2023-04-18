@@ -41,6 +41,6 @@ public class TypeGallery {
     @OneToMany(mappedBy = "typeGallery")
     private List<Gallery> galleries;
 
-    @OneToMany(mappedBy = "typeGallery")
+    @OneToMany(mappedBy = "type")
     private List<ProductImage> images;
 }
