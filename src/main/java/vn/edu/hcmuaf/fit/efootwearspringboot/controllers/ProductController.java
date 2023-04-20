@@ -39,6 +39,7 @@ public class ProductController {
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
+
     // get slug & color
     @GetMapping("/slug/{slug}/color/{id}")
     public ResponseEntity getProduct(@PathVariable("slug") String slug, @PathVariable("id") Long color_id) {

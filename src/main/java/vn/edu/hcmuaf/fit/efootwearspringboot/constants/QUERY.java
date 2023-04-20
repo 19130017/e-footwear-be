@@ -25,10 +25,12 @@ public class QUERY {
     public static class PRODUCT {
         public static final String FIND_PRODUCTS = "select * from products where state = 'ACTIVE'";
         public static final String FIND_PRODUCT_BY_ID = "select * from products p " +
-                "join products_sizes_colors psc on p.id = psc.product_id " +
                 "where p.state = 'ACTIVE' and p.id = ? ";
         public static final String FIND_PRODUCT_BY_SLUG = "select * from products where state = 'ACTIVE' and slug = ? ";
         public static final String FIND_PRODUCT_BY_SLUG_COLOR = "select * from products where state = 'ACTIVE' and slug = ? and color_id = ? ";
+
+        public static final String FIND_PRODUCTS_HOT = "select * from products where state = 'ACTIVE' order by create_at limit 15";
+        public static final String FIND_PRODUCTS_NEWS = " select p.* from products p  JOIN product_details d on d.product_id = p.id  where p.state = 'ACTIVE'  order by d.stock_quantity DESC limit 15";
 
         public static final String FIND_PRODUCT_BY_CATE_SLUG = "select p.* from products p join categories c on c.id = p.category_id where p.state = 'ACTIVE' and c.slug = ? ";
 
@@ -43,5 +45,10 @@ public class QUERY {
     public static class GALLERY {
 
         public static final String FIND_GALLERIES_BY_TYPE = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = ?";
+        public static final String FIND_CAROUSELS = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'slide'";
+        public static final String FIND_BANNERS = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'banner'";
+        public static final String FIND_COLLECTIONS = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'collection'";
+        public static final String FIND_ADS = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'ads'";
+        public static final String FIND_FOOTER = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'footer'";
     }
 }

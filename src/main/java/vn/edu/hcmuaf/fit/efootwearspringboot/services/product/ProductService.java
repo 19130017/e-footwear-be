@@ -10,19 +10,19 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 import java.util.List;
 
 public interface ProductService {
-    public DataResult findProduct(Long id);
+    DataResult findProduct(Long id);
 
-    public DataResult findProduct(String slug, Long color_id);
+    DataResult findProduct(String slug, Long color_id);
 
-    public DataResult findProductsBySlug(String slug);
+    DataResult findProductsBySlug(String slug);
 
-    public DataResult findProducts();
+    DataResult findProducts();
 
-    public BaseResult deleteProduct(Long id);
+    BaseResult deleteProduct(Long id);
 
-    public BaseResult createProduct(ProductDto productDto);
+    BaseResult createProduct(ProductDto productDto);
 
-    public BaseResult updateProduct(ProductDto productDto);
+    BaseResult updateProduct(ProductDto productDto);
 
-    public DataResult findProductsByCateSlug(String slug);
+    DataResult findProductsByCateSlug(String slug);
 }

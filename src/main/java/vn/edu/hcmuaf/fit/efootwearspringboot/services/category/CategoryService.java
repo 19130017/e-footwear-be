@@ -4,19 +4,19 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
-public interface CategoryService {
-    public DataResult findCategory(Long id);
+ interface CategoryService {
+     DataResult findCategory(Long id);
 
-    public DataResult findCategoryBySlug(String slug);
+     DataResult findCategoryBySlug(String slug);
 
 
-    public BaseResult deleteCategory(Long id);
+     BaseResult deleteCategory(Long id);
 
-    public BaseResult createCategory(CategoryDto CategoryDto);
+     BaseResult createCategory(CategoryDto CategoryDto);
 
-    public BaseResult updateCategory(CategoryDto CategoryDto);
+     BaseResult updateCategory(CategoryDto CategoryDto);
 
-    public DataResult findParentCategory();
+     DataResult findParentCategory();
 
-    public DataResult findCategories();
+     DataResult findCategories();
 }

@@ -13,4 +13,14 @@ import java.util.Optional;
 public interface GalleryRepository extends JpaRepository<Gallery, Long> {
     @Query(value = QUERY.GALLERY.FIND_GALLERIES_BY_TYPE, nativeQuery = true)
     Optional<List<Gallery>> findGalleriesByType(String type_code);
+    @Query(value = QUERY.GALLERY.FIND_CAROUSELS, nativeQuery = true)
+    Optional<List<Gallery>> findCarousels();
+    @Query(value = QUERY.GALLERY.FIND_COLLECTIONS, nativeQuery = true)
+    Optional<List<Gallery>> findCollections();
+    @Query(value = QUERY.GALLERY.FIND_BANNERS, nativeQuery = true)
+    Optional<List<Gallery>> findBanners();
+    @Query(value = QUERY.GALLERY.FIND_ADS, nativeQuery = true)
+    Optional<List<Gallery>> findAds();
+    @Query(value = QUERY.GALLERY.FIND_FOOTER, nativeQuery = true)
+    Optional<List<Gallery>> findFooters();
 }

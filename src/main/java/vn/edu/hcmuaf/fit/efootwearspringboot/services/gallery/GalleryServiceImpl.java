@@ -30,4 +30,49 @@ public class GalleryServiceImpl implements GalleryService {
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
+
+    @Override
+    public DataResult getCarousels() {
+        Optional<List<Gallery>> optional = galleryRepository.findCarousels();
+        if (optional.isPresent()) {
+            return DataResult.success(galleryMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+    }
+
+    @Override
+    public DataResult getCollections() {
+        Optional<List<Gallery>> optional = galleryRepository.findCollections();
+        if (optional.isPresent()) {
+            return DataResult.success(galleryMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+    }
+
+    @Override
+    public DataResult getBanners() {
+        Optional<List<Gallery>> optional = galleryRepository.findBanners();
+        if (optional.isPresent()) {
+            return DataResult.success(galleryMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+    }
+
+    @Override
+    public DataResult getAds() {
+        Optional<List<Gallery>> optional = galleryRepository.findAds();
+        if (optional.isPresent()) {
+            return DataResult.success(galleryMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+    }
+
+    @Override
+    public DataResult getFooters() {
+        Optional<List<Gallery>> optional = galleryRepository.findFooters();
+        if (optional.isPresent()) {
+            return DataResult.success(galleryMapper.toDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+    }
 }

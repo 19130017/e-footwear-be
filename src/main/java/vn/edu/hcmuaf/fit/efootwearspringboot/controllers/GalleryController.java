@@ -28,4 +28,42 @@ public class GalleryController {
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
+
+    @GetMapping("/slide")
+    public ResponseEntity getCarousels(){
+        DataResult dataResult = galleryService.getCarousels();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+    @GetMapping("/collection")
+    public ResponseEntity getCollections(){
+        DataResult dataResult = galleryService.getCollections();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+    @GetMapping("/banner")
+    public ResponseEntity getBanners(){
+        DataResult dataResult = galleryService.getBanners();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+    @GetMapping("/ads")
+    public ResponseEntity getAds(){
+        DataResult dataResult = galleryService.getAds();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+    @GetMapping("/footer")
+    public ResponseEntity getFooters(){
+        DataResult dataResult = galleryService.getFooters();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
 }

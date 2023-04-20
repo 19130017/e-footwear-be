@@ -14,6 +14,10 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = QUERY.PRODUCT.FIND_PRODUCTS, nativeQuery = true)
     Optional<List<Product>> findProducts();
+    @Query(value = QUERY.PRODUCT.FIND_PRODUCTS_HOT, nativeQuery = true)
+    Optional<List<Product>> findProductsHot();
+    @Query(value = QUERY.PRODUCT.FIND_PRODUCTS_NEWS, nativeQuery = true)
+    Optional<List<Product>> findProductsNew();
 
     @Query(value = QUERY.PRODUCT.FIND_PRODUCT_BY_ID, nativeQuery = true)
     Optional<Product> findProductById(Long id);
