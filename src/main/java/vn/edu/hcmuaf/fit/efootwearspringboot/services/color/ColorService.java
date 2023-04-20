@@ -4,7 +4,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
- interface ColorService {
+public interface ColorService {
      DataResult findAll();
      DataResult findColor(Long id);
 

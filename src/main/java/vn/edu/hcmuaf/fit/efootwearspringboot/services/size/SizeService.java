@@ -4,7 +4,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
- interface SizeService {
+ public interface SizeService {
      DataResult findAll();
      DataResult findSize(Long id);
 

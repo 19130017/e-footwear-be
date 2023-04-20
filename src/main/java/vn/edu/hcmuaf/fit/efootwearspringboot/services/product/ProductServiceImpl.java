@@ -84,21 +84,46 @@ public class ProductServiceImpl implements ProductService {
 
         if (optional.isPresent()) {
             List<Product> products = findProductsByCategory(optional.get());
-            for (Product product : products) {
-                System.out.println(product);
-                String productSlug = product.getSlug();
-                String temp = "";
-                Integer count = 0;
-                if (!productSlug.equals(temp)) {
-                    temp = productSlug;
-                    count = productRepository.countProductBySlug(temp);
-                }
-                product.setColorCounter(count);
-                product.setSizeCounter(product.getDetails().size());
-            }
+            setCounter(products);
             return DataResult.success(productMapper.toSlimDtos(products));
         }
         throw new NotFoundException("Không tìm thấy dữ liệu danh mục với slug " + slug);
+    }
+
+    @Override
+    public DataResult findProductsHot() {
+        Optional<List<Product>> optional = productRepository.findProductsHot();
+        if (optional.isPresent()) {
+            List<Product> products = optional.get();
+            setCounter(products);
+            return DataResult.success(productMapper.toSlimDtos(products));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+    }
+
+    public void setCounter(List<Product> products) {
+        for (Product product : products) {
+            String productSlug = product.getSlug();
+            String temp = "";
+            Integer count = 0;
+            if (!productSlug.equals(temp)) {
+                temp = productSlug;
+                count = productRepository.countProductBySlug(temp);
+            }
+            product.setColorCounter(count);
+            product.setSizeCounter(product.getDetails().size());
+        }
+    }
+
+    @Override
+    public DataResult findProductsNew() {
+        Optional<List<Product>> optional = productRepository.findProductsNew();
+        if (optional.isPresent()) {
+            List<Product> products = optional.get();
+            setCounter(products);
+            return DataResult.success(productMapper.toSlimDtos(products));
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
     }
 
     @Override

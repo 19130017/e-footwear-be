@@ -29,7 +29,7 @@ public class QUERY {
         public static final String FIND_PRODUCT_BY_SLUG = "select * from products where state = 'ACTIVE' and slug = ? ";
         public static final String FIND_PRODUCT_BY_SLUG_COLOR = "select * from products where state = 'ACTIVE' and slug = ? and color_id = ? ";
 
-        public static final String FIND_PRODUCTS_HOT = "select * from products where state = 'ACTIVE' order by create_at limit 15";
+        public static final String FIND_PRODUCTS_HOT = "select * from products where state = 'ACTIVE' order by create_at desc limit 15";
         public static final String FIND_PRODUCTS_NEWS = " select p.* from products p  JOIN product_details d on d.product_id = p.id  where p.state = 'ACTIVE'  order by d.stock_quantity DESC limit 15";
 
         public static final String FIND_PRODUCT_BY_CATE_SLUG = "select p.* from products p join categories c on c.id = p.category_id where p.state = 'ACTIVE' and c.slug = ? ";

@@ -25,4 +25,8 @@ public interface ProductService {
     BaseResult updateProduct(ProductDto productDto);
 
     DataResult findProductsByCateSlug(String slug);
+
+    DataResult findProductsHot();
+
+    DataResult findProductsNew();
 }

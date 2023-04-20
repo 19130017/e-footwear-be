@@ -107,5 +107,19 @@ public class ProductController {
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
+    @GetMapping("/hot")
+    public ResponseEntity getProductsHot() {
+        DataResult dataResult = productService.findProductsHot();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+    }
+    @GetMapping("/new")
+    public ResponseEntity getProductsNew() {
+        DataResult dataResult = productService.findProductsNew();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+    }
 
 }
