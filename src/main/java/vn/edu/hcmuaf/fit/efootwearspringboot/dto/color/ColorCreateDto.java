@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.dto.color;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

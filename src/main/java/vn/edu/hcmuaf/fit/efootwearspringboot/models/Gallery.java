@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -17,7 +18,7 @@ import java.time.ZonedDateTime;
 @SuperBuilder
 @ToString
 @Table(name = "galleries")
-public class Gallery {
+public class Gallery  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -44,7 +45,4 @@ public class Gallery {
     @ManyToOne()
     @JoinColumn(name = "type_gallery_id")
     private TypeGallery typeGallery;
-
-    @OneToOne(mappedBy = "gallery")
-    private Category category;
 }

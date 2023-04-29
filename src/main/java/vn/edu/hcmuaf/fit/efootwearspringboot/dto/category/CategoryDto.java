@@ -26,5 +26,4 @@ public class CategoryDto {
     private ZonedDateTime updateAt;
     private EntityState state;
     private GallerySlimDto gallery;
-
 }

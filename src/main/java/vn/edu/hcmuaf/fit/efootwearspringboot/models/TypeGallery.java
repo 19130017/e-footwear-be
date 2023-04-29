@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "type_galleries")
-public class TypeGallery {
+public class TypeGallery  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -37,10 +38,4 @@ public class TypeGallery {
     @Column(name = "state", length = 10)
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
-
-    @OneToMany(mappedBy = "typeGallery")
-    private List<Gallery> galleries;
-
-    @OneToMany(mappedBy = "type")
-    private List<ProductImage> images;
 }

@@ -1,7 +1,9 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
@@ -43,7 +45,7 @@ public class ColorController {
 
     // create a new color
     @PostMapping
-    public ResponseEntity createColor(@RequestBody ColorCreateDto colorCreateDto) {
+    public ResponseEntity createColor( @RequestBody ColorCreateDto colorCreateDto) {
         ColorDto colorDto = ColorDto.builder()
                 .codeColor(colorCreateDto.getCodeColor())
                 .name(colorCreateDto.getName())

@@ -41,6 +41,7 @@ public class Color implements Serializable {
     @Column(name = "state", length = 10)
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
+
     @OneToMany(mappedBy = "color")
     private List<Product> products ;
 }
