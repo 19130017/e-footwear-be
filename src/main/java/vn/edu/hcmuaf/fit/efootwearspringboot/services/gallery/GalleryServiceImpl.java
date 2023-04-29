@@ -126,7 +126,6 @@ public class GalleryServiceImpl implements GalleryService {
             gallery.setImageURL(galleryDto.getImageURL());
             gallery.setLink(galleryDto.getLink());
             gallery.setTitle(galleryDto.getTitle());
-            gallery.setState(galleryDto.getState());
             gallery.setTypeGallery(typeGalleryMapper.toEntity(galleryDto.getTypeGallery()));
             if (!ObjectUtils.isEmpty(galleryRepository.save(gallery))) {
                 return BaseResult.success();
