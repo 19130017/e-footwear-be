@@ -50,5 +50,11 @@ public class QUERY {
         public static final String FIND_COLLECTIONS = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'collection'";
         public static final String FIND_ADS = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'ads'";
         public static final String FIND_FOOTER = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'footer'";
+        public static final String FIND_ALL = "select * from galleries where state = 'ACTIVE'";
+    }
+
+    public static class GALLERY_TYPE {
+        public static final String FIND_ALL = "select * from type_galleries where state = 'ACTIVE'";
+        public static final String FIND_GALLERY_TYPE = "select * from type_galleries where state = 'ACTIVE' and id = ? ";
     }
 }
