@@ -45,7 +45,7 @@ public class ColorController {
 
     // create a new color
     @PostMapping
-    public ResponseEntity createColor( @RequestBody ColorCreateDto colorCreateDto) {
+    public ResponseEntity createColor(@RequestBody @Valid ColorCreateDto colorCreateDto) {
         ColorDto colorDto = ColorDto.builder()
                 .codeColor(colorCreateDto.getCodeColor())
                 .name(colorCreateDto.getName())
@@ -58,7 +58,7 @@ public class ColorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateColor(@RequestBody ColorUpdateDto colorUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity updateColor(@RequestBody @Valid ColorUpdateDto colorUpdateDto, @PathVariable("id") Long id) {
         ColorDto colorDto = ColorDto.builder()
                 .id(id)
                 .codeColor(colorUpdateDto.getCodeColor())

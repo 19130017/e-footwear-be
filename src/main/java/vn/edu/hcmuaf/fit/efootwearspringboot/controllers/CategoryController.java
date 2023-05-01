@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,7 +61,7 @@ public class CategoryController {
 
     // create a new category
     @PostMapping
-    public ResponseEntity createCategory(@RequestBody CategoryCreateDto categoryCreateDto) {
+    public ResponseEntity createCategory(@RequestBody @Valid CategoryCreateDto categoryCreateDto) {
         CategoryDto categoryDto = CategoryDto.builder()
                 .category(categoryCreateDto.getCategory())
                 .name(categoryCreateDto.getName()).build();
@@ -73,7 +74,7 @@ public class CategoryController {
 
     // update category
     @PutMapping("/{id}")
-    public ResponseEntity updateCategory(@RequestBody CategoryUpdateDto categoryUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity updateCategory(@RequestBody @Valid CategoryUpdateDto categoryUpdateDto, @PathVariable("id") Long id) {
         CategoryDto categoryDto = CategoryDto.builder()
                 .id(id)
                 .category(categoryUpdateDto.getCategory())

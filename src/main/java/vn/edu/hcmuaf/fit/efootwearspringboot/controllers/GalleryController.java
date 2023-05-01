@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -87,7 +88,7 @@ public class GalleryController {
     }
 
     @PostMapping
-    public ResponseEntity createGallery(@RequestBody GalleryCreateDto galleryCreateDto) {
+    public ResponseEntity createGallery(@RequestBody @Valid GalleryCreateDto galleryCreateDto) {
         GalleryDto galleryDto = GalleryDto.builder()
                 .typeGallery(galleryCreateDto.getTypeGallery())
                 .imageURL(galleryCreateDto.getImageURL())
@@ -101,7 +102,7 @@ public class GalleryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateGallery(@RequestBody GalleryUpdateDto galleryUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity updateGallery(@RequestBody @Valid GalleryUpdateDto galleryUpdateDto, @PathVariable("id") Long id) {
         GalleryDto galleryDto = GalleryDto.builder()
                 .id(id)
                 .typeGallery(galleryUpdateDto.getTypeGallery())

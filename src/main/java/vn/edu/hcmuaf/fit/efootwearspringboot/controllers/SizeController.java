@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class SizeController {
     }
 
     @PostMapping
-    public ResponseEntity createSize(@RequestBody  SizeCreateDto sizeCreateDto) {
+    public ResponseEntity createSize(@RequestBody @Valid SizeCreateDto sizeCreateDto) {
         SizeDto sizeDto = SizeDto.builder()
                 .value(sizeCreateDto.getValue())
                 .build();
@@ -51,7 +52,7 @@ public class SizeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateSize(@RequestBody SizeUpdateDto sizeUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity updateSize(@RequestBody @Valid  SizeUpdateDto sizeUpdateDto, @PathVariable("id") Long id) {
         SizeDto sizeDto = SizeDto.builder()
                 .id(id)
                 .value(sizeUpdateDto.getValue())
