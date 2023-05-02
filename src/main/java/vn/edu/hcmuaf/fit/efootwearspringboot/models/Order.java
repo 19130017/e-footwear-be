@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.OrderStatus;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.OrderStatus;
 
 import java.io.Serializable;
 import java.util.List;

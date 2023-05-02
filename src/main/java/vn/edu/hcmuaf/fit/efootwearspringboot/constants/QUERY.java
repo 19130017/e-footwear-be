@@ -2,6 +2,18 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.constants;
 
 public class QUERY {
 
+    public static class VERIFY {
+
+        public static final String FIND_TOKEN_BY_ACCOUNT_ID = " select v from verifies v inner join accounts a\n" +
+                "on v.account_id = a.id\n" +
+                "where a.id = ? and (v.expired = false or v.revoked = false)";
+        public static final String FIND_TOKEN = "select * from verifies where token=?";
+    }
+
+    public static class ACCOUNT {
+
+        public static final String FIND_ACCOUNT = "select * from accounts where username = ? or email = ?";
+    }
 
     public static class CATEGORY {
         public static final String FIND_ALL = "select * from categories where state = 'ACTIVE'";

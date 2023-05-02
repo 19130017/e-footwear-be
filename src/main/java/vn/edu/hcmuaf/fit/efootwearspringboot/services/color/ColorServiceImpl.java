@@ -9,7 +9,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.ColorMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Color;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.ColorRepository;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 

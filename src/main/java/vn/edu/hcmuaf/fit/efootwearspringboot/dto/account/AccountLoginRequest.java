@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.efootwearspringboot.dto.gallery;
+package vn.edu.hcmuaf.fit.efootwearspringboot.dto.account;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,9 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GallerySlimDto {
-    private Long id;
-    private String imageURL;
-    private String link;
-    private String title;
+public class AccountLoginRequest {
+    private String email;
+    private String password;
 }

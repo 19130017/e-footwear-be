@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Table(name = "accounts")
+@Table(name = "verifies")
 public class Verify implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +23,11 @@ public class Verify implements Serializable {
     private Long id;
 
     private String type;
+
+    @Column(unique = true)
     private String token;
-    private Boolean isVerified;
+    public boolean revoked;
+    public boolean expired;
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

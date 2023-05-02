@@ -17,7 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Table(name = "products")
+@Table(name = "coupons")
 public class Coupon  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
