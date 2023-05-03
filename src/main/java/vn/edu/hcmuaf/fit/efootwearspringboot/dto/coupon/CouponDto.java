@@ -16,7 +16,7 @@ public class CouponDto {
     private Long id;
     private Integer price;
     private String code;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Ho_Chi_Minh")
     private Date endTime;
     private Integer maxUsage;
 }

@@ -14,7 +14,6 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 @RestController
 @RequestMapping("/api/v1/coupons")
@@ -59,7 +58,7 @@ public class CouponController {
 
     }
 
-    @GetMapping
+    @GetMapping("/code")
     public ResponseEntity findCouponByCode(String code) {
         DataResult dataResult = couponService.findCouponByCode(code);
         return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));

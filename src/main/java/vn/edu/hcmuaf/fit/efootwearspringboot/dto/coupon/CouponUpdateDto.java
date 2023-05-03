@@ -23,7 +23,7 @@ public class CouponUpdateDto {
     private String code;
     @NotNull(message = "Không được để trống số lần sử dụng")
     private Integer maxUsage;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy", timezone = "Asia/Ho_Chi_Minh")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Ho_Chi_Minh")
     @NotNull(message = "Không được để trống thời gian kết thúc")
     private Date endTime;
 }
