@@ -57,10 +57,4 @@ public class CouponController {
         return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success()) : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
 
     }
-
-    @GetMapping("/code")
-    public ResponseEntity findCouponByCode(String code) {
-        DataResult dataResult = couponService.findCouponByCode(code);
-        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
-    }
 }
