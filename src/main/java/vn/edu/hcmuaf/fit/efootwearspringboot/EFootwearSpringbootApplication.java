@@ -5,9 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.models.Account;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.account.AccountService;
 
 @SpringBootApplication
@@ -22,11 +20,11 @@ public class EFootwearSpringbootApplication {
             AccountService service
     ) {
         return args -> {
-            var admin = AccountDto.builder()
+            AccountDto admin = AccountDto.builder()
                     .username("admin")
                     .email("admin@gmail.com")
                     .password("admin")
-                    .role("ADMIN")
+                    .role(Role.ADMIN.name())
                     .isBlocked(false)
                     .build();
             service.createAccount(admin);

@@ -3,10 +3,7 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
@@ -35,8 +32,8 @@ public class AccountController {
         AccountDto accountDto = AccountDto
                 .builder()
                 .email(accountLoginRequest.getEmail())
-                .role(Role.CUSTOMER.name())
-                .password(accountLoginRequest.getPassword()).build();
+                .password(accountLoginRequest.getPassword())
+                .build();
         DataResult dataResult = accountService.login(accountDto);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
@@ -56,5 +53,13 @@ public class AccountController {
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage()))
                 : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+    }
+
+    @GetMapping("/verify/{token}")
+    public ResponseEntity<HttpResponse> verifyAccount(@PathVariable("token") String token) {
+        BaseResult baseResult = accountService.verify(token);
+        return baseResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
     }
 }

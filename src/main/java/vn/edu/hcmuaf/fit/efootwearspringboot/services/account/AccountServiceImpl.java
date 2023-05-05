@@ -13,6 +13,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountLoginResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AccountMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Account;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Customer;
+import vn.edu.hcmuaf.fit.efootwearspringboot.models.Verify;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.AccountRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CustomerRepository;
@@ -27,12 +28,11 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private final VerifyRepository verifyRepository;
     private final AccountMapper accountMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
     private final JwtService jwtService;
-
     private final MailService mailService;
 
     @Autowired
@@ -43,7 +43,8 @@ public class AccountServiceImpl implements AccountService {
             AuthenticationManager authenticationManager,
             JwtService jwtService,
             CustomerRepository customerRepository,
-            MailService mailService
+            MailService mailService,
+            VerifyRepository verifyRepository
     ) {
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;
@@ -52,19 +53,21 @@ public class AccountServiceImpl implements AccountService {
         this.jwtService = jwtService;
         this.customerRepository = customerRepository;
         this.mailService = mailService;
+        this.verifyRepository = verifyRepository;
     }
 
     @Override
     public DataResult login(AccountDto accountDto) {
+        // authenticate
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountDto.getEmail(), accountDto.getPassword()));
-        Optional<Account> optional = accountRepository.findByEmail(accountDto.getEmail());
 
+        // get account
+        Optional<Account> optional = accountRepository.findByEmail(accountDto.getEmail());
         if (optional.isPresent()) {
             Account account = optional.get();
             String jwtToken = jwtService.generateToken(account, account.getAuthorities());
             String jwtRefreshToken = jwtService.refreshToken(account);
             account.setRefreshToken(jwtRefreshToken);
-            System.out.println(account);
             if (!ObjectUtils.isEmpty(accountRepository.save(account))) {
                 AccountLoginResponse response = AccountLoginResponse
                         .builder()
@@ -82,6 +85,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public BaseResult verify(String token) {
+        Optional<Verify> optional = verifyRepository.findByToken(token);
+        if (optional.isPresent()) {
+            Verify verify = optional.get();
+            verify.setIsExpired(true);
+            if (!ObjectUtils.isEmpty(verifyRepository.save(verify))) {
+                return BaseResult.success("Xác thực tài khoản thành công");
+            }
+            return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống");
+        }
+        return BaseResult.error(HttpStatus.BAD_REQUEST, "Thông tin token không hợp lệ hoặc đã hết hạn");
+    }
+
+    @Override
     public BaseResult createAccount(AccountDto accountDto) {
         Optional<Account> optional = accountRepository.findByEmail(accountDto.getEmail());
         if (optional.isPresent()) {
@@ -93,7 +110,7 @@ public class AccountServiceImpl implements AccountService {
         else account.setRole(Role.ADMIN);
         account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         account.setCustomer(new Customer());
-        account.getCustomer().setAvatar("https://p7.hiclipart.com/preview/636/702/321/computer-icons-user-profile-avatar-black-man.jpg");
+        account.getCustomer().setAvatar("https://anhnenchat.com/wp-content/uploads/2021/02/chim-canh-cut-chibi-dang-yeu-nhat-cho-dien-thoai-1.png");
         account.setIsBlocked(false);
 
         if (!ObjectUtils.isEmpty(accountRepository.save(account))) {

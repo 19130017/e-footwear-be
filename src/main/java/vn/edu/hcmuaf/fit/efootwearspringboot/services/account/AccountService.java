@@ -9,4 +9,6 @@ public interface AccountService {
 
 
     DataResult login(AccountDto accountDto);
+
+    BaseResult verify(String token);
 }

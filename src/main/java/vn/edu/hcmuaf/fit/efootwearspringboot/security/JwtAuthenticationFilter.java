@@ -1,5 +1,7 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.security;
 
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.VerifyRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.account.JwtService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 
 import java.io.IOException;
 
@@ -40,34 +44,44 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        // get token
-        String jwtToken = authHeader.substring(7);
-
-        String email = jwtService.getSubject(jwtToken);
-        System.out.println(email);
-
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            System.out.println(userDetails);
-            if (jwtService.isTokenValid(jwtToken, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            } else {
-                SecurityContextHolder.clearContext();
+        try {
+            final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
             }
+            System.out.println("hello");
+            // get token
+            String jwtToken = authHeader.substring(7);
+            String email = jwtService.getSubject(jwtToken);
+            ;
+
+
+            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                if (jwtService.isTokenValid(jwtToken, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                } else {
+                    SecurityContextHolder.clearContext();
+                }
+            }
+            filterChain.doFilter(request, response);
+        } catch (TokenExpiredException e) {
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().print("Token đã hết hạn vui lòng đăng nhập để làm mới token!");
+        } catch (SignatureVerificationException e) {
+            response.setStatus(HttpStatus.BAD_REQUEST.value());
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().print("Token không hợp lệ!");
         }
-        filterChain.doFilter(request, response);
     }
 }

@@ -7,7 +7,7 @@ public class QUERY {
         public static final String FIND_TOKEN_BY_ACCOUNT_ID = " select v from verifies v inner join accounts a\n" +
                 "on v.account_id = a.id\n" +
                 "where a.id = ? and (v.expired = false or v.revoked = false)";
-        public static final String FIND_TOKEN = "select * from verifies where token=?";
+        public static final String FIND_TOKEN = "select * from verifies where token=? and expire_time > now() and is_expired=false";
     }
 
     public static class ACCOUNT {

@@ -65,12 +65,13 @@ public class MailServiceImpl implements MailService {
         verify.setType(VerifyType.VERIFY.name());
         verify.setIsExpired(false);
         verify.setToken(UUID.randomUUID().toString());
-        verify.setExpireTime(new Date(System.currentTimeMillis() + (60 * 60)));
+        verify.setExpireTime(new Date(System.currentTimeMillis() + (3600 * 1000 * 3)));
         verify.setAccount(account);
 
         //save
         verifyRepository.save(verify);
-        System.out.println(verify.getToken().toString());
+
+
         // send email
         boolean isSuccess = isSendVerify(account.getEmail(), verify.getToken().toString());
         if (isSuccess) {

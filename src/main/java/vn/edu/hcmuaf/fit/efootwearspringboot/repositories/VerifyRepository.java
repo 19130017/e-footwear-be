@@ -9,5 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VerifyRepository extends JpaRepository<Verify, Long> {
+    @Query(value = QUERY.VERIFY.FIND_TOKEN, nativeQuery = true)
     Optional<Verify> findByToken(String token);
 }
