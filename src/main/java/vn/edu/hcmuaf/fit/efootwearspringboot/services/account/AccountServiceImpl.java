@@ -17,6 +17,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.AccountRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CustomerRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.VerifyRepository;
+import vn.edu.hcmuaf.fit.efootwearspringboot.services.mail.MailService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
@@ -32,6 +33,8 @@ public class AccountServiceImpl implements AccountService {
 
     private final JwtService jwtService;
 
+    private final MailService mailService;
+
     @Autowired
     public AccountServiceImpl(
             AccountRepository accountRepository,
@@ -39,7 +42,8 @@ public class AccountServiceImpl implements AccountService {
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
             JwtService jwtService,
-            CustomerRepository customerRepository
+            CustomerRepository customerRepository,
+            MailService mailService
     ) {
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;
@@ -47,17 +51,20 @@ public class AccountServiceImpl implements AccountService {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.customerRepository = customerRepository;
+        this.mailService = mailService;
     }
 
     @Override
     public DataResult login(AccountDto accountDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountDto.getEmail(), accountDto.getPassword()));
         Optional<Account> optional = accountRepository.findByEmail(accountDto.getEmail());
+
         if (optional.isPresent()) {
             Account account = optional.get();
             String jwtToken = jwtService.generateToken(account, account.getAuthorities());
             String jwtRefreshToken = jwtService.refreshToken(account);
             account.setRefreshToken(jwtRefreshToken);
+            System.out.println(account);
             if (!ObjectUtils.isEmpty(accountRepository.save(account))) {
                 AccountLoginResponse response = AccountLoginResponse
                         .builder()
@@ -82,15 +89,15 @@ public class AccountServiceImpl implements AccountService {
         }
 
         Account account = accountMapper.toEntity(accountDto);
-        account.setRole(Role.CUSTOMER);
+        if (accountDto.getRole() == null) account.setRole(Role.CUSTOMER);
+        else account.setRole(Role.ADMIN);
         account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         account.setCustomer(new Customer());
         account.getCustomer().setAvatar("https://p7.hiclipart.com/preview/636/702/321/computer-icons-user-profile-avatar-black-man.jpg");
         account.setIsBlocked(false);
 
         if (!ObjectUtils.isEmpty(accountRepository.save(account))) {
-            // Send mail verify
-
+            if (accountDto.getRole() == null) mailService.sendMailVerify(account);
 
             return BaseResult.success("Chúc mừng bạn đăng ký tài khoản thành công. Vui lòng truy cập email để kích hoạt tài khoản.");
         }

@@ -14,6 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.SecurityConstant;
 import vn.edu.hcmuaf.fit.efootwearspringboot.security.JwtAuthenticationFilter;
@@ -24,13 +27,14 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.security.JwtAuthenticationFilter;
 public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
-//    private final LogoutHandler logoutHandler;
 
     @Autowired
-    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, AuthenticationProvider authenticationProvider) {
+    public SecurityConfiguration(
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            AuthenticationProvider authenticationProvider
+    ) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.authenticationProvider = authenticationProvider;
-//        this.logoutHandler = logoutHandler;
     }
 
     @Bean
@@ -45,19 +49,32 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests()
                 // limit role access
-                .requestMatchers(SecurityConstant.PUBLIC_URLS).permitAll()
-                .requestMatchers(SecurityConstant.REQUIRE_ADMIN_ROLE_URLS).hasAnyRole(Role.ADMIN.name())
+                .requestMatchers(SecurityConstant.PUBLIC_URLS)
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, SecurityConstant.METHOD_GET_URLS)
+                .permitAll()
+                .requestMatchers(SecurityConstant.REQUIRE_ADMIN_ROLE_URLS)
+                .hasRole(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
                 // jwt authentication
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        // logout
-//                .logout()
-//                .logoutUrl("/api/v1/auth/logout")
-//                .addLogoutHandler(logoutHandler)
-//                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
         return http.build();
     }
+
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOriginPattern("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+
 }

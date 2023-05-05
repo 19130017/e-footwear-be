@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -23,11 +24,14 @@ public class Verify implements Serializable {
     private Long id;
 
     private String type;
+    @Column(name = "is_expired")
+    private Boolean isExpired;
 
     @Column(unique = true)
     private String token;
-    public boolean revoked;
-    public boolean expired;
+
+    public Date expireTime;
+
     @ManyToOne
     @JoinColumn(name = "account_id")
     private Account account;

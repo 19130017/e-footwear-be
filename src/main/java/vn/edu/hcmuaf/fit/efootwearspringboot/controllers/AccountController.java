@@ -3,12 +3,11 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountLoginRequest;
@@ -36,6 +35,7 @@ public class AccountController {
         AccountDto accountDto = AccountDto
                 .builder()
                 .email(accountLoginRequest.getEmail())
+                .role(Role.CUSTOMER.name())
                 .password(accountLoginRequest.getPassword()).build();
         DataResult dataResult = accountService.login(accountDto);
         return dataResult.getSuccess() ?
