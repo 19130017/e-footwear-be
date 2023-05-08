@@ -18,7 +18,8 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "coupons")
-public class Coupon  implements Serializable {
+public class Coupon implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,7 +28,7 @@ public class Coupon  implements Serializable {
     private Integer price;
     @Column(name = "code")
     private String code;
-
+    @Temporal(TemporalType.DATE)
     @Column(name = "end_time")
     private Date endTime;
 

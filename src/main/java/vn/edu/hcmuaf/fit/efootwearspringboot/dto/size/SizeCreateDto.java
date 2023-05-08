@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.dto.size;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SizeCreateDto {
+    @NotNull(message = "Không được để trống size")
     private Integer value;
 }

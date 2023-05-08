@@ -4,69 +4,69 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeCreateDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeUpdateDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.services.size.SizeService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.type_gallery.TypeGalleryCreateDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.type_gallery.TypeGalleryDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.type_gallery.TypeGalleryUpdateDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.services.type_gallery.TypeGalleryService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
-@RestController()
-@RequestMapping("/api/v1/sizes")
-public class SizeController {
-    private SizeService sizeService;
+@RestController
+@RequestMapping("/api/v1/type-galleries")
+public class TypeGalleryController {
+    private TypeGalleryService typeGalleryService;
 
     @Autowired
-    public SizeController(SizeService sizeService) {
-        this.sizeService = sizeService;
+    public TypeGalleryController(TypeGalleryService typeGalleryService) {
+        this.typeGalleryService = typeGalleryService;
     }
 
     @GetMapping
-    public ResponseEntity findSizes() {
-        DataResult dataResult = sizeService.findAll();
+    public ResponseEntity findTypeGalleries() {
+        DataResult dataResult = typeGalleryService.findAll();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findSize(@PathVariable("id") Long id) {
-        DataResult dataResult = sizeService.findSize(id);
+    public ResponseEntity findTypeGallery(@PathVariable("id") Long id) {
+        DataResult dataResult = typeGalleryService.findTypeGallery(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
     @PostMapping
-    public ResponseEntity createSize(@RequestBody @Valid SizeCreateDto sizeCreateDto) {
-        SizeDto sizeDto = SizeDto.builder()
-                .value(sizeCreateDto.getValue())
+    public ResponseEntity createTypeGallery(@RequestBody @Valid TypeGalleryCreateDto typeGalleryCreateDto) {
+        TypeGalleryDto typeGalleryDto = TypeGalleryDto.builder()
+                .typeCode(typeGalleryCreateDto.getTypeCode())
+                .typeName(typeGalleryCreateDto.getTypeName())
                 .build();
-
-        BaseResult baseResult = sizeService.createSize(sizeDto);
+        BaseResult baseResult = typeGalleryService.createTypeGallery(typeGalleryDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateSize(@RequestBody @Valid  SizeUpdateDto sizeUpdateDto, @PathVariable("id") Long id) {
-        SizeDto sizeDto = SizeDto.builder()
+    public ResponseEntity updateTypeGallery(@RequestBody @Valid TypeGalleryUpdateDto typeGalleryUpdateDto, @PathVariable("id") Long id) {
+        TypeGalleryDto typeGalleryDto = TypeGalleryDto.builder()
                 .id(id)
-                .value(sizeUpdateDto.getValue())
+                .typeCode(typeGalleryUpdateDto.getTypeCode())
+                .typeName(typeGalleryUpdateDto.getTypeName())
                 .build();
-
-        BaseResult baseResult = sizeService.updateSize(sizeDto);
+        BaseResult baseResult = typeGalleryService.updateTypeGallery(typeGalleryDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSize(@PathVariable("id") Long id) {
-        BaseResult baseResult = sizeService.deleteSize(id);
+    public ResponseEntity deleteTypeGallery(@PathVariable("id") Long id) {
+        BaseResult baseResult = typeGalleryService.deleteTypeGallery(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
