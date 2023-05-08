@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.efootwearspringboot.utils;
+package vn.edu.hcmuaf.fit.efootwearspringboot.constants;
 
 public enum OrderStatus {
     CANCEL("Huỷ"),

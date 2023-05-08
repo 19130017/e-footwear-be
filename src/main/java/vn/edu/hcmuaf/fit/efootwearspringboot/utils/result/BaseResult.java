@@ -15,6 +15,10 @@ public class BaseResult extends AbstractResult {
         return new BaseResult(true, HttpStatus.OK, "Success!");
     }
 
+    public static BaseResult success(String message) {
+        return new BaseResult(true, HttpStatus.OK, message);
+    }
+
     public static BaseResult error(HttpStatus httpStatus, String message) {
         return new BaseResult(false, httpStatus, message);
     }

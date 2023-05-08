@@ -5,11 +5,10 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Entity
 @Getter

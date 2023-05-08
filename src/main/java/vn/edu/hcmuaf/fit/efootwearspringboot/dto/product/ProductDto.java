@@ -7,7 +7,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image.ProductImageDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 
 import java.time.ZonedDateTime;
 import java.util.List;

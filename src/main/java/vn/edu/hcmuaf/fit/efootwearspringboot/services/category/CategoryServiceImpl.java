@@ -9,7 +9,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.CategoryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Category;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CategoryRepository;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.MyParser;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
@@ -72,16 +72,26 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public BaseResult createCategory(CategoryDto categoryDto) {
+        // convert name to slug
         String slug = MyParser.convertToSlug(categoryDto.getName());
+
+        // set slug = slug + parent's slug
         if (categoryDto.getCategory() != null) {
             Optional<Category> optionalParent = categoryRepository.findCategoryById(categoryDto.getCategory().getId());
             if (optionalParent.isPresent()) {
                 slug = MyParser.convertToSlug(categoryDto.getName()) + "-" + optionalParent.get().getSlug();
             }
         }
-        categoryDto.setSlug(slug);
+
+        // tìm kiếm category với slug
+        Optional<Category> optionalCategory = categoryRepository.findCategoryBySlug(slug);
+        if (optionalCategory.isPresent())
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Category đã tồn tại");
+
         categoryDto.setState(EntityState.ACTIVE);
+        categoryDto.setSlug(slug);
         Category category = categoryMapper.toEntity(categoryDto);
+
         if (!ObjectUtils.isEmpty(categoryRepository.save(category))) {
             return BaseResult.success();
         }

@@ -19,6 +19,7 @@ import java.util.Date;
 @SuperBuilder
 @Table(name = "coupons")
 public class Coupon implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
