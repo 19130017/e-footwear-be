@@ -6,11 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Getter
 @Setter

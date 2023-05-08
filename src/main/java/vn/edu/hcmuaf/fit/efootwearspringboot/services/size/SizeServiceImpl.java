@@ -7,10 +7,9 @@ import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.SizeMapper;
-import vn.edu.hcmuaf.fit.efootwearspringboot.models.Color;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Size;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.SizeRepository;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 

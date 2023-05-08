@@ -23,7 +23,6 @@ public class Customer  implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     private String firstName;
     private String lastName;
     private String birthday;
@@ -33,10 +32,7 @@ public class Customer  implements Serializable {
     private List<Order> orders;
     @OneToMany(mappedBy = "customer")
     private List<AddressDelivery> addresses;
-    @OneToOne
-    @JoinColumn(name = "account_id")
+    @OneToOne(mappedBy = "customer")
     private Account account;
-
-
 
 }
