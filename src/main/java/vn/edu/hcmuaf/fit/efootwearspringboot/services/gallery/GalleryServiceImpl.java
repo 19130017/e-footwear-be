@@ -10,7 +10,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.GalleryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.TypeGalleryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Gallery;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.GalleryRepository;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
