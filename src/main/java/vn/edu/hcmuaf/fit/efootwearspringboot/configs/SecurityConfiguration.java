@@ -45,6 +45,7 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .sessionManagement()
+
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //                .and()
 //                .authorizeHttpRequests()
@@ -61,6 +62,7 @@ public class SecurityConfiguration {
                 // jwt authentication
 //                .authenticationProvider(authenticationProvider)
 //                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
