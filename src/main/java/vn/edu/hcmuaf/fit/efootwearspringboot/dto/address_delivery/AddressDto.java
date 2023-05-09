@@ -1,18 +1,17 @@
-package vn.edu.hcmuaf.fit.efootwearspringboot.models;
+package vn.edu.hcmuaf.fit.efootwearspringboot.dto.address_delivery;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.io.Serializable;
-
 @Getter
 @Setter
-public class Address  implements Serializable {
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AddressDto {
     private Integer provinceId;
     private String provinceName;
     private Integer districtId;

@@ -63,7 +63,7 @@ public class MailServiceImpl implements MailService {
     public BaseResult sendMailVerify(Account account) {
         Verify verify = new Verify();
         verify.setType(VerifyType.VERIFY.name());
-        verify.setIsExpired(false);
+        verify.setIsVerified(false);
         verify.setToken(UUID.randomUUID().toString());
         verify.setExpireTime(new Date(System.currentTimeMillis() + (3600 * 1000 * 3)));
         verify.setAccount(account);

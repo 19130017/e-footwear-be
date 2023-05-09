@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 @Getter
@@ -26,13 +25,5 @@ public class Customer  implements Serializable {
     private String firstName;
     private String lastName;
     private String birthday;
-    private Boolean gender;
     private String avatar;
-    @OneToMany(mappedBy = "customer")
-    private List<Order> orders;
-    @OneToMany(mappedBy = "customer")
-    private List<AddressDelivery> addresses;
-    @OneToOne(mappedBy = "customer")
-    private Account account;
-
 }

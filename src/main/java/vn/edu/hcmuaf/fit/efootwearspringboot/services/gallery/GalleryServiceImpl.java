@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.gallery.GalleryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.GalleryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.TypeGalleryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Gallery;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.GalleryRepository;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 

@@ -1,10 +1,7 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.io.Serializable;
@@ -15,6 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString
 @Table(name = "address_delivery")
 public class AddressDelivery implements Serializable {
     @Id
@@ -24,16 +22,21 @@ public class AddressDelivery implements Serializable {
     @Column(name = "full_name")
     private String fullName;
 
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "email")
     private String email;
 
     @Column(name = "address")
     private String address;
 
-    @ManyToOne()
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @Column(name = "is_default")
+    private Boolean isDefault;
 
+    @ManyToOne()
+    @JoinColumn(name = "account_id")
+    private Account account;
     @Embedded
     private Address addresses;
 }

@@ -38,8 +38,8 @@ public class Order  implements Serializable {
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
     @ManyToOne()
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    @JoinColumn(name = "account_id")
+    private Account account;
     @ManyToOne()
     @JoinColumn(name = "address_id")
     private AddressDelivery address;

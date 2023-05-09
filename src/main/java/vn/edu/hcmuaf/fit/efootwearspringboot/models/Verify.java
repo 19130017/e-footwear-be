@@ -24,8 +24,8 @@ public class Verify implements Serializable {
     private Long id;
 
     private String type;
-    @Column(name = "is_expired")
-    private Boolean isExpired;
+    @Column(name = "is_verified")
+    private Boolean isVerified;
 
     @Column(unique = true)
     private String token;

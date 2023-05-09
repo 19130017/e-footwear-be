@@ -53,12 +53,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("hello");
             // get token
             String jwtToken = authHeader.substring(7);
-            String email = jwtService.getSubject(jwtToken);
-            ;
+            String username = jwtService.getSubject(jwtToken);
 
 
-            if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 if (jwtService.isTokenValid(jwtToken, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -77,6 +76,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (TokenExpiredException e) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
             response.setCharacterEncoding("UTF-8");
+            // kiểm tra refresh token
+            // còn hạn thì reset
+            // không còn hạn thì đăng nhập lại
             response.getWriter().print("Token đã hết hạn vui lòng đăng nhập để làm mới token!");
         } catch (SignatureVerificationException e) {
             response.setStatus(HttpStatus.BAD_REQUEST.value());
