@@ -45,22 +45,24 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests()
+
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                .and()
+//                .authorizeHttpRequests()
                 // limit role access
-                .requestMatchers(SecurityConstant.PUBLIC_URLS)
-                .permitAll()
-                .requestMatchers(HttpMethod.GET, SecurityConstant.METHOD_GET_URLS)
-                .permitAll()
-                .requestMatchers(SecurityConstant.REQUIRE_ADMIN_ROLE_URLS)
-                .hasRole(Role.ADMIN.name())
-                .anyRequest()
-                .authenticated()
-                .and()
+//                .requestMatchers(SecurityConstant.PUBLIC_URLS)
+//                .permitAll()
+//                .requestMatchers(HttpMethod.GET, SecurityConstant.METHOD_GET_URLS)
+//                .permitAll()
+//                .requestMatchers(SecurityConstant.REQUIRE_ADMIN_ROLE_URLS)
+//                .hasRole(Role.ADMIN.name())
+//                .anyRequest()
+//                .authenticated()
+//                .and()
                 // jwt authentication
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

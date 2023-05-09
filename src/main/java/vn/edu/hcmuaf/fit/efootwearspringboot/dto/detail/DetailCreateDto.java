@@ -12,8 +12,8 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class DetailDto {
-    private Long id;
+public class DetailCreateDto {
     private Integer stockQuantity;
     private SizeDto size;
+    private ProductSlimDto product;
 }

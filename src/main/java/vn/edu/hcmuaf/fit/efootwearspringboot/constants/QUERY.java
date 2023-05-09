@@ -52,6 +52,7 @@ public class QUERY {
     public static class DETAIL {
         public static final String FIND_DETAIL_BY_PRODUCT = "select d.* from product_details d join products p on d.product_id = p.id where p.state = 'ACTIVE' and d.size_id=? and p.slug=? and p.color_id=?";
         public static final String FIND_DETAILS_BY_PRODUCT = "select d.* from product_details d join products p on d.product_id = p.id where p.state = 'ACTIVE' and p.slug=? and p.color_id=?";
+        public static final String FIND_ALL = "select * from product_details ";
     }
 
     public static class GALLERY {

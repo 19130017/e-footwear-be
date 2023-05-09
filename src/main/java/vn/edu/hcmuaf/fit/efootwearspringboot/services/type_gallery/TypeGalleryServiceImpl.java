@@ -8,7 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.TypeGalleryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.TypeGallery;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.TypeGalleryRepository;
-import vn.edu.hcmuaf.fit.efootwearspringboot.utils.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 import org.springframework.http.HttpStatus;

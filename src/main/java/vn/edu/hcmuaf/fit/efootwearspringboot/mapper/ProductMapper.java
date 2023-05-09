@@ -9,18 +9,20 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.models.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = { ColorMapper.class, ProductImageMapper.class, DetailMapper.class})
+@Mapper(componentModel = "spring", uses = {ColorMapper.class, ProductImageMapper.class, DetailMapper.class})
 @Component("productMapper")
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     ProductSlimDto toSlimDto(Product product);
 
-//    Product slimToEntity(ProductSlimDto productSlimDto);
+
+    Product slimToEntity(ProductSlimDto productSlimDto);
 
 //    List<Product> slimToEntities(List<ProductSlimDto> productSlimDtos);
 
     List<ProductSlimDto> toSlimDtos(List<Product> products);
+
 
     ProductDto toDto(Product product);
 
