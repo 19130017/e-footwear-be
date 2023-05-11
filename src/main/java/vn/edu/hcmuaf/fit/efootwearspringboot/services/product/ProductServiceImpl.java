@@ -41,9 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository,
-                              ProductMapper productMapper, ColorMapper colorMapper, ProductImageMapper
-                                      productImageMapper, TypeGalleryRepository typeGalleryRepository, CategoryMapper categoryMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ProductMapper productMapper, ColorMapper colorMapper, ProductImageMapper productImageMapper, TypeGalleryRepository typeGalleryRepository, CategoryMapper categoryMapper) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.productMapper = productMapper;
@@ -164,6 +162,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public BaseResult createProduct(ProductDto productDto) {
         Product product = productMapper.toEntity(productDto);
+        product.setState(EntityState.ACTIVE);
         product.setSlug(MyParser.convertToSlug(product.getName()));
         for (ProductImage productImage : product.getImages()) {
             String temp = "product";
@@ -171,7 +170,6 @@ public class ProductServiceImpl implements ProductService {
             productImage.setTypeGallery(optional.get());
             productImage.setProduct(product);
             productImage.setState(EntityState.ACTIVE);
-
         }
         if (!ObjectUtils.isEmpty(productRepository.save(product))) {
             return BaseResult.success();
@@ -186,11 +184,13 @@ public class ProductServiceImpl implements ProductService {
             Product product = optional.get();
             product.setName(productDto.getName());
             product.setDiscountRate(productDto.getDiscountRate());
-            product.setDiscountPrice(productDto.getDiscountPrice());
+            product.setOriginPrice(productDto.getOriginPrice());
+            product.setDescription(productDto.getDescription());
             product.setCategory(categoryMapper.toEntity(productDto.getCategory()));
             product.setColor(colorMapper.toEntity(productDto.getColor()));
-            for (ProductImage productImage : product.getImages()) {
-                productImage.setImageURL(productImage.getImageURL());
+            for (int i = 0; i < product.getImages().size(); i++) {
+                ProductImage productImage = product.getImages().get(i);
+                productImage.setImageURL(productDto.getImages().get(i).getImageURL());
             }
             if (!ObjectUtils.isEmpty(productRepository.save(product))) {
                 return BaseResult.success();
