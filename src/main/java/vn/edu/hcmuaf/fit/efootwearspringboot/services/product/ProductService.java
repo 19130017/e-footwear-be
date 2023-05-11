@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Product;
+import vn.edu.hcmuaf.fit.efootwearspringboot.models.ProductImage;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 

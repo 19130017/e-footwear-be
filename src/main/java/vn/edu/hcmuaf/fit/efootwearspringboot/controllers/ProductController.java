@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductUpdateDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image.ProductImageDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.product.ProductService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
@@ -82,7 +83,9 @@ public class ProductController {
                 .description(productCreateDto.getDescription())
                 .color(productCreateDto.getColor())
                 .category(productCreateDto.getCategory())
+                .images(productCreateDto.getImages())
                 .build();
+
         BaseResult baseResult = productService.createProduct(productDto);
 
         return baseResult.getSuccess() ?
@@ -90,16 +93,17 @@ public class ProductController {
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
-    @PutMapping()
-    public ResponseEntity updateProduct(@Valid @RequestBody ProductUpdateDto productUpdateDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity updateProduct(@Valid @RequestBody ProductUpdateDto productUpdateDto, @PathVariable("id") Long id) {
         ProductDto productDto = ProductDto.builder()
-                .id(productUpdateDto.getId())
+                .id(id)
                 .name(productUpdateDto.getName())
                 .originPrice(productUpdateDto.getOriginPrice())
                 .discountRate(productUpdateDto.getDiscountRate())
                 .description(productUpdateDto.getDescription())
                 .color(productUpdateDto.getColor())
                 .category(productUpdateDto.getCategory())
+                .images(productUpdateDto.getImages())
                 .build();
         BaseResult baseResult = productService.updateProduct(productDto);
         return baseResult.getSuccess() ?
@@ -114,6 +118,7 @@ public class ProductController {
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
+
     @GetMapping("/new")
     public ResponseEntity getProductsNew() {
         DataResult dataResult = productService.findProductsNew();
@@ -121,5 +126,4 @@ public class ProductController {
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
-
 }

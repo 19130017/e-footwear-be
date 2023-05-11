@@ -1,10 +1,7 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 
@@ -15,6 +12,7 @@ import java.time.ZonedDateTime;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class ProductImageDto {
     private Long id;
     private String imageURL;

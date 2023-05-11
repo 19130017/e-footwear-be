@@ -1,14 +1,25 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
+import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.CategoryMapper;
+import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.ColorMapper;
+import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.ProductImageMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.ProductMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Category;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Product;
+import vn.edu.hcmuaf.fit.efootwearspringboot.models.ProductImage;
+import vn.edu.hcmuaf.fit.efootwearspringboot.models.TypeGallery;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CategoryRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.ProductRepository;
+import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.TypeGalleryRepository;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.MyParser;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
@@ -23,12 +34,23 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
     private ProductMapper productMapper;
+    private ColorMapper colorMapper;
+    private ProductImageMapper productImageMapper;
+    private TypeGalleryRepository typeGalleryRepository;
+    private CategoryMapper categoryMapper;
+
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository, ProductMapper productMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository,
+                              ProductMapper productMapper, ColorMapper colorMapper, ProductImageMapper
+                                      productImageMapper, TypeGalleryRepository typeGalleryRepository, CategoryMapper categoryMapper) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.productMapper = productMapper;
+        this.colorMapper = colorMapper;
+        this.productImageMapper = productImageMapper;
+        this.typeGalleryRepository = typeGalleryRepository;
+        this.categoryMapper = categoryMapper;
     }
 
     @Override
@@ -128,16 +150,54 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public BaseResult deleteProduct(Long id) {
-        return null;
+        Optional<Product> optional = productRepository.findProductById(id);
+        if (optional.isPresent()) {
+            Product product = optional.get();
+            product.setState(EntityState.DELETED);
+            if (!ObjectUtils.isEmpty(productRepository.save(product))) {
+                return BaseResult.success();
+            }
+        }
+        return BaseResult.error(HttpStatus.BAD_REQUEST, "Xóa thất bại");
     }
 
     @Override
     public BaseResult createProduct(ProductDto productDto) {
-        return null;
+        Product product = productMapper.toEntity(productDto);
+        product.setSlug(MyParser.convertToSlug(product.getName()));
+        for (ProductImage productImage : product.getImages()) {
+            String temp = "product";
+            Optional<TypeGallery> optional = typeGalleryRepository.findTypeGalleryByType(temp);
+            productImage.setTypeGallery(optional.get());
+            productImage.setProduct(product);
+            productImage.setState(EntityState.ACTIVE);
+
+        }
+        if (!ObjectUtils.isEmpty(productRepository.save(product))) {
+            return BaseResult.success();
+        }
+        return BaseResult.error(HttpStatus.BAD_REQUEST, "Thêm mới thất bại");
     }
 
     @Override
     public BaseResult updateProduct(ProductDto productDto) {
-        return null;
+        Optional<Product> optional = productRepository.findProductById(productDto.getId());
+        if (optional.isPresent()) {
+            Product product = optional.get();
+            product.setName(productDto.getName());
+            product.setDiscountRate(productDto.getDiscountRate());
+            product.setDiscountPrice(productDto.getDiscountPrice());
+            product.setCategory(categoryMapper.toEntity(productDto.getCategory()));
+            product.setColor(colorMapper.toEntity(productDto.getColor()));
+            for (ProductImage productImage : product.getImages()) {
+                productImage.setImageURL(productImage.getImageURL());
+            }
+            if (!ObjectUtils.isEmpty(productRepository.save(product))) {
+                return BaseResult.success();
+            }
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể cập nhật dữ liệu.");
+        }
+        throw new NotFoundException("Không tìm thấy dữ liệu");
+
     }
 }

@@ -14,4 +14,7 @@ public interface TypeGalleryRepository extends JpaRepository<TypeGallery, Long> 
 
     @Query(value = QUERY.GALLERY_TYPE.FIND_GALLERY_TYPE, nativeQuery = true)
     Optional<TypeGallery> findTypeGalleryBy(Long id);
+
+    @Query(value = QUERY.GALLERY_TYPE.FIND_GALLERY_BY_TYPE, nativeQuery = true)
+    Optional<TypeGallery> findTypeGalleryByType(String type);
 }

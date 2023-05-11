@@ -69,6 +69,7 @@ public class QUERY {
     public static class GALLERY_TYPE {
         public static final String FIND_ALL = "select * from type_galleries where state = 'ACTIVE'";
         public static final String FIND_GALLERY_TYPE = "select * from type_galleries where state = 'ACTIVE' and id = ? ";
+        public static final String FIND_GALLERY_BY_TYPE = "select * from type_galleries where state = 'ACTIVE' and type_code = ? ";
     }
 
     public static class COUPON {
