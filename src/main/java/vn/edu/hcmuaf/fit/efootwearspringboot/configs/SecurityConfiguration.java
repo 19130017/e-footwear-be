@@ -53,8 +53,6 @@ public class SecurityConfiguration {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, SecurityConstant.METHOD_GET_URLS)
                 .permitAll()
-                .requestMatchers(SecurityConstant.REQUIRE_ADMIN_ROLE_URLS)
-                .hasRole(Role.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()

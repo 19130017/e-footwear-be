@@ -8,13 +8,14 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.models.AddressDelivery;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = AccountMapper.class)
+@Mapper(componentModel = "spring")
 @Component("addressDeliveryMapper")
 public interface AddressDeliveryMapper {
 
     AddressDeliveryMapper INSTANCE = Mappers.getMapper(AddressDeliveryMapper.class);
 
     AddressDeliveryDto toDto(AddressDelivery AddressDelivery);
+
 
     AddressDelivery toEntity(AddressDeliveryDto AddressDeliveryDto);
 

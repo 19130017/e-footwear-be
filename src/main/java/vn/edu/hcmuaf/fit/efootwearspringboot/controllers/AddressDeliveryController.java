@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.address_delivery.AddressDeliveryCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.address_delivery.AddressDeliveryDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.address_delivery.AddressDeliveryUpdateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.address_delivery.AddressDeliveryService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
@@ -22,6 +23,14 @@ public class AddressDeliveryController {
     @Autowired
     public AddressDeliveryController(AddressDeliveryService addressDeliveryService) {
         this.addressDeliveryService = addressDeliveryService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<HttpResponse> getAddress(@PathVariable("id") Long id) {
+        DataResult dataResult = addressDeliveryService.getAddress(id);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
     @GetMapping()
@@ -47,6 +56,35 @@ public class AddressDeliveryController {
                 .build();
 
         BaseResult baseResult = addressDeliveryService.createAddress(addressDeliveryDto, accountId);
+        return baseResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success()) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+    }
+
+    @PutMapping()
+    public ResponseEntity<HttpResponse> updateAddressDelivery(
+            @RequestBody AddressDeliveryUpdateDto addressDeliveryUpdateDto,
+            @RequestParam("accountId") Long accountId) {
+        AddressDeliveryDto addressDeliveryDto = AddressDeliveryDto
+                .builder()
+                .id(addressDeliveryUpdateDto.getId())
+                .fullName(addressDeliveryUpdateDto.getFullName())
+                .phone(addressDeliveryUpdateDto.getPhone())
+                .address(addressDeliveryUpdateDto.getAddress())
+                .email(addressDeliveryUpdateDto.getEmail())
+                .isDefault(addressDeliveryUpdateDto.getIsDefault())
+                .addresses(addressDeliveryUpdateDto.getAddresses())
+                .build();
+        BaseResult baseResult = addressDeliveryService.updateAddress(accountId, addressDeliveryDto);
+
+        return baseResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success()) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpResponse> deleteAddress(@PathVariable("id") Long id) {
+        BaseResult baseResult = addressDeliveryService.deleteAddress(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));

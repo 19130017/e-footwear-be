@@ -11,7 +11,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressDeliveryCreateDto {
+public class AddressDeliveryUpdateDto {
+    private Long id;
     private String fullName;
     private String email;
     private String phone;

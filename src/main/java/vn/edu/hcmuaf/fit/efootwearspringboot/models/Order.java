@@ -18,14 +18,16 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "orders")
-public class Order  implements Serializable {
+public class Order implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private String id;
 
     @Column(name = "cost")
-    private Integer cost;
+    private Integer cost; // giá sau khi + VAT + phí vận chuyển
+
+    @Column(name = "transport_fee")
+    private Integer transportFee; // giá vận chuyển
 
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
@@ -37,9 +39,11 @@ public class Order  implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
+
     @ManyToOne()
     @JoinColumn(name = "account_id")
     private Account account;
+
     @ManyToOne()
     @JoinColumn(name = "address_id")
     private AddressDelivery address;

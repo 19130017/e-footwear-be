@@ -3,6 +3,7 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.models;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 
 import java.io.Serializable;
 
@@ -39,4 +40,8 @@ public class AddressDelivery implements Serializable {
     private Account account;
     @Embedded
     private Address addresses;
+
+    @Column(name = "state", length = 10)
+    @Enumerated(value = EnumType.STRING)
+    private EntityState state;
 }

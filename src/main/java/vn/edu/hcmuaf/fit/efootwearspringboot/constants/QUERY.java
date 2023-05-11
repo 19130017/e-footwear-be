@@ -5,8 +5,10 @@ public class QUERY {
     public static class VERIFY {
         public static final String FIND_TOKEN = "select * from verifies where token=? and expire_time > now() and is_verified=false";
     }
+
     public static class ADDRESS_DELIVERY {
-        public static final String FIND_ADDRESSES = "select * from address_delivery where account_id= ?";
+        public static final String FIND_ADDRESSES = "select * from address_delivery where account_id= ? and state= 'ACTIVE'";
+        public static final String FIND_BY_ID_AND_ACCOUNT_ID = "select * from address_delivery where id=? and account_id= ?";
     }
 
     public static class ACCOUNT {

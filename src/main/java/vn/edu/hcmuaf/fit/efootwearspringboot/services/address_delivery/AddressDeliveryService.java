@@ -8,4 +8,10 @@ public interface AddressDeliveryService {
     DataResult getAddresses(Long accountId);
 
     BaseResult createAddress(AddressDeliveryDto addressDeliveryDto, Long accountId);
+
+    BaseResult updateAddress(Long accountId, AddressDeliveryDto addressDeliveryDto);
+
+    DataResult getAddress(Long id);
+
+    BaseResult deleteAddress(Long id);
 }
