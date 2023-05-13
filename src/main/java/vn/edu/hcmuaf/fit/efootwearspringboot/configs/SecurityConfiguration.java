@@ -45,9 +45,10 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeHttpRequests()
+
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+               .and()
+               .authorizeHttpRequests()
                 // limit role access
                 .requestMatchers(SecurityConstant.PUBLIC_URLS)
                 .permitAll()
@@ -56,9 +57,10 @@ public class SecurityConfiguration {
                 .anyRequest()
                 .authenticated()
                 .and()
-                // jwt authentication
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//                 jwt authentication
+               .authenticationProvider(authenticationProvider)
+               .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

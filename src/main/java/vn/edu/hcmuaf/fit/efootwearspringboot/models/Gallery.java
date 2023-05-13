@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "galleries")
-public class Gallery  implements Serializable {
+public class Gallery implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

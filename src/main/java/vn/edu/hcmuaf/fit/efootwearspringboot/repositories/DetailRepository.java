@@ -16,4 +16,9 @@ public interface DetailRepository extends JpaRepository<Detail, Long> {
 
     @Query(value = QUERY.DETAIL.FIND_DETAILS_BY_PRODUCT, nativeQuery = true)
     Optional<List<Detail>> findDetailsByProduct(String slug, Long color_id);
+
+    @Query(value = QUERY.DETAIL.FIND_ALL, nativeQuery = true)
+    Optional<List<Detail>> findDetails();
+
+
 }

@@ -6,6 +6,7 @@ import lombok.experimental.SuperBuilder;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailSlimDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image.ProductImageDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 
@@ -34,5 +35,5 @@ public class ProductDto {
     private CategoryDto category;
     private ColorDto color;
     private List<ProductImageDto> images;
-    private List<DetailDto> details;
+    private List<DetailSlimDto> details;
 }

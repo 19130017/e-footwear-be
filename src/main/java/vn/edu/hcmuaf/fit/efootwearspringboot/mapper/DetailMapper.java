@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailSlimDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Detail;
 
 import java.util.List;
@@ -15,9 +16,15 @@ public interface DetailMapper {
 
     DetailDto toDto(Detail detail);
 
+    DetailSlimDto toSlimDto(Detail detail);
+
     Detail toEntity(DetailDto detailDto);
+
+    Detail toEntitySlim(DetailSlimDto detailSlimDto);
 
     List<Detail> toEntities(List<DetailDto> detailDtos);
 
     List<DetailDto> toDtos(List<Detail> details);
+
+    List<DetailSlimDto> toDtosSlim(List<Detail> details);
 }
