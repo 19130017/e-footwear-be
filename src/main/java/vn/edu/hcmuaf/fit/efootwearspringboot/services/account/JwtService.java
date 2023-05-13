@@ -29,7 +29,7 @@ public class JwtService {
     public String generateToken(Account account, Collection<? extends GrantedAuthority> authorities) {
         return JWT
                 .create()
-                .withSubject(account.getEmail())
+                .withSubject(account.getUsername())
                 .withClaim("roles", authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + jwtExpiration))
@@ -39,7 +39,7 @@ public class JwtService {
     public String refreshToken(Account account) {
         return JWT
                 .create()
-                .withSubject(account.getEmail())
+                .withSubject(account.getUsername())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + refreshExpiration))
                 .sign(Algorithm.HMAC256(secretKey.getBytes()));

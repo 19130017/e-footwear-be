@@ -52,6 +52,10 @@ public class Account implements Serializable, UserDetails {
 
     @Column(name = "is_blocked")
     private Boolean isBlocked;
+    @OneToMany(mappedBy = "account")
+    private List<Order> orders;
+    @OneToMany(mappedBy = "account")
+    private List<AddressDelivery> addresses;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -65,7 +69,7 @@ public class Account implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

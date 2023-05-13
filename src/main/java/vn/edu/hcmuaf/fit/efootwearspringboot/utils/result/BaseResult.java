@@ -12,11 +12,7 @@ public class BaseResult extends AbstractResult {
     }
 
     public static BaseResult success() {
-        return new BaseResult(true, HttpStatus.OK, "Success!");
-    }
-
-    public static BaseResult success(String message) {
-        return new BaseResult(true, HttpStatus.OK, message);
+        return new BaseResult(true, HttpStatus.OK, "Thành công!");
     }
 
     public static BaseResult error(HttpStatus httpStatus, String message) {

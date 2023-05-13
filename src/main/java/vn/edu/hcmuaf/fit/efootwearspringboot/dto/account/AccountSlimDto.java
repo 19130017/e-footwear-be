@@ -1,9 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.dto.account;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -11,8 +8,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountLoginRequest {
+public class AccountSlimDto {
+    private Long id;
     private String username;
-    private String email;
-    private String password;
+    private String role;
+    private Boolean isBlocked;
 }
