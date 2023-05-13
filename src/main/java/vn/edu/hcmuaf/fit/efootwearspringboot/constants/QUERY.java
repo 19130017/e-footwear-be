@@ -3,16 +3,21 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.constants;
 public class QUERY {
 
     public static class VERIFY {
+        public static final String FIND_TOKEN = "select * from verifies where token=? and expire_time > now() and is_verified=false";
+    }
 
-        public static final String FIND_TOKEN_BY_ACCOUNT_ID = " select v from verifies v inner join accounts a\n" +
-                "on v.account_id = a.id\n" +
-                "where a.id = ? and (v.expired = false or v.revoked = false)";
-        public static final String FIND_TOKEN = "select * from verifies where token=? and expire_time > now() and is_expired=false";
+    public static class ADDRESS_DELIVERY {
+        public static final String FIND_ADDRESSES = "select * from address_delivery where account_id= ? and state= 'ACTIVE'";
+        public static final String FIND_BY_ID_AND_ACCOUNT_ID = "select * from address_delivery where id=? and account_id= ?";
     }
 
     public static class ACCOUNT {
 
-        public static final String FIND_ACCOUNT = "select * from accounts where username = ? or email = ?";
+        public static final String FIND_ACCOUNT = "select * from accounts where email = ? or username = ?";
+    }
+
+    public static class CUSTOMER {
+        public static final String FIND_BY_ACCOUNT = "SELECT c.* from customers c JOIN accounts a on a.customer_id = c.id where a.id = ?";
     }
 
     public static class CATEGORY {

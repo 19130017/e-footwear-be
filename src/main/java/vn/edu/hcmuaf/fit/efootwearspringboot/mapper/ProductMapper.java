@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductOrderDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductSlimDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.*;
 
@@ -16,10 +17,10 @@ public interface ProductMapper {
 
     ProductSlimDto toSlimDto(Product product);
 
-
     Product slimToEntity(ProductSlimDto productSlimDto);
 
-//    List<Product> slimToEntities(List<ProductSlimDto> productSlimDtos);
+    ProductOrderDto toOrderDto(Product product);
+
 
     List<ProductSlimDto> toSlimDtos(List<Product> products);
 

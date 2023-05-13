@@ -1,13 +1,14 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountLoginRequest;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.account.AccountService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
@@ -31,6 +32,7 @@ public class AccountController {
     public ResponseEntity<HttpResponse> login(@RequestBody AccountLoginRequest accountLoginRequest) {
         AccountDto accountDto = AccountDto
                 .builder()
+                .username(accountLoginRequest.getUsername())
                 .email(accountLoginRequest.getEmail())
                 .password(accountLoginRequest.getPassword())
                 .build();
@@ -48,18 +50,37 @@ public class AccountController {
                 .email(accountCreateDto.getEmail())
                 .build();
 
-        BaseResult baseResult = accountService.createAccount(accountDto);
+        DataResult dataResult = accountService.createAccount(accountDto);
 
-        return baseResult.getSuccess() ?
-                ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage()))
-                : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getMessage()))
+                : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
     @GetMapping("/verify/{token}")
     public ResponseEntity<HttpResponse> verifyAccount(@PathVariable("token") String token) {
-        BaseResult baseResult = accountService.verify(token);
-        return baseResult.getSuccess() ?
-                ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+        DataResult dataResult = accountService.verify(token);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getMessage())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
+
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<HttpResponse> getProfile(@PathVariable("id") Long id) {
+        DataResult dataResult = accountService.getProfile(id);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<HttpResponse> updateProfile(@RequestBody CustomerInfoRequestDto customerInfoRequest) {
+        DataResult dataResult = accountService.updateProfile(customerInfoRequest);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+
 }

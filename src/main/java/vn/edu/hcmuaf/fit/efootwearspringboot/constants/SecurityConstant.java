@@ -27,7 +27,6 @@ public class SecurityConstant {
             "/api/v1/details/**",
 
             "/api/v1/galleries/{type}",
-
     };
     public final static String[] REQUIRE_ADMIN_ROLE_URLS = {
 //            "/api/v1/sizes",

@@ -11,8 +11,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountLoginRequest {
-    private String username;
-    private String email;
-    private String password;
+public class CustomerInfoRequestDto {
+    private Long accountId;
+    private String firstName;
+    private String lastName;
+    private String birthday;
 }
