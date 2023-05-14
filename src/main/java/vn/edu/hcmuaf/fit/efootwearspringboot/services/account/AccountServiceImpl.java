@@ -11,6 +11,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountLoginResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoResponseDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AccountMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AddressDeliveryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Account;
@@ -23,6 +24,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.VerifyRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.mail.MailService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -136,6 +138,15 @@ public class AccountServiceImpl implements AccountService {
             return DataResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống");
         }
         return DataResult.error(HttpStatus.BAD_REQUEST, "Tài khoản không tồn tại");
+    }
+
+    @Override
+    public DataResult getAllAccount() {
+        Optional<List<Account>> optional = accountRepository.findAllAccount();
+        if (optional.isPresent()) {
+            return DataResult.success(accountMapper.toSlimAddressDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy tài khoản");
     }
 
 

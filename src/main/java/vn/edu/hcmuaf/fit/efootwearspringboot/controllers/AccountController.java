@@ -82,5 +82,12 @@ public class AccountController {
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
+    @GetMapping()
+    public ResponseEntity<HttpResponse> getAllAccount() {
+        DataResult dataResult = accountService.getAllAccount();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
 
 }

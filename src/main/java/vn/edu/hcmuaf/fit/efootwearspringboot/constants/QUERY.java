@@ -14,6 +14,7 @@ public class QUERY {
     public static class ACCOUNT {
 
         public static final String FIND_ACCOUNT = "select * from accounts where email = ? or username = ?";
+        public static final String FIND_ALL_ACCOUNT = "select * from accounts";
     }
 
     public static class CUSTOMER {

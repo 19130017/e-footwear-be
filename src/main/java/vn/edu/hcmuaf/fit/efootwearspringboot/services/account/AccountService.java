@@ -16,4 +16,6 @@ public interface AccountService {
 
     DataResult updateProfile(CustomerInfoRequestDto customerInfoRequest);
 
+    DataResult getAllAccount();
+
 }

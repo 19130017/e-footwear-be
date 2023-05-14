@@ -46,9 +46,9 @@ public class SecurityConfiguration {
                 .and()
                 .sessionManagement()
 
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-               .and()
-               .authorizeHttpRequests()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests()
                 // limit role access
                 .requestMatchers(SecurityConstant.PUBLIC_URLS)
                 .permitAll()
@@ -58,8 +58,8 @@ public class SecurityConfiguration {
                 .authenticated()
                 .and()
 //                 jwt authentication
-               .authenticationProvider(authenticationProvider)
-               .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
