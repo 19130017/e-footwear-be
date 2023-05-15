@@ -37,7 +37,7 @@ public class DetailServiceImpl implements DetailService {
     public DataResult findDetailByProduct(Long size_id, String slug, Long color_id) {
         Optional<Detail> optional = detailRepository.findDetailByProduct(size_id, slug, color_id);
         if (optional.isPresent()) {
-            return DataResult.success(detailMapper.toDto(optional.get()));
+            return DataResult.success(detailMapper.toSlimDto(optional.get()));
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }

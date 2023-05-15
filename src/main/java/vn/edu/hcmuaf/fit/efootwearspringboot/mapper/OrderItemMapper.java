@@ -8,7 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.models.OrderItem;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {ProductMapper.class})
+@Mapper(componentModel = "spring", uses = {DetailMapper.class})
 @Component("orderItemMapper")
 public interface OrderItemMapper {
     OrderItemMapper INSTANCE = Mappers.getMapper(OrderItemMapper.class);

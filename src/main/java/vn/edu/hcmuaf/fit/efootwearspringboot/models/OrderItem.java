@@ -16,7 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "order_items")
-public class OrderItem  implements Serializable {
+public class OrderItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -27,8 +27,8 @@ public class OrderItem  implements Serializable {
     private Order order;
 
     @OneToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @JoinColumn(name = "detail_id")
+    private Detail detail;
 
     @Column(name = "quantity")
     private Integer quantity;

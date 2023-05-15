@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductOrderDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductSlimDto;
 
@@ -15,7 +16,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductSlimDto;
 @AllArgsConstructor
 public class OrderItemDto {
     private Long id;
-    private ProductOrderDto product;
+    private DetailDto detail;
     private Integer quantity;
     private Integer price;
 }
