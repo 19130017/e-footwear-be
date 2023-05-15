@@ -20,7 +20,11 @@ public interface DetailMapper {
 
     Detail toEntity(DetailDto detailDto);
 
+    Detail toEntitySlim(DetailSlimDto detailSlimDto);
+
     List<Detail> toEntities(List<DetailDto> detailDtos);
 
     List<DetailDto> toDtos(List<Detail> details);
+
+    List<DetailSlimDto> toDtosSlim(List<Detail> details);
 }

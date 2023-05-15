@@ -26,6 +26,7 @@ public class QUERY {
     public static class ACCOUNT {
 
         public static final String FIND_ACCOUNT = "select * from accounts where email = ? or username = ?";
+        public static final String FIND_ALL_ACCOUNT = "select * from accounts";
     }
 
     public static class CUSTOMER {
@@ -69,6 +70,7 @@ public class QUERY {
     public static class DETAIL {
         public static final String FIND_DETAIL_BY_PRODUCT = "select d.* from product_details d join products p on d.product_id = p.id where p.state = 'ACTIVE' and d.size_id=? and p.slug=? and p.color_id=?";
         public static final String FIND_DETAILS_BY_PRODUCT = "select d.* from product_details d join products p on d.product_id = p.id where p.state = 'ACTIVE' and p.slug=? and p.color_id=?";
+        public static final String FIND_ALL = "select * from product_details ";
     }
 
     public static class GALLERY {
@@ -85,6 +87,7 @@ public class QUERY {
     public static class GALLERY_TYPE {
         public static final String FIND_ALL = "select * from type_galleries where state = 'ACTIVE'";
         public static final String FIND_GALLERY_TYPE = "select * from type_galleries where state = 'ACTIVE' and id = ? ";
+        public static final String FIND_GALLERY_BY_TYPE = "select * from type_galleries where state = 'ACTIVE' and type_code = ? ";
     }
 
     public static class COUPON {

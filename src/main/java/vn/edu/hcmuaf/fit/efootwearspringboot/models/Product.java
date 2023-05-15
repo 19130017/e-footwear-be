@@ -48,7 +48,7 @@ public class Product implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private EntityState state;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductImage> images;
     @OneToMany(mappedBy = "product")
     private List<Detail> details;

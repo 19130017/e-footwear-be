@@ -17,9 +17,12 @@ public interface ProductMapper {
 
     ProductSlimDto toSlimDto(Product product);
 
+    Product slimToEntity(ProductSlimDto productSlimDto);
+
     ProductOrderDto toOrderDto(Product product);
 
     List<ProductSlimDto> toSlimDtos(List<Product> products);
+
 
     ProductDto toDto(Product product);
 

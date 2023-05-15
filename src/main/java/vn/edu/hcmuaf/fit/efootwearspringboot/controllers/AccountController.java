@@ -78,6 +78,15 @@ public class AccountController {
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
+
+    @GetMapping()
+    public ResponseEntity<HttpResponse> getAllAccount() {
+        DataResult dataResult = accountService.getAllAccount();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
     @PutMapping("/change-password")
     public ResponseEntity<HttpResponse> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto) {
         BaseResult baseResult = accountService.changePassword(changePasswordDto);
@@ -89,6 +98,7 @@ public class AccountController {
     @PostMapping("/forgot-password")
     public ResponseEntity<HttpResponse> forgotPassword(@Valid @RequestParam("email") String email) {
         BaseResult baseResult = accountService.forgotPassword(email);
+
 
         return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success("Vui lòng kiểm tra email của bạn!"))
                 : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
