@@ -1,14 +1,16 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.order.OrderService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 @RestController
@@ -28,5 +30,31 @@ public class OrderController {
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+
+    @GetMapping("/account/{id}")
+    public ResponseEntity<HttpResponse> getOrdersByAccountId(@PathVariable("id") Long accountId) {
+        System.out.println(accountId);
+        DataResult dataResult = orderService.getOrdersByAccountId(accountId);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+    @PostMapping()
+    public ResponseEntity<HttpResponse> createOrder(@RequestBody @Valid OrderRequestDto orderRequestDto) {
+        BaseResult baseResult = orderService.createOrder(orderRequestDto);
+        return baseResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success("Đặt hàng thành công")) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
+    }
+
+    @PutMapping()
+    public ResponseEntity<HttpResponse> updateOrderStatus(@RequestBody OrderRequestStatusDto orderRequestStatusDto) {
+        BaseResult baseResult = orderService.updateStatus(orderRequestStatusDto);
+        return baseResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success()) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
     }
 }

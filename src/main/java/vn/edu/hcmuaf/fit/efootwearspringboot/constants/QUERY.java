@@ -4,6 +4,18 @@ public class QUERY {
 
     public static class VERIFY {
         public static final String FIND_TOKEN = "select * from verifies where token=? and expire_time > now() and is_verified=false";
+        public static final String FIND_BY_ACCOUNT_AND_TYPE = "select * from verifies where account_id=? and type=?";
+    }
+
+    public static class ORDER {
+        public static final String FIND_ORDERS_BY_ACCOUNT_ID = "select * from orders where account_id=?";
+
+        public static final String FIND_ORDER_BY_ID = "select * from orders where id=?";
+    }
+
+    public static class ORDER_STATUS {
+        public static final String FIND_BY_CODE = "select * from order_status where code=?";
+
     }
 
     public static class ADDRESS_DELIVERY {

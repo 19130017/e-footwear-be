@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class Address  implements Serializable {
+
     private Integer provinceId;
     private String provinceName;
     private Integer districtId;

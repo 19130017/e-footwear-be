@@ -65,7 +65,7 @@
         <p>Có vẻ như bạn đang yêu cầu cấp lại mật khẩu của tài khoản tại <strong>HB Footwear</strong></p>
         <p>Nhấp vào nút ở dưới và làm theo hướng dẫn để được cấp lại mật khẩu</p>
         <div class="link-wrapper">
-            <a th:href=="${app_url}/reset-password/${token}" class="link">
+            <a th:href="@{http://localhost:3000/auth/reset-password/{token}(token=${token})}" class="link">
                 Cấp lại mật khẩu
             </a>
         </div>

@@ -4,6 +4,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderResponseDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Order;
 
 import java.util.List;
@@ -12,7 +14,8 @@ import java.util.List;
         uses = {AccountMapper.class,
                 CouponMapper.class,
                 AddressDeliveryMapper.class,
-                OrderItemMapper.class
+                OrderItemMapper.class,
+                OrderStatusMapper.class
         })
 @Component("orderMapper")
 public interface OrderMapper {
@@ -20,7 +23,13 @@ public interface OrderMapper {
 
     OrderDto toDto(Order order);
 
+    OrderResponseDto toResponseDto(Order order);
+
+    List<OrderResponseDto> toResponseDtos(List<Order> order);
+
     Order toEntity(OrderDto orderDto);
+
+    Order requestToEntity(OrderRequestDto orderRequestDto);
 
     List<Order> toEntities(List<OrderDto> orderDtos);
 
