@@ -19,6 +19,9 @@ public interface AccountService {
 
     DataResult updateProfile(CustomerInfoRequestDto customerInfoRequest);
 
+
+    DataResult getAllAccount();
+
     BaseResult changePassword(ChangePasswordDto changePasswordDto);
 
     BaseResult forgotPassword(String email);

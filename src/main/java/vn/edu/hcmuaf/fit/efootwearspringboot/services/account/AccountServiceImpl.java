@@ -7,6 +7,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountLoginResponse;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoRequestDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoResponseDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.VerifyType;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AccountMapper;
@@ -22,6 +27,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.services.mail.MailService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -206,6 +212,15 @@ public class AccountServiceImpl implements AccountService {
             return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Không thể reset mật khẩu");
         }
         return BaseResult.success();
+    }
+
+    @Override
+    public DataResult getAllAccount() {
+        Optional<List<Account>> optional = accountRepository.findAllAccount();
+        if (optional.isPresent()) {
+            return DataResult.success(accountMapper.toSlimAddressDtos(optional.get()));
+        }
+        throw new NotFoundException("Không tìm thấy tài khoản");
     }
 
 

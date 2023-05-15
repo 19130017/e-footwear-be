@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountSlimAddressDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountSlimDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Account;
 
@@ -15,7 +16,10 @@ public interface AccountMapper {
     AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
     AccountDto toDto(Account account);
+
     AccountSlimDto toSlimDto(Account account);
+
+    AccountSlimAddressDto toSlimAddressDto(Account account);
 
 
     Account toEntity(AccountDto accountDto);
@@ -23,4 +27,6 @@ public interface AccountMapper {
     List<Account> toEntities(List<AccountDto> accountDtos);
 
     List<AccountDto> toDtos(List<Account> accounts);
+
+    List<AccountSlimAddressDto> toSlimAddressDtos(List<Account> accounts);
 }
