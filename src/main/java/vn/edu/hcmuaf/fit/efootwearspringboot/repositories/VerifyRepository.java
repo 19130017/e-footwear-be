@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface VerifyRepository extends JpaRepository<Verify, Long> {
     @Query(value = QUERY.VERIFY.FIND_TOKEN, nativeQuery = true)
     Optional<Verify> findByToken(String token);
+    @Query(value = QUERY.VERIFY.FIND_BY_ACCOUNT_AND_TYPE, nativeQuery = true)
+
+    Optional<Verify> findByAccountIdAndType(Long id, String verify);
 }

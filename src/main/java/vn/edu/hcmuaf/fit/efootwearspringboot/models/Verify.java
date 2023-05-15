@@ -22,14 +22,16 @@ public class Verify implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
+    @Column(name = "type")
     private String type;
+
     @Column(name = "is_verified")
     private Boolean isVerified;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "token")
     private String token;
 
+    @Column(name = "expire_time")
     public Date expireTime;
 
     @ManyToOne

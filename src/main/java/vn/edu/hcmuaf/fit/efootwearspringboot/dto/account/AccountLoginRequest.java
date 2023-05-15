@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.dto.account;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountLoginRequest {
+    @NotEmpty(message = "Không được để trống")
     private String username;
-    private String email;
+
+    @NotEmpty(message = "Không được để trống")
     private String password;
 }

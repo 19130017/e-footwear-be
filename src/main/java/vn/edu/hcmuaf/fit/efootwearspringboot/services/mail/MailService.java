@@ -6,8 +6,5 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 public interface MailService {
     BaseResult sendMailVerify(Account account);
 
-    BaseResult sendMailResetPassword(String email, String context);
-
-
-
+    BaseResult sendMailResetPassword(Account account);
 }
