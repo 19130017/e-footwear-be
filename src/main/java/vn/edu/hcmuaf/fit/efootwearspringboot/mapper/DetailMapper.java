@@ -9,7 +9,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.models.Detail;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {SizeMapper.class})
+@Mapper(componentModel = "spring", uses = {SizeMapper.class, ProductMapper.class})
 @Component("detailMapper")
 public interface DetailMapper {
     DetailMapper INSTANCE = Mappers.getMapper(DetailMapper.class);
