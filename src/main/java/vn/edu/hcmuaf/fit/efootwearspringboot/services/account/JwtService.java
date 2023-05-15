@@ -49,7 +49,6 @@ public class JwtService {
         JWTVerifier verifier = getVerifier();
         return verifier.verify(token).getSubject();
     }
-
     public JWTVerifier getVerifier() {
         JWTVerifier verifier;
         try {

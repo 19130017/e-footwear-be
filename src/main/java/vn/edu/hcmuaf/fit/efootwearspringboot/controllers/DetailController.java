@@ -45,12 +45,12 @@ public class DetailController {
 
     @PostMapping
     public ResponseEntity createDetail(@RequestBody DetailCreateDto detailCreateDto) {
-        DetailSlimDto detailSlimDto = DetailSlimDto.builder()
+        DetailDto detailDto = DetailDto.builder()
                 .stockQuantity(detailCreateDto.getStockQuantity())
                 .size(detailCreateDto.getSize())
                 .product(detailCreateDto.getProduct())
                 .build();
-        BaseResult baseResult = detailService.createDetail(detailSlimDto);
+        BaseResult baseResult = detailService.createDetail(detailDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
@@ -66,13 +66,13 @@ public class DetailController {
 
     @PutMapping("{id}")
     public ResponseEntity updateDetail(@RequestBody DetailUpdateDto detailUpdateDto, @PathVariable("id") Long id) {
-        DetailSlimDto detailSlimDto = DetailSlimDto.builder()
+        DetailDto detailDto = DetailDto.builder()
                 .id(id)
                 .stockQuantity(detailUpdateDto.getStockQuantity())
                 .size(detailUpdateDto.getSize())
                 .product(detailUpdateDto.getProduct())
                 .build();
-        BaseResult baseResult = detailService.updateDetail(detailSlimDto);
+        BaseResult baseResult = detailService.updateDetail(detailDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));

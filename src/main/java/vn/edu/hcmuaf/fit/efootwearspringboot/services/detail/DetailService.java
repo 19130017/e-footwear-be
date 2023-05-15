@@ -12,9 +12,9 @@ public interface DetailService {
 
     DataResult findAll();
 
-    BaseResult createDetail(DetailSlimDto detailSlimDto);
+    BaseResult createDetail(DetailDto detailDto);
 
     BaseResult deleteDetail(Long id);
 
-    BaseResult updateDetail(DetailSlimDto detailSlimDto);
+    BaseResult updateDetail(DetailDto detailDto);
 }
