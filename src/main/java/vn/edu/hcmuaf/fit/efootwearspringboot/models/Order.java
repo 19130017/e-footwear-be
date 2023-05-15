@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hcmuaf.fit.efootwearspringboot.constants.OrderStatus;
 
 import java.io.Serializable;
 import java.util.List;
@@ -29,11 +28,10 @@ public class Order implements Serializable {
     @Column(name = "transport_fee")
     private Integer transportFee; // giá vận chuyển
 
-    @Column(name = "status")
-    @Enumerated(value = EnumType.STRING)
-    private OrderStatus status;
+    @Column(name = "description")
+    private String description;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
 
     @ManyToOne()
@@ -47,4 +45,8 @@ public class Order implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "address_id")
     private AddressDelivery address;
+
+    @ManyToOne()
+    @JoinColumn(name = "order_status_id")
+    private OrderStatus orderStatus;
 }

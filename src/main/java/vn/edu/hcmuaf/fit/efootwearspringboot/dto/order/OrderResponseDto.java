@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.address_delivery.AddressDeliveryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.coupon.CouponDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_item.OrderItemDto;
@@ -18,7 +17,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto {
+public class OrderResponseDto {
     private String id;
     private Integer cost;
     private Integer transportFee;
@@ -26,8 +25,5 @@ public class OrderDto {
     private String description;
     private List<OrderItemDto> items;
     private CouponDto coupon;
-    private AccountDto account;
     private AddressDeliveryDto address;
-
-
 }

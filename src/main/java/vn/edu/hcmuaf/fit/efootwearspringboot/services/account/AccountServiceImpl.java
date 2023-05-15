@@ -7,10 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountLoginResponse;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoRequestDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoResponseDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.VerifyType;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AccountMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AddressDeliveryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Account;
@@ -21,6 +19,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CustomerRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.VerifyRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.mail.MailService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 import java.util.Optional;
@@ -64,13 +63,19 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public DataResult login(AccountDto accountDto) {
-        // authenticate
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountDto.getUsername(), accountDto.getPassword()));
-
         // get account
         Optional<Account> optional = accountRepository.findByUsername(accountDto.getUsername());
+
+
         if (optional.isPresent()) {
             Account account = optional.get();
+            if (!passwordEncoder.matches(accountDto.getPassword(), account.getPassword())) {
+                return DataResult.error(HttpStatus.BAD_REQUEST, "Mật khẩu sai. Vui lòng nhập lại mật khẩu");
+            }
+
+            // authenticate
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountDto.getUsername(), accountDto.getPassword()));
+
             String jwtToken = jwtService.generateToken(account, account.getAuthorities());
             String jwtRefreshToken = jwtService.refreshToken(account);
             account.setRefreshToken(jwtRefreshToken);
@@ -88,7 +93,7 @@ public class AccountServiceImpl implements AccountService {
             }
             return DataResult.error(HttpStatus.BAD_GATEWAY, "Lỗi từ hệ thống");
         }
-        return DataResult.error(HttpStatus.BAD_REQUEST, "Tài khoản không tồn tại");
+        return DataResult.error(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản!");
     }
 
     @Override
@@ -102,7 +107,7 @@ public class AccountServiceImpl implements AccountService {
             }
             return DataResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống");
         }
-        return DataResult.error(HttpStatus.BAD_REQUEST, "Thông tin token không hợp lệ hoặc đã hết hạn");
+        return DataResult.error(HttpStatus.NOT_FOUND, "Token không hợp lệ hoặc đã hết hạn");
     }
 
     @Override
@@ -119,7 +124,7 @@ public class AccountServiceImpl implements AccountService {
                     .build();
             return DataResult.success(customerInfoResponseDto);
         }
-        return DataResult.error(HttpStatus.BAD_REQUEST, "Thông tin tài khoản lỗi");
+        return DataResult.error(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản!");
     }
 
     @Override
@@ -135,7 +140,72 @@ public class AccountServiceImpl implements AccountService {
             }
             return DataResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống");
         }
-        return DataResult.error(HttpStatus.BAD_REQUEST, "Tài khoản không tồn tại");
+        return DataResult.error(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản!");
+    }
+
+    @Override
+    public BaseResult changePassword(ChangePasswordDto changePasswordDto) {
+        if (changePasswordDto.getNewPassword().equals(changePasswordDto.getOldPassword())) {
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Mật khẩu trùng với mật khẩu cũ. Vui lòng nhập mật khẩu khác!");
+        }
+
+        Optional<Account> optional = accountRepository.findById(changePasswordDto.getId());
+        if (optional.isEmpty()) {
+            return BaseResult.error(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản!");
+        }
+
+        Account account = optional.get();
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), account.getPassword())) {
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Mật khẩu cũ không trùng khớp!");
+        }
+        account.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        if (ObjectUtils.isEmpty(accountRepository.save(account))) {
+            return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Không thể thay đổi mật khẩu");
+        }
+        return BaseResult.success();
+    }
+
+    @Override
+    public BaseResult forgotPassword(String email) {
+        // check email
+        Optional<Account> optional = accountRepository.findByEmail(email);
+        if (optional.isEmpty()) {
+            return BaseResult.error(HttpStatus.NOT_FOUND, "Không tìm thấy tài khoản!");
+        }
+        Account account = optional.get();
+        if (account.getIsBlocked()) {
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Tài khoản của bạn đã bị khoá!");
+        }
+        Optional<Verify> optional1 = verifyRepository.findByAccountIdAndType(account.getId(), VerifyType.VERIFY.name());
+        if (optional1.isEmpty()) {
+            return BaseResult.error(HttpStatus.NOT_FOUND, "Tài khoản của bạn chưa kích hoạt !");
+        }
+        return mailService.sendMailResetPassword(account);
+    }
+
+    @Override
+    public BaseResult resetPassword(ResetPasswordDto resetPasswordDto) {
+        Optional<Verify> optional = verifyRepository.findByToken(resetPasswordDto.getToken());
+        if (optional.isEmpty()) {
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Token không hợp lệ hoặc đã hết hạn");
+        }
+        Verify verifier = optional.get();
+        Optional<Account> optional1 = accountRepository.findById(verifier.getAccount().getId());
+        if (optional.isEmpty()) {
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không tìm thấy tài khoản");
+        }
+
+        Account account = optional1.get();
+        if (passwordEncoder.matches(resetPasswordDto.getNewPassword(), account.getPassword())) {
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Mật khẩu đã được sử dụng ở lần trước. Vui lòng thay đổi mật khẩu khác");
+        }
+        account.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
+        verifier.setIsVerified(true);
+
+        if (ObjectUtils.isEmpty(accountRepository.save(account)) && ObjectUtils.isEmpty(verifyRepository.save(verifier))) {
+            return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Không thể reset mật khẩu");
+        }
+        return BaseResult.success();
     }
 
 

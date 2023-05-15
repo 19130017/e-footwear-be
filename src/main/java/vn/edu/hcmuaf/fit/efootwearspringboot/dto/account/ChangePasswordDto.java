@@ -1,9 +1,13 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.dto.account;
 
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Getter
@@ -11,16 +15,15 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountCreateDto {
-    @NotEmpty(message = "Không được để trống")
-    @Size(min = 5, max = 20, message = "Username tối thiểu 5 ký tự, tối đa 20 ký tự")
-    private String username;
+public class ChangePasswordDto {
+    @NotNull(message = "Không được để trống")
+    private Long id;
 
     @NotEmpty(message = "Không được để trống")
     @Size(min = 8, message = "Mật khẩu tối thiểu 8 ký tự")
-    private String password;
+    private String newPassword;
 
     @NotEmpty(message = "Không được để trống")
-    @Email(message = "Email không hợp lệ")
-    private String email;
+    @Size(min = 8, message = "Mật khẩu tối thiểu 8 ký tự")
+    private String oldPassword;
 }

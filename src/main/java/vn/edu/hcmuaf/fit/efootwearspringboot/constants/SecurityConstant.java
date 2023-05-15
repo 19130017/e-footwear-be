@@ -13,6 +13,8 @@ public class SecurityConstant {
             "/api/v1/accounts/register",
             "/api/v1/accounts/login",
             "/api/v1/accounts/verify/{token}",
+            "/api/v1/accounts/forgot-password/**",
+            "/api/v1/accounts/reset-password",
 
             "/api/v1/products/slug/**",
             "/api/v1/products/{id}",

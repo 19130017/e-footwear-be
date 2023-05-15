@@ -80,7 +80,7 @@ public class MailServiceImpl implements MailService {
         return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Gửi email lỗi");
     }
 
-    public boolean isSendVerify(String email, String token) {
+    private boolean isSendVerify(String email, String token) {
         try {
             final Context context = new Context();
             context.setVariable("app_url", app_url);
@@ -96,7 +96,35 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public BaseResult sendMailResetPassword(String email, String context) {
-        return null;
+    public BaseResult sendMailResetPassword(Account account) {
+        Verify verify = new Verify();
+        verify.setType(VerifyType.RESET_PASSWORD.name());
+        verify.setIsVerified(false);
+        verify.setToken(UUID.randomUUID().toString());
+        verify.setExpireTime(new Date(System.currentTimeMillis() + (3600 * 1000 * 3)));
+        verify.setAccount(account);
+
+        //save
+        verifyRepository.save(verify);
+
+        boolean isSuccess = isSendResetPassword(account.getEmail(), verify.getToken());
+        if (isSuccess) {
+            return BaseResult.success();
+        }
+        return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Gửi email lỗi");
+    }
+
+    private boolean isSendResetPassword(String email, String token) {
+        try {
+            final Context context = new Context();
+            context.setVariable("token", token);
+            String html = templateEngine.process("reset-template", context);
+
+            sendMailer(from, email, html, "Quên mật khẩu", true);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
