@@ -32,6 +32,14 @@ public class OrderController {
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<HttpResponse> getOrder(@PathVariable("id")String id) {
+        DataResult dataResult = orderService.getOrder(id);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
 
     @GetMapping("/account/{id}")
     public ResponseEntity<HttpResponse> getOrdersByAccountId(@PathVariable("id") Long accountId) {
@@ -44,6 +52,7 @@ public class OrderController {
 
     @PostMapping()
     public ResponseEntity<HttpResponse> createOrder(@RequestBody @Valid OrderRequestDto orderRequestDto) {
+        System.out.println(orderRequestDto);
         BaseResult baseResult = orderService.createOrder(orderRequestDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success("Đặt hàng thành công")) :
