@@ -81,7 +81,6 @@ public class AccountServiceImpl implements AccountService {
 
             // authenticate
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountDto.getUsername(), accountDto.getPassword()));
-
             String jwtToken = jwtService.generateToken(account, account.getAuthorities());
             String jwtRefreshToken = jwtService.refreshToken(account);
             account.setRefreshToken(jwtRefreshToken);

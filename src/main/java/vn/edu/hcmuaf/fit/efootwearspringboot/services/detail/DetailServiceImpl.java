@@ -55,14 +55,14 @@ public class DetailServiceImpl implements DetailService {
     public DataResult findAll() {
         Optional<List<Detail>> optional = detailRepository.findDetails();
         if (optional.isPresent()) {
-            return DataResult.success(detailMapper.toDtosSlim(optional.get()));
+            return DataResult.success(detailMapper.toDtos(optional.get()));
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
 
     @Override
-    public BaseResult createDetail(DetailSlimDto detailSlimDto) {
-        Detail detail = detailMapper.toEntitySlim(detailSlimDto);
+    public BaseResult createDetail(DetailDto detailDto) {
+        Detail detail = detailMapper.toEntity(detailDto);
 
         if (!ObjectUtils.isEmpty(detailRepository.save(detail))) {
             return BaseResult.success();
@@ -82,13 +82,10 @@ public class DetailServiceImpl implements DetailService {
     }
 
     @Override
-    public BaseResult updateDetail(DetailSlimDto detailSlimDto) {
-        Optional<Detail> optional = detailRepository.findById(detailSlimDto.getId());
+    public BaseResult updateDetail(DetailDto detailDto) {
+        Optional<Detail> optional = detailRepository.findById(detailDto.getId());
         if (optional.isPresent()) {
-            Detail detail = optional.get();
-            detail.setSize(sizeMapper.toEntity(detailSlimDto.getSize()));
-            detail.setProduct(productMapper.slimToEntity(detailSlimDto.getProduct()));
-            detail.setStockQuantity(detailSlimDto.getStockQuantity());
+            Detail detail = detailMapper.toEntity(detailDto);
             if (!ObjectUtils.isEmpty(detailRepository.save(detail))) {
                 return BaseResult.success();
             }
