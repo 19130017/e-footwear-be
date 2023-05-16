@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductOrderDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductSlimDto;
 
 @Getter
 @Setter
