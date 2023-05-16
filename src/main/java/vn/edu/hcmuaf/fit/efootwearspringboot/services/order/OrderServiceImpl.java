@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestStatusDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderResponseDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_status.OrderStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.*;
@@ -42,7 +43,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public DataResult getOrders() {
         List<Order> orders = orderRepository.findAll();
-        return DataResult.success(orderMapper.toDtos(orders));
+        return DataResult.success(orderMapper.toResponseDtos(orders));
     }
 
     @Override
