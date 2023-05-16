@@ -7,6 +7,7 @@ import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_status.OrderStatusDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Order;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.OrderItem;
@@ -94,5 +95,14 @@ public class OrderServiceImpl implements OrderService {
             return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Không thế cập nhật trạng thái đơn hàng!");
         }
         return BaseResult.success();
+    }
+
+    @Override
+    public DataResult getOrder(String id) {
+        Optional<Order> optional = orderRepository.findByOrderId(id);
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy đơn hàng!");
+        }
+        return DataResult.success(orderMapper.toResponseDto(optional.get()));
     }
 }

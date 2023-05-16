@@ -16,4 +16,6 @@ public interface OrderService {
     DataResult getOrdersByAccountId(Long accountId);
 
     BaseResult updateStatus(OrderRequestStatusDto orderRequestStatusDto);
+
+    DataResult getOrder(String id);
 }

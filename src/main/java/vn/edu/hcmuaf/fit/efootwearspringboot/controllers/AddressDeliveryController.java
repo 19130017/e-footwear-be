@@ -41,6 +41,14 @@ public class AddressDeliveryController {
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
+    @GetMapping()
+    public ResponseEntity<HttpResponse> getAddressesCustomer(@RequestParam("accountId") Long accountId) {
+        DataResult dataResult = addressDeliveryService.getAddresses(accountId);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
     @PostMapping()
     public ResponseEntity<HttpResponse> createAddress(
             @RequestBody AddressDeliveryCreateDto addressDeliveryCreateDto,
