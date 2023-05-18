@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.SizeMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Size;
@@ -55,7 +56,7 @@ public class SizeServiceImpl implements SizeService {
             if (!ObjectUtils.isEmpty(sizeRepository.save(size))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể xoá dữ liệu.");
+            throw new InternalServerException("Không thể xoá size");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
@@ -67,7 +68,7 @@ public class SizeServiceImpl implements SizeService {
         if (!ObjectUtils.isEmpty(sizeRepository.save(size))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể thêm mới dữ liệu.");
+        throw new InternalServerException("Không thêm mới size");
     }
 
     @Override
@@ -79,7 +80,7 @@ public class SizeServiceImpl implements SizeService {
             if (!ObjectUtils.isEmpty(sizeRepository.save(size))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể xoá dữ liệu.");
+            throw new InternalServerException("Không cập nhật size");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }

@@ -8,6 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryUpdateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.category.CategoryService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -26,7 +27,7 @@ public class CategoryController {
 
     // get root category
     @GetMapping("/parent")
-    public ResponseEntity findParentCategory() {
+    public ResponseEntity<HttpResponse> findParentCategory() {
         DataResult dataResult = categoryService.findParentCategory();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -34,7 +35,7 @@ public class CategoryController {
     }
 
     @GetMapping()
-    public ResponseEntity findCategories() {
+    public ResponseEntity<HttpResponse> findCategories() {
         DataResult dataResult = categoryService.findCategories();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -43,7 +44,7 @@ public class CategoryController {
 
     // get category by id
     @GetMapping("/{id}")
-    public ResponseEntity findCategoryById(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> findCategoryById(@PathVariable("id") Long id) {
         DataResult dataResult = categoryService.findCategory(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -52,7 +53,7 @@ public class CategoryController {
 
     // get category by slug
     @GetMapping("/slug/{slug}")
-    public ResponseEntity findCategoryBySlug(@PathVariable("slug") String slug) {
+    public ResponseEntity<HttpResponse> findCategoryBySlug(@PathVariable("slug") String slug) {
         DataResult dataResult = categoryService.findCategoryBySlug(slug);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -61,7 +62,7 @@ public class CategoryController {
 
     // create a new category
     @PostMapping
-    public ResponseEntity createCategory(@RequestBody @Valid CategoryCreateDto categoryCreateDto) {
+    public ResponseEntity<HttpResponse> createCategory(@RequestBody @Valid CategoryCreateDto categoryCreateDto) {
         CategoryDto categoryDto = CategoryDto.builder()
                 .category(categoryCreateDto.getCategory())
                 .name(categoryCreateDto.getName()).build();
@@ -74,7 +75,7 @@ public class CategoryController {
 
     // update category
     @PutMapping("/{id}")
-    public ResponseEntity updateCategory(@RequestBody @Valid CategoryUpdateDto categoryUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> updateCategory(@RequestBody @Valid CategoryUpdateDto categoryUpdateDto, @PathVariable("id") Long id) {
         CategoryDto categoryDto = CategoryDto.builder()
                 .id(id)
                 .category(categoryUpdateDto.getCategory())
@@ -89,7 +90,7 @@ public class CategoryController {
 
     // delete category
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteCategory(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> deleteCategory(@PathVariable("id") Long id) {
         BaseResult baseResult = categoryService.deleteCategory(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :

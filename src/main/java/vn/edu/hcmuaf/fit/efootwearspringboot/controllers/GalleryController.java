@@ -8,6 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.gallery.GalleryCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.gallery.GalleryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.gallery.GalleryUpdateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.gallery.GalleryService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -24,7 +25,7 @@ public class GalleryController {
     }
 
     @GetMapping("/type/{type_code}")
-    public ResponseEntity getGalleriesByType(@PathVariable("type_code") String type_code) {
+    public ResponseEntity<HttpResponse> getGalleriesByType(@PathVariable("type_code") String type_code) {
         DataResult dataResult = galleryService.getGalleriesByType(type_code);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -32,7 +33,7 @@ public class GalleryController {
     }
 
     @GetMapping("/slide")
-    public ResponseEntity getCarousels() {
+    public ResponseEntity<HttpResponse> getCarousels() {
         DataResult dataResult = galleryService.getCarousels();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -40,7 +41,7 @@ public class GalleryController {
     }
 
     @GetMapping("/collection")
-    public ResponseEntity getCollections() {
+    public ResponseEntity<HttpResponse> getCollections() {
         DataResult dataResult = galleryService.getCollections();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -48,7 +49,7 @@ public class GalleryController {
     }
 
     @GetMapping("/banner")
-    public ResponseEntity getBanners() {
+    public ResponseEntity<HttpResponse> getBanners() {
         DataResult dataResult = galleryService.getBanners();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -56,7 +57,7 @@ public class GalleryController {
     }
 
     @GetMapping("/ads")
-    public ResponseEntity getAds() {
+    public ResponseEntity<HttpResponse> getAds() {
         DataResult dataResult = galleryService.getAds();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -64,7 +65,7 @@ public class GalleryController {
     }
 
     @GetMapping("/footer")
-    public ResponseEntity getFooters() {
+    public ResponseEntity<HttpResponse> getFooters() {
         DataResult dataResult = galleryService.getFooters();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -72,7 +73,7 @@ public class GalleryController {
     }
 
     @GetMapping
-    public ResponseEntity findAll() {
+    public ResponseEntity<HttpResponse> findAll() {
         DataResult dataResult = galleryService.findAll();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -80,7 +81,7 @@ public class GalleryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteGallery(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> deleteGallery(@PathVariable("id") Long id) {
         BaseResult baseResult = galleryService.deleteGallery(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
@@ -88,7 +89,7 @@ public class GalleryController {
     }
 
     @PostMapping
-    public ResponseEntity createGallery(@RequestBody @Valid GalleryCreateDto galleryCreateDto) {
+    public ResponseEntity<HttpResponse> createGallery(@RequestBody @Valid GalleryCreateDto galleryCreateDto) {
         GalleryDto galleryDto = GalleryDto.builder()
                 .typeGallery(galleryCreateDto.getTypeGallery())
                 .imageURL(galleryCreateDto.getImageURL())
@@ -102,7 +103,7 @@ public class GalleryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateGallery(@RequestBody @Valid GalleryUpdateDto galleryUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> updateGallery(@RequestBody @Valid GalleryUpdateDto galleryUpdateDto, @PathVariable("id") Long id) {
         GalleryDto galleryDto = GalleryDto.builder()
                 .id(id)
                 .typeGallery(galleryUpdateDto.getTypeGallery())

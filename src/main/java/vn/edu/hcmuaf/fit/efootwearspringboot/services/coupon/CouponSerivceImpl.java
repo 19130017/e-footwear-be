@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.coupon.CouponDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.CouponMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Coupon;
@@ -52,7 +53,7 @@ public class CouponSerivceImpl implements CouponService {
         if (!ObjectUtils.isEmpty(couponRepository.save(coupon))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể thêm dữ liệu.");
+        throw new InternalServerException("Không thể thêm mới coupon.");
 
     }
 
@@ -68,7 +69,7 @@ public class CouponSerivceImpl implements CouponService {
             if (!ObjectUtils.isEmpty(couponRepository.save(coupon))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể cập nhật dữ liệu.");
+            throw new InternalServerException("Không thể cập nhật coupon.");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }

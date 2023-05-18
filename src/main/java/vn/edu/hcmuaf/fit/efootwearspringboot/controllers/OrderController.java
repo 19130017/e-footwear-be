@@ -43,7 +43,6 @@ public class OrderController {
 
     @GetMapping("/account/{id}")
     public ResponseEntity<HttpResponse> getOrdersByAccountId(@PathVariable("id") Long accountId) {
-        System.out.println(accountId);
         DataResult dataResult = orderService.getOrdersByAccountId(accountId);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :

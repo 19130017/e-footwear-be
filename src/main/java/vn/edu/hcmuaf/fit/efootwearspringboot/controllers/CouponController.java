@@ -8,6 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.coupon.CouponCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.coupon.CouponDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.coupon.CouponUpdateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.coupon.CouponService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -26,19 +27,19 @@ public class CouponController {
     }
 
     @GetMapping
-    public ResponseEntity findCoupons() {
+    public ResponseEntity<HttpResponse> findCoupons() {
         DataResult dataResult = couponService.findAll();
         return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findCoupon(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> findCoupon(@PathVariable("id") Long id) {
         DataResult dataResult = couponService.findCoupon(id);
         return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 
     @PostMapping
-    public ResponseEntity createCoupon(@RequestBody @Valid CouponCreateDto couponCreateDto) throws ParseException {
+    public ResponseEntity<HttpResponse> createCoupon(@RequestBody @Valid CouponCreateDto couponCreateDto) throws ParseException {
         CouponDto couponDto = CouponDto.builder()
                 .code(couponCreateDto.getCode())
                 .maxUsage(couponCreateDto.getMaxUsage())
@@ -51,7 +52,7 @@ public class CouponController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateCoupon(@RequestBody @Valid CouponUpdateDto couponUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> updateCoupon(@RequestBody @Valid CouponUpdateDto couponUpdateDto, @PathVariable("id") Long id) {
         CouponDto couponDto = CouponDto.builder().id(id).code(couponUpdateDto.getCode()).maxUsage(couponUpdateDto.getMaxUsage()).price(couponUpdateDto.getPrice()).endTime(couponUpdateDto.getEndTime()).build();
         BaseResult baseResult = couponService.updateCoupon(couponDto);
         return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success()) : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));

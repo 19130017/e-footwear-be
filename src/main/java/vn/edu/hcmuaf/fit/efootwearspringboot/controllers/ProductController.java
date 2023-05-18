@@ -9,6 +9,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductUpdateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product_image.ProductImageDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.product.ProductService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -24,8 +25,16 @@ public class ProductController {
         this.productService = productService;
     }
 
+
+    @GetMapping("/search")
+    public ResponseEntity<HttpResponse> getProductByQuery(@RequestParam("query") String query){
+        DataResult dataResult = productService.findProducts(query);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
     @GetMapping
-    public ResponseEntity getProducts() {
+    public ResponseEntity<HttpResponse> getProducts() {
         DataResult dataResult = productService.findProducts();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -33,7 +42,7 @@ public class ProductController {
     }
 
     @GetMapping("/category/slug/{slug}")
-    public ResponseEntity getProductsByCateSlug(@PathVariable("slug") String slug) {
+    public ResponseEntity<HttpResponse> getProductsByCateSlug(@PathVariable("slug") String slug) {
         DataResult dataResult = productService.findProductsByCateSlug(slug);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -43,7 +52,7 @@ public class ProductController {
 
     // get slug & color
     @GetMapping("/slug/{slug}/color/{id}")
-    public ResponseEntity getProduct(@PathVariable("slug") String slug, @PathVariable("id") Long color_id) {
+    public ResponseEntity<HttpResponse> getProduct(@PathVariable("slug") String slug, @PathVariable("id") Long color_id) {
         DataResult dataResult = productService.findProduct(slug, color_id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -51,7 +60,7 @@ public class ProductController {
     }
 
     @GetMapping("/slug/{slug}")
-    public ResponseEntity getProductsBySlug(@Valid @PathVariable("slug") String slug) {
+    public ResponseEntity<HttpResponse> getProductsBySlug(@Valid @PathVariable("slug") String slug) {
         DataResult dataResult = productService.findProductsBySlug(slug);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -59,7 +68,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getProduct(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<HttpResponse> getProduct(@PathVariable(name = "id") Long id) {
         DataResult dataResult = productService.findProduct(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -67,7 +76,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteProduct(@Valid @PathVariable(name = "id") Long id) {
+    public ResponseEntity<HttpResponse> deleteProduct(@Valid @PathVariable(name = "id") Long id) {
         BaseResult baseResult = productService.deleteProduct(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
@@ -75,7 +84,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity createProduct(@Valid @RequestBody ProductCreateDto productCreateDto) {
+    public ResponseEntity<HttpResponse> createProduct(@Valid @RequestBody ProductCreateDto productCreateDto) {
         ProductDto productDto = ProductDto.builder()
                 .name(productCreateDto.getName())
                 .originPrice(productCreateDto.getOriginPrice())
@@ -94,7 +103,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateProduct(@Valid @RequestBody ProductUpdateDto productUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> updateProduct(@Valid @RequestBody ProductUpdateDto productUpdateDto, @PathVariable("id") Long id) {
         ProductDto productDto = ProductDto.builder()
                 .id(id)
                 .name(productUpdateDto.getName())
@@ -112,7 +121,7 @@ public class ProductController {
     }
 
     @GetMapping("/hot")
-    public ResponseEntity getProductsHot() {
+    public ResponseEntity<HttpResponse> getProductsHot() {
         DataResult dataResult = productService.findProductsHot();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -120,7 +129,7 @@ public class ProductController {
     }
 
     @GetMapping("/new")
-    public ResponseEntity getProductsNew() {
+    public ResponseEntity<HttpResponse> getProductsNew() {
         DataResult dataResult = productService.findProductsNew();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :

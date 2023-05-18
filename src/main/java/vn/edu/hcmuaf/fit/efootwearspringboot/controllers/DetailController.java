@@ -8,6 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailSlimDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailUpdateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.detail.DetailService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -36,7 +37,7 @@ public class DetailController {
     }
 
     @GetMapping()
-    public ResponseEntity findAll() {
+    public ResponseEntity<HttpResponse> findAll() {
         DataResult dataResult = detailService.findAll();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -44,7 +45,7 @@ public class DetailController {
     }
 
     @PostMapping
-    public ResponseEntity createDetail(@RequestBody DetailCreateDto detailCreateDto) {
+    public ResponseEntity<HttpResponse> createDetail(@RequestBody DetailCreateDto detailCreateDto) {
         DetailDto detailDto = DetailDto.builder()
                 .stockQuantity(detailCreateDto.getStockQuantity())
                 .size(detailCreateDto.getSize())
@@ -57,7 +58,7 @@ public class DetailController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteDetail(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> deleteDetail(@PathVariable("id") Long id) {
         BaseResult baseResult = detailService.deleteDetail(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
@@ -65,7 +66,7 @@ public class DetailController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity updateDetail(@RequestBody DetailUpdateDto detailUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> updateDetail(@RequestBody DetailUpdateDto detailUpdateDto, @PathVariable("id") Long id) {
         DetailDto detailDto = DetailDto.builder()
                 .id(id)
                 .stockQuantity(detailUpdateDto.getStockQuantity())

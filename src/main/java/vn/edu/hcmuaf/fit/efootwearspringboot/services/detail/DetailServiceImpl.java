@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.detail.DetailSlimDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.DetailMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.ProductMapper;
@@ -67,7 +68,7 @@ public class DetailServiceImpl implements DetailService {
         if (!ObjectUtils.isEmpty(detailRepository.save(detail))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Thêm mới thất bại");
+        throw new InternalServerException("Không thể thêm mới chi tiết sản phẩm.");
     }
 
 
@@ -78,7 +79,7 @@ public class DetailServiceImpl implements DetailService {
             detailRepository.delete(optional.get());
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Xóa thất bại");
+        throw new NotFoundException("Không tìm thấy chi tiết sản phẩm.");
     }
 
     @Override
@@ -89,8 +90,7 @@ public class DetailServiceImpl implements DetailService {
             if (!ObjectUtils.isEmpty(detailRepository.save(detail))) {
                 return BaseResult.success();
             }
-
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Cập nhật thất bại");
+            throw new InternalServerException("Không thể cập nhật chi tiết sản phẩm.");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
