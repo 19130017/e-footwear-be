@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.color.ColorDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.ColorMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Color;
@@ -54,7 +55,7 @@ public class ColorServiceImpl implements ColorService {
             if (!ObjectUtils.isEmpty(colorRepository.save(color))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể xoá dữ liệu.");
+            throw new InternalServerException("Không thể xoá màu.");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
@@ -66,7 +67,7 @@ public class ColorServiceImpl implements ColorService {
         if (!ObjectUtils.isEmpty(colorRepository.save(color))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể thêm mới dữ liệu.");
+        throw new InternalServerException("Không thể thêm mới màu.");
     }
 
     @Override
@@ -79,7 +80,7 @@ public class ColorServiceImpl implements ColorService {
             if (!ObjectUtils.isEmpty(colorRepository.save(color))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể xoá dữ liệu.");
+            throw new InternalServerException("Không thể cập nhật màu.");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }

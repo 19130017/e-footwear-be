@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.gallery.GalleryDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.GalleryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.TypeGalleryMapper;
@@ -106,7 +107,7 @@ public class GalleryServiceImpl implements GalleryService {
             if (!ObjectUtils.isEmpty(galleryRepository.save(gallery))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể xoá dữ liệu.");
+            throw new InternalServerException("Không xoá gallery");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
@@ -118,7 +119,7 @@ public class GalleryServiceImpl implements GalleryService {
         if (!ObjectUtils.isEmpty(galleryRepository.save(gallery))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể thêm dữ liệu.");
+        throw new InternalServerException("Không thêm gallery");
     }
 
     @Override
@@ -133,7 +134,8 @@ public class GalleryServiceImpl implements GalleryService {
             if (!ObjectUtils.isEmpty(galleryRepository.save(gallery))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể cập nhật dữ liệu.");
+            throw new InternalServerException("Không cập nhật gallery");
+
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
 

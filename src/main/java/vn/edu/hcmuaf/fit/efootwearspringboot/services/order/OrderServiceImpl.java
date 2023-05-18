@@ -8,6 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderResponseDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_status.OrderStatusDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Order;
@@ -50,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     public BaseResult createOrder(OrderRequestDto orderRequestDto) {
         Optional<OrderStatus> optional = orderStatusRepository.findByCode("CONFIRMATION");
         if (optional.isEmpty()) {
-            return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống");
+            throw new NotFoundException("Không tìm thấy dữ liệu!");
         }
 
         Order order = orderMapper.requestToEntity(orderRequestDto);
@@ -63,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
         if (!ObjectUtils.isEmpty(orderRepository.save(order))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Không thể lưu trữ");
+        throw new InternalServerException("Không tạo mới đơn hàng!");
     }
 
     @Override
@@ -75,25 +76,25 @@ public class OrderServiceImpl implements OrderService {
 
             return DataResult.success(orderMapper.toResponseDtos(orders));
         }
-        return DataResult.error(HttpStatus.BAD_REQUEST, "khong tim thay voi id");
+        throw new NotFoundException("Không tìm thấy dữ liệu");
     }
 
     @Override
     public BaseResult updateStatus(OrderRequestStatusDto orderRequestStatusDto) {
         Optional<OrderStatus> optional = orderStatusRepository.findById(orderRequestStatusDto.getStatus().getId());
         if (optional.isEmpty()) {
-            return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi hệ thống");
+            throw new NotFoundException("Không tìm thấy trạng thái đơn hàng!");
         }
 
         Optional<Order> optional1 = orderRepository.findByOrderId(orderRequestStatusDto.getId());
         if (optional1.isEmpty()) {
-            return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Không tìm thấy Order_Id");
+            throw new NotFoundException("Không tìm thấy đơn hàng!");
         }
 
         Order order = optional1.get();
         order.setOrderStatus(optional.get());
         if (ObjectUtils.isEmpty(orderRepository.save(order))) {
-            return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Không thế cập nhật trạng thái đơn hàng!");
+            throw new InternalServerException("Không thể cập nhật trạng thái của đơn hàng!");
         }
         return BaseResult.success();
     }

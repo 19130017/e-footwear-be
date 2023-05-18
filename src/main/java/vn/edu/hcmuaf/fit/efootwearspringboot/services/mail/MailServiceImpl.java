@@ -13,6 +13,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 import vn.edu.hcmuaf.fit.efootwearspringboot.configs.SpringMailConfig;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.VerifyType;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Account;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Verify;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.VerifyRepository;
@@ -77,7 +78,7 @@ public class MailServiceImpl implements MailService {
         if (isSuccess) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Gửi email lỗi");
+        throw new InternalServerException("Gửi mail lỗi");
     }
 
     private boolean isSendVerify(String email, String token) {
@@ -111,7 +112,8 @@ public class MailServiceImpl implements MailService {
         if (isSuccess) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Gửi email lỗi");
+        throw new InternalServerException("Gửi mail lỗi");
+
     }
 
     private boolean isSendResetPassword(String email, String token) {

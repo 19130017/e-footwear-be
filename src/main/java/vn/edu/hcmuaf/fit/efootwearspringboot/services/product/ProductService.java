@@ -19,6 +19,8 @@ public interface ProductService {
 
     DataResult findProducts();
 
+    DataResult findProducts(String query);
+
     BaseResult deleteProduct(Long id);
 
     BaseResult createProduct(ProductDto productDto);
