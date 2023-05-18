@@ -222,6 +222,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public DataResult countAccount() {
+        Long count = accountRepository.count();
+        if (ObjectUtils.isEmpty(count)) {
+            throw new InternalServerException("Không thể đếm số lượng tài khoản!");
+        }
+        return DataResult.success(count);
+    }
+
+    @Override
     public DataResult getAllAccount() {
         Optional<List<Account>> optional = accountRepository.findAllAccount();
         if (optional.isPresent()) {

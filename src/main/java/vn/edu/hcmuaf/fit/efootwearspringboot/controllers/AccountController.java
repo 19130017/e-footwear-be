@@ -110,4 +110,12 @@ public class AccountController {
         return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success("Thay đổi mật khẩu thành công"))
                 : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<HttpResponse> countAccount() {
+        DataResult dataResult = accountService.countAccount();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
 }

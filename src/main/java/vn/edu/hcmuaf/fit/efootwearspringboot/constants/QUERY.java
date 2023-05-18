@@ -11,6 +11,26 @@ public class QUERY {
         public static final String FIND_ORDERS_BY_ACCOUNT_ID = "select * from orders where account_id=?";
 
         public static final String FIND_ORDER_BY_ID = "select * from orders where id=?";
+        public static final String FIND_ORDERS_HOT = "select * from orders order by order_time desc limit 3";
+        public static final String TOTAL_BY_MONTH = "SELECT months.month_number AS month, COUNT(orders.id) AS total\n" +
+                "FROM (\n" +
+                "    SELECT 1 AS month_number UNION ALL\n" +
+                "    SELECT 2 UNION ALL\n" +
+                "    SELECT 3 UNION ALL\n" +
+                "    SELECT 4 UNION ALL\n" +
+                "    SELECT 5 UNION ALL\n" +
+                "    SELECT 6 UNION ALL\n" +
+                "    SELECT 7 UNION ALL\n" +
+                "    SELECT 8 UNION ALL\n" +
+                "    SELECT 9 UNION ALL\n" +
+                "    SELECT 10 UNION ALL\n" +
+                "    SELECT 11 UNION ALL\n" +
+                "    SELECT 12\n" +
+                ") AS months\n" +
+                "LEFT JOIN orders ON MONTH(orders.order_time) = months.month_number\n" +
+                "GROUP BY months.month_number";
+
+
     }
 
     public static class ORDER_STATUS {

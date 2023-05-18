@@ -33,7 +33,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HttpResponse> getOrder(@PathVariable("id")String id) {
+    public ResponseEntity<HttpResponse> getOrder(@PathVariable("id") String id) {
         DataResult dataResult = orderService.getOrder(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -64,5 +64,29 @@ public class OrderController {
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<HttpResponse> countOrder() {
+        DataResult dataResult = orderService.countOrder();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+    @GetMapping("/hot")
+    public ResponseEntity<HttpResponse> listOrderHot() {
+        DataResult dataResult = orderService.listOrderHot();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<HttpResponse> totalByMonth() {
+        DataResult dataResult = orderService.totalByMonth();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
 }

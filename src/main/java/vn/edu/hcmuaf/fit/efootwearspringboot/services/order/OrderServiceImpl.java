@@ -20,6 +20,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -107,4 +108,32 @@ public class OrderServiceImpl implements OrderService {
         }
         return DataResult.success(orderMapper.toResponseDto(optional.get()));
     }
+
+    @Override
+    public DataResult countOrder() {
+        Long count = orderRepository.count();
+        if (ObjectUtils.isEmpty(count)) {
+            throw new InternalServerException("Không thể đếm số lượng đơn hàng");
+        }
+        return DataResult.success(count);
+    }
+
+    @Override
+    public DataResult listOrderHot() {
+        Optional<List<Order>> optional = orderRepository.findOrdersHot();
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy đơn hàng nào!");
+        }
+        return DataResult.success(orderMapper.toResponseDtos(optional.get()));
+    }
+
+    @Override
+    public DataResult totalByMonth() {
+        List<Object[]> optional = orderRepository.totalByMonth();
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy đơn hàng nào!");
+        }
+        return DataResult.success(optional);
+    }
+
 }

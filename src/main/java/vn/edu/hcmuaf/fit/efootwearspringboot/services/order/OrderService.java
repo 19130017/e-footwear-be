@@ -18,4 +18,9 @@ public interface OrderService {
     BaseResult updateStatus(OrderRequestStatusDto orderRequestStatusDto);
 
     DataResult getOrder(String id);
+
+    DataResult countOrder();
+
+    DataResult listOrderHot();
+    DataResult totalByMonth();
 }

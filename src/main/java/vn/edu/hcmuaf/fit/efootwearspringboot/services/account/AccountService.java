@@ -27,4 +27,6 @@ public interface AccountService {
     BaseResult forgotPassword(String email);
 
     BaseResult resetPassword(ResetPasswordDto resetPasswordDto);
+
+    DataResult countAccount();
 }
