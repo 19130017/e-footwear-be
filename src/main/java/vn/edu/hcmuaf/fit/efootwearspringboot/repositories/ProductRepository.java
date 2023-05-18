@@ -34,4 +34,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(countQuery = QUERY.PRODUCT.COUNT_PRODUCT_BY_SLUG)
     Integer countProductBySlug(String slug);
+
+    @Query(value = QUERY.PRODUCT.FIND_PRODUCT_BY_NAME,
+            nativeQuery = true)
+    Optional<List<Product>> findProductsByName(String query);
 }

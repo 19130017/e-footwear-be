@@ -65,6 +65,7 @@ public class QUERY {
         public static final String FIND_PRODUCT_BY_CATE_SLUG = "select p.* from products p join categories c on c.id = p.category_id where p.state = 'ACTIVE' and c.slug = ? ";
 
         public static final String COUNT_PRODUCT_BY_SLUG = "SELECT COUNT(*) from products where slug = ?";
+        public static final String FIND_PRODUCT_BY_NAME = "select * from products where name like ?";
     }
 
     public static class DETAIL {
@@ -74,7 +75,6 @@ public class QUERY {
     }
 
     public static class GALLERY {
-
         public static final String FIND_GALLERIES_BY_TYPE = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = ?";
         public static final String FIND_CAROUSELS = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'slide'";
         public static final String FIND_BANNERS = "select g.* from galleries g join type_galleries t on g.type_gallery_id = t.id where t.type_code = 'banner'";

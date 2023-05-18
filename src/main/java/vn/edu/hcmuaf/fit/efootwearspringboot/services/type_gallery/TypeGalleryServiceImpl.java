@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.type_gallery.TypeGalleryDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.TypeGalleryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.TypeGallery;
@@ -59,7 +60,7 @@ public class TypeGalleryServiceImpl implements TypeGalleryService {
             if (!ObjectUtils.isEmpty(typeGalleryRepository.save(typeGallery))) {
                 return BaseResult.success();
             }
-            return BaseResult.success();
+            throw new InternalServerException("Không xoá type gallery");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
@@ -71,7 +72,7 @@ public class TypeGalleryServiceImpl implements TypeGalleryService {
         if (!ObjectUtils.isEmpty(typeGalleryRepository.save(typeGallery))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể thêm mới dữ liệu");
+        throw new InternalServerException("Không thêm mới type gallery");
     }
 
     @Override
@@ -84,7 +85,7 @@ public class TypeGalleryServiceImpl implements TypeGalleryService {
             if (!ObjectUtils.isEmpty(typeGalleryRepository.save(typeGallery))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể cập nhật dữ liệu");
+            throw new InternalServerException("Không cập nhật type gallery");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }

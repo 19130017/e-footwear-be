@@ -8,6 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.size.SizeUpdateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.size.SizeService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -24,7 +25,7 @@ public class SizeController {
     }
 
     @GetMapping
-    public ResponseEntity findSizes() {
+    public ResponseEntity<HttpResponse> findSizes() {
         DataResult dataResult = sizeService.findAll();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -32,7 +33,7 @@ public class SizeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findSize(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> findSize(@PathVariable("id") Long id) {
         DataResult dataResult = sizeService.findSize(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -40,7 +41,7 @@ public class SizeController {
     }
 
     @PostMapping
-    public ResponseEntity createSize(@RequestBody @Valid SizeCreateDto sizeCreateDto) {
+    public ResponseEntity<HttpResponse> createSize(@RequestBody @Valid SizeCreateDto sizeCreateDto) {
         SizeDto sizeDto = SizeDto.builder()
                 .value(sizeCreateDto.getValue())
                 .build();
@@ -52,7 +53,7 @@ public class SizeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateSize(@RequestBody @Valid  SizeUpdateDto sizeUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> updateSize(@RequestBody @Valid  SizeUpdateDto sizeUpdateDto, @PathVariable("id") Long id) {
         SizeDto sizeDto = SizeDto.builder()
                 .id(id)
                 .value(sizeUpdateDto.getValue())
@@ -65,7 +66,7 @@ public class SizeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSize(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> deleteSize(@PathVariable("id") Long id) {
         BaseResult baseResult = sizeService.deleteSize(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :

@@ -2,9 +2,13 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.services.order_status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.OrderStatusMapper;
+import vn.edu.hcmuaf.fit.efootwearspringboot.models.OrderStatus;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.OrderStatusRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
+
+import java.util.List;
 
 @Service
 public class OrderStatusServiceImpl implements OrderStatusService {
@@ -19,6 +23,9 @@ public class OrderStatusServiceImpl implements OrderStatusService {
 
     @Override
     public DataResult getAll() {
+        List<OrderStatus> optional = orderStatusRepository.findAll();
+        if (optional.size() == 0) throw new NotFoundException("Không tìm thấy trạng thái đơn hàng");
+
         return DataResult.success(orderStatusRepository.findAll());
     }
 }

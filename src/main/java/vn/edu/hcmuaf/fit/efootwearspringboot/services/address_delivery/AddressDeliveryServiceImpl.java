@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.address_delivery.AddressDeliveryDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AddressDeliveryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Account;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Address;
@@ -42,7 +44,7 @@ public class AddressDeliveryServiceImpl implements AddressDeliveryService {
             List<AddressDelivery> addresses = optional.get();
             return DataResult.success(addressDeliveryMapper.toDtos(addresses));
         }
-        return DataResult.error(HttpStatus.BAD_REQUEST, "Tài khoản không tồn tại");
+        throw new NotFoundException("Không tìm thấy địa chỉ!");
     }
 
     @Override
@@ -73,9 +75,9 @@ public class AddressDeliveryServiceImpl implements AddressDeliveryService {
 
             if (!ObjectUtils.isEmpty(addressDeliveryRepository.save(addressDelivery)))
                 return BaseResult.success();
-            return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi từ hệ thống");
+            throw new InternalServerException("Không thể lưu địa chỉ giao hàng");
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Tài khoản không tồn tại");
+        throw new NotFoundException("Tài khoản không tồn tại!");
     }
 
     @Override
@@ -105,11 +107,11 @@ public class AddressDeliveryServiceImpl implements AddressDeliveryService {
                 if (!ObjectUtils.isEmpty(addressDeliveryRepository.save(addressDelivery))) {
                     return BaseResult.success();
                 }
-                return BaseResult.error(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi từ hệ thống");
+                throw new InternalServerException("Không thể cập nhật địa chỉ");
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Địa chỉ không tồn tại");
+            throw new NotFoundException("Địa chỉ không tồn tại!");
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Tài khoản tồn tại");
+        throw new NotFoundException("Tài khoản không tồn tại!");
     }
 
     @Override
@@ -119,7 +121,7 @@ public class AddressDeliveryServiceImpl implements AddressDeliveryService {
             AddressDelivery address = optional.get();
             return DataResult.success(addressDeliveryMapper.toDto(address));
         }
-        return DataResult.error(HttpStatus.BAD_REQUEST, "Không tim thấy địa chỉ");
+        throw new NotFoundException("Địa chỉ không tồn tại!");
     }
 
     @Override
@@ -134,6 +136,6 @@ public class AddressDeliveryServiceImpl implements AddressDeliveryService {
             addressDeliveryRepository.save(addressDelivery);
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Không tim thấy địa chỉ");
+        throw new NotFoundException("Địa chỉ không tồn tại!");
     }
 }

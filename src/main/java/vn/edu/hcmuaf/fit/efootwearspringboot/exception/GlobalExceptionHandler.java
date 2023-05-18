@@ -6,6 +6,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 
 
@@ -13,7 +14,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(BindException.class)
-    public ResponseEntity handleBindException(BindException e) {
+    public ResponseEntity<HttpResponse> handleBindException(BindException e) {
         StringBuilder stringBuilder = new StringBuilder();
         for (ObjectError error : e.getAllErrors()) {
             stringBuilder.append(error.getDefaultMessage()).append(", ");
@@ -23,12 +24,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity handleNotFoundException(NotFoundException e) {
+    public ResponseEntity<HttpResponse> handleNotFoundException(NotFoundException e) {
         return ResponseEntity.badRequest().body(HttpResponseError.error(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 
     @ExceptionHandler(InternalServerException.class)
-    public ResponseEntity handleInternalServerException(InternalServerException e) {
+    public ResponseEntity<HttpResponse> handleInternalServerException(InternalServerException e) {
         return ResponseEntity.internalServerError().body(HttpResponseError.error(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
     }
 }

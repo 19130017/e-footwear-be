@@ -8,6 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.type_gallery.TypeGalleryCreateD
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.type_gallery.TypeGalleryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.type_gallery.TypeGalleryUpdateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.type_gallery.TypeGalleryService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -24,7 +25,7 @@ public class TypeGalleryController {
     }
 
     @GetMapping
-    public ResponseEntity findTypeGalleries() {
+    public ResponseEntity<HttpResponse> findTypeGalleries() {
         DataResult dataResult = typeGalleryService.findAll();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -32,7 +33,7 @@ public class TypeGalleryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity findTypeGallery(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> findTypeGallery(@PathVariable("id") Long id) {
         DataResult dataResult = typeGalleryService.findTypeGallery(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
@@ -40,7 +41,7 @@ public class TypeGalleryController {
     }
 
     @PostMapping
-    public ResponseEntity createTypeGallery(@RequestBody @Valid TypeGalleryCreateDto typeGalleryCreateDto) {
+    public ResponseEntity<HttpResponse> createTypeGallery(@RequestBody @Valid TypeGalleryCreateDto typeGalleryCreateDto) {
         TypeGalleryDto typeGalleryDto = TypeGalleryDto.builder()
                 .typeCode(typeGalleryCreateDto.getTypeCode())
                 .typeName(typeGalleryCreateDto.getTypeName())
@@ -52,7 +53,7 @@ public class TypeGalleryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateTypeGallery(@RequestBody @Valid TypeGalleryUpdateDto typeGalleryUpdateDto, @PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> updateTypeGallery(@RequestBody @Valid TypeGalleryUpdateDto typeGalleryUpdateDto, @PathVariable("id") Long id) {
         TypeGalleryDto typeGalleryDto = TypeGalleryDto.builder()
                 .id(id)
                 .typeCode(typeGalleryUpdateDto.getTypeCode())
@@ -65,7 +66,7 @@ public class TypeGalleryController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteTypeGallery(@PathVariable("id") Long id) {
+    public ResponseEntity<HttpResponse> deleteTypeGallery(@PathVariable("id") Long id) {
         BaseResult baseResult = typeGalleryService.deleteTypeGallery(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :

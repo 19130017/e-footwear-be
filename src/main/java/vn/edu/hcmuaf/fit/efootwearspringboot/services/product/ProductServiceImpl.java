@@ -7,6 +7,7 @@ import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.EntityState;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductCreateDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.CategoryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.ColorMapper;
@@ -87,6 +88,13 @@ public class ProductServiceImpl implements ProductService {
         throw new NotFoundException("Không tìm thấy dữ liệu");
     }
 
+    @Override
+    public DataResult findProducts(String query) {
+        Optional<List<Product>> optional = productRepository.findProductsByName("%"+query+"%");
+        if (optional.isEmpty()) throw new NotFoundException("Không tìm thấy dữ liệu");
+        return DataResult.success(productMapper.toSlimDtos(optional.get()));
+    }
+
     public List<Product> findProductsByCategory(Category category) {
         if (category.getChildrenCategory() == null || category.getChildrenCategory().isEmpty()) {
             return productRepository.findProductByCateSlug(category.getSlug()).get();
@@ -156,7 +164,7 @@ public class ProductServiceImpl implements ProductService {
                 return BaseResult.success();
             }
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Xóa thất bại");
+        throw new InternalServerException("Không xoá sản phẩm");
     }
 
     @Override
@@ -174,7 +182,8 @@ public class ProductServiceImpl implements ProductService {
         if (!ObjectUtils.isEmpty(productRepository.save(product))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Thêm mới thất bại");
+        throw new InternalServerException("Không tạo mới sản phẩm");
+
     }
 
     @Override
@@ -195,9 +204,8 @@ public class ProductServiceImpl implements ProductService {
             if (!ObjectUtils.isEmpty(productRepository.save(product))) {
                 return BaseResult.success();
             }
-            return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể cập nhật dữ liệu.");
+            throw new InternalServerException("Không cập nhật dữ liệu của sản phẩm");
         }
         throw new NotFoundException("Không tìm thấy dữ liệu");
-
     }
 }

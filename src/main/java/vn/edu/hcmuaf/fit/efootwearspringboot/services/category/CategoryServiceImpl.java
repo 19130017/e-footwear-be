@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.category.CategoryDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.CategoryMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Category;
@@ -52,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (optional.isPresent()) {
             return DataResult.success(categoryMapper.toDtos(optional.get()));
         }
-        return DataResult.error(HttpStatus.BAD_REQUEST, "Lỗi truy cập database");
+        throw new NotFoundException("không tìm thấy category!");
     }
 
     @Override
@@ -63,9 +64,8 @@ public class CategoryServiceImpl implements CategoryService {
             category.setState(EntityState.DELETED);
             if (!ObjectUtils.isEmpty(categoryRepository.save(category))) {
                 return BaseResult.success();
-            } else {
-                return BaseResult.error(HttpStatus.BAD_REQUEST, "Danh mục không thể xoá.");
             }
+            throw new InternalServerException("Không thể xoá được danh mục.");
         }
         throw new NotFoundException("Không tìm thấy danh mục");
     }
@@ -95,7 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
         if (!ObjectUtils.isEmpty(categoryRepository.save(category))) {
             return BaseResult.success();
         }
-        return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể tạo được danh mục");
+        throw new InternalServerException("Không thể tạo được danh mục.");
     }
 
     @Override
@@ -117,9 +117,8 @@ public class CategoryServiceImpl implements CategoryService {
 
             if (!ObjectUtils.isEmpty(categoryRepository.save(category))) {
                 return BaseResult.success();
-            } else {
-                return BaseResult.error(HttpStatus.BAD_REQUEST, "Không thể cập nhật được danh mục");
             }
+            throw new InternalServerException("Không thể cập nhật được danh mục.");
         }
         throw new NotFoundException("Không tìm thấy danh mục");
     }
@@ -130,6 +129,6 @@ public class CategoryServiceImpl implements CategoryService {
         if (optional.isPresent()) {
             return DataResult.success(categoryMapper.toChildrenDtos(optional.get()));
         }
-        throw new NotFoundException("Không tìm thấy dữ liệu");
+        throw new NotFoundException("Không tìm thấy category parent");
     }
 }
