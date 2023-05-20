@@ -54,14 +54,14 @@
 </head>
 <body>
 <div class="container">
-    <img class="logo-img" th:src=="|cid:${logo}"/>
+    <img class="logo-img" src="cid:logo">
     <h5 class="title">Xác thực tài khoản</h5>
     <div class="content">
         <h5 class="subtitle">Xác thực tài khoản</h5>
         <p>Chào bạn rất cám ơn bạn đã đăng ký tài khoản của <strong>HB Footwear</strong></p>
         <p>Nhấp vào nút ở dưới để xác nhận tài khoản của bạn</p>
         <div class="link-wrapper">
-            <p><a th:href="@{http://localhost:3000/auth/verify-account/{token}(token=${token})}" class="link">
+            <p><a th:href="${url_verify_account}" class="link">
                 Xác thực tài khoản của bạn
             </a></p>
         </div>

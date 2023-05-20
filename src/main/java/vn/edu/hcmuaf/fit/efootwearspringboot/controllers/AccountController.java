@@ -46,11 +46,11 @@ public class AccountController {
                 .email(accountCreateDto.getEmail())
                 .build();
 
-        DataResult dataResult = accountService.createAccount(accountDto);
+        BaseResult baseResult = accountService.createAccount(accountDto);
 
-        return dataResult.getSuccess() ?
-                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getMessage()))
-                : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+        return baseResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success("Chúc mừng bạn đăng ký tài khoản thành công. Vui lòng truy cập email để kích hoạt tài khoản."))
+                : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @GetMapping("/verify/{token}")

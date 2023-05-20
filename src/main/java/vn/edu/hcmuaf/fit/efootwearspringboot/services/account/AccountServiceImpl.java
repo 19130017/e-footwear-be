@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.QUERY;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
@@ -190,8 +191,9 @@ public class AccountServiceImpl implements AccountService {
             return BaseResult.error(HttpStatus.BAD_REQUEST, "Tài khoản của bạn đã bị khoá!");
         }
         Optional<Verify> optional1 = verifyRepository.findByAccountIdAndType(account.getId(), VerifyType.VERIFY.name());
-        if (optional1.isEmpty()) {
-            throw new NotFoundException("Tài khoản của bạn chưa kích hoạt !");
+        if (optional1.isPresent()) {
+            Verify verify = optional1.get();
+            if (!verify.getIsVerified()) throw new NotFoundException("Tài khoản của bạn chưa kích hoạt !");
         }
         return mailService.sendMailResetPassword(account);
     }
@@ -232,17 +234,18 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public DataResult createAccount(AccountDto accountDto) {
+    @Transactional
+    public BaseResult createAccount(AccountDto accountDto) {
         // check email
         Optional<Account> optional = accountRepository.findByEmail(accountDto.getEmail());
         if (optional.isPresent()) {
-            return DataResult.error(HttpStatus.BAD_REQUEST, "Email đã tồn tại");
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Email đã tồn tại");
         }
 
         //check username
         optional = accountRepository.findByUsername(accountDto.getUsername());
         if (optional.isPresent()) {
-            return DataResult.error(HttpStatus.BAD_REQUEST, "Username đã tồn tại");
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Username đã tồn tại");
         }
 
         Account account = accountMapper.toEntity(accountDto);
@@ -255,7 +258,8 @@ public class AccountServiceImpl implements AccountService {
 
         if (!ObjectUtils.isEmpty(accountRepository.save(account))) {
             if (accountDto.getRole() == null) mailService.sendMailVerify(account);
-            return DataResult.success("Chúc mừng bạn đăng ký tài khoản thành công. Vui lòng truy cập email để kích hoạt tài khoản.");
+
+            return BaseResult.success();
         }
         throw new InternalServerException("Không thể thêm mới dữ liệu.");
     }

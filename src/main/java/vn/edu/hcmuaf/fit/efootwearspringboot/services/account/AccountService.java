@@ -8,7 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 public interface AccountService {
-    DataResult createAccount(AccountDto accountDto);
+    BaseResult createAccount(AccountDto accountDto);
 
     DataResult getProfile(Long accountId);
 
