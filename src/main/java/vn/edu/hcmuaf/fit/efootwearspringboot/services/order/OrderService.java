@@ -22,5 +22,6 @@ public interface OrderService {
     DataResult countOrder();
 
     DataResult listOrderHot();
+    DataResult countByMonth();
     DataResult totalByMonth();
 }

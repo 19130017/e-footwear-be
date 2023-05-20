@@ -128,6 +128,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public DataResult countByMonth() {
+        List<Object[]> optional = orderRepository.countByMonth();
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy đơn hàng nào!");
+        }
+        return DataResult.success(optional);
+    }
+
+    @Override
     public DataResult totalByMonth() {
         List<Object[]> optional = orderRepository.totalByMonth();
         if (optional.isEmpty()) {
@@ -135,5 +144,4 @@ public class OrderServiceImpl implements OrderService {
         }
         return DataResult.success(optional);
     }
-
 }

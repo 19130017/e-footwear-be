@@ -30,4 +30,12 @@ public class OrderStatusController {
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<HttpResponse> countByDescription() {
+        DataResult dataResult = orderStatusService.countByDescription();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
 }

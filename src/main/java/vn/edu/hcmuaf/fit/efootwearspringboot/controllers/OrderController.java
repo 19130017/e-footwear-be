@@ -84,6 +84,14 @@ public class OrderController {
 
     @GetMapping("/total")
     public ResponseEntity<HttpResponse> totalByMonth() {
+        DataResult dataResult = orderService.countByMonth();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+    }
+
+    @GetMapping("/totalPrice")
+    public ResponseEntity<HttpResponse> totalPriceByMonth() {
         DataResult dataResult = orderService.totalByMonth();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
