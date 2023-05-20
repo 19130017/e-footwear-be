@@ -110,4 +110,11 @@ public class AccountController {
         return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success("Thay đổi mật khẩu thành công"))
                 : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
+
+    @PostMapping("/upload-avatar")
+    public ResponseEntity<HttpResponse> uploadAvatar(@RequestBody @Valid UploadAvatarDto avatar) {
+        BaseResult baseResult = accountService.uploadAvatar(avatar);
+        return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success())
+                : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
+    }
 }

@@ -224,6 +224,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public BaseResult uploadAvatar(UploadAvatarDto avatar) {
+        Optional<Account> optional = accountRepository.findById(avatar.getAccountId());
+        if (optional.isPresent()) {
+            Account account = optional.get();
+            account.getCustomer().setAvatar(avatar.getAvatar());
+            if (ObjectUtils.isEmpty(accountRepository.save(account))) {
+                throw new InternalServerException("Không thể cập nhật ảnh đại diện!");
+            }
+            return BaseResult.success();
+        }
+        throw new NotFoundException("Không tìm thấy tài khoản");
+    }
+
+    @Override
     public DataResult getAllAccount() {
         Optional<List<Account>> optional = accountRepository.findAllAccount();
         if (optional.isPresent()) {
