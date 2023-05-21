@@ -4,11 +4,13 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.exceptions.TemplateProcessingException;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import vn.edu.hcmuaf.fit.efootwearspringboot.configs.SpringMailConfig;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.VerifyType;
@@ -19,6 +21,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.models.Verify;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.VerifyRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -30,8 +33,8 @@ public class MailServiceImpl implements MailService {
     @Value("${spring.mail.username}")
     private String from;
 
-    @Value("${app.url")
-    private String app_url;
+    @Value("${app.url}")
+    private String host;
 
     private VerifyRepository verifyRepository;
     private JavaMailSender javaMailSender;
@@ -46,22 +49,24 @@ public class MailServiceImpl implements MailService {
 
     public void sendMailer(
             String mailFrom, String mailTo, String text, String subject, boolean html)
-            throws MessagingException {
+            throws MessagingException, UnsupportedEncodingException {
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
 
+        helper.setFrom(mailFrom, "HB Footwear - Nâng niu bàn chân việt");
         helper.setTo(mailTo);
         helper.setText(text, html);
         helper.setSubject(subject);
-        helper.setFrom(mailFrom);
+        ClassPathResource imageResource = new ClassPathResource("static/images/logo.png");
+        helper.addInline("logo", imageResource);
 
         javaMailSender.send(message);
     }
 
     @Override
-    public BaseResult sendMailVerify(Account account) {
+    public BaseResult sendMailVerify(Account account) throws TemplateProcessingException {
         Verify verify = new Verify();
         verify.setType(VerifyType.VERIFY.name());
         verify.setIsVerified(false);
@@ -72,7 +77,6 @@ public class MailServiceImpl implements MailService {
         //save
         verifyRepository.save(verify);
 
-
         // send email
         boolean isSuccess = isSendVerify(account.getEmail(), verify.getToken().toString());
         if (isSuccess) {
@@ -81,14 +85,13 @@ public class MailServiceImpl implements MailService {
         throw new InternalServerException("Gửi mail lỗi");
     }
 
-    private boolean isSendVerify(String email, String token) {
+    private boolean isSendVerify(String email, String token) throws TemplateProcessingException {
         try {
             final Context context = new Context();
-            context.setVariable("app_url", app_url);
-            context.setVariable("token", token);
+            String link = host + "auth/verify-account/" + token;
+            context.setVariable("url_verify_account", link);
             String html = templateEngine.process("verify-template", context);
-
-            sendMailer(from, email, html, "Xác thực tài khoản", true);
+            sendMailer(from, email, html, "[HB Footwear] Xác thực tài khoản", true);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,10 +122,10 @@ public class MailServiceImpl implements MailService {
     private boolean isSendResetPassword(String email, String token) {
         try {
             final Context context = new Context();
-            context.setVariable("token", token);
+            String link = host + "auth/reset-password/" + token;
+            context.setVariable("url_reset_password", link);
             String html = templateEngine.process("reset-template", context);
-
-            sendMailer(from, email, html, "Quên mật khẩu", true);
+            sendMailer(from, email, html, "[HB Footwear] Quên mật khẩu", true);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

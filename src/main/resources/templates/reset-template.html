@@ -58,14 +58,14 @@
 </head>
 <body>
 <div class="container">
-    <img class="logo-img" th:src=="|cid:${logo}"/>
+    <img class="logo-img" src="cid:logo"/>
     <h5 class="title">Cấp lại mật khẩu</h5>
     <div class="content">
         <h5 class="subtitle">Cấp lại mật khẩu</h5>
         <p>Có vẻ như bạn đang yêu cầu cấp lại mật khẩu của tài khoản tại <strong>HB Footwear</strong></p>
         <p>Nhấp vào nút ở dưới và làm theo hướng dẫn để được cấp lại mật khẩu</p>
         <div class="link-wrapper">
-            <a th:href="@{http://localhost:3000/auth/reset-password/{token}(token=${token})}" class="link">
+            <a th:href="${url_reset_password}" class="link">
                 Cấp lại mật khẩu
             </a>
         </div>

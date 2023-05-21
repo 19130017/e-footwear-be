@@ -10,9 +10,9 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_status.OrderStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.*;
-import vn.edu.hcmuaf.fit.efootwearspringboot.models.Order;
-import vn.edu.hcmuaf.fit.efootwearspringboot.models.OrderItem;
-import vn.edu.hcmuaf.fit.efootwearspringboot.models.OrderStatus;
+import vn.edu.hcmuaf.fit.efootwearspringboot.models.*;
+import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CouponRepository;
+import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.DetailRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.OrderRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.OrderStatusRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -27,17 +27,23 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     private OrderStatusRepository orderStatusRepository;
     private OrderMapper orderMapper;
+    private DetailRepository detailRepository;
+    private CouponRepository couponRepository;
 
     @Autowired
     public OrderServiceImpl(
             OrderRepository orderRepository,
             OrderMapper orderMapper,
-            OrderStatusRepository orderStatusRepository
+            OrderStatusRepository orderStatusRepository,
+            DetailRepository detailRepository,
+            CouponRepository couponRepository
 
     ) {
         this.orderRepository = orderRepository;
         this.orderMapper = orderMapper;
         this.orderStatusRepository = orderStatusRepository;
+        this.detailRepository = detailRepository;
+        this.couponRepository = couponRepository;
     }
 
     @Override
@@ -57,9 +63,33 @@ public class OrderServiceImpl implements OrderService {
         String orderId = UUID.randomUUID().toString();
         order.setId(orderId);
         order.setOrderStatus(optional.get());
+
+        // set order and update quantity detail
         for (OrderItem orderItem : order.getItems()) {
+            Optional<Detail> optionalDetail = detailRepository.findById(orderItem.getDetail().getId());
+            if (optionalDetail.isEmpty()) {
+                throw new NotFoundException("Không tìm thấy detail!");
+            }
+            Detail detail = optionalDetail.get();
+            detail.setStockQuantity(detail.getStockQuantity() - orderItem.getQuantity());
+            if (ObjectUtils.isEmpty(detailRepository.save(detail))) {
+                throw new InternalServerException("Không thể cập nhật số lượng tồn kho của sản phẩm!");
+            }
             orderItem.setOrder(order);
         }
+        // set usage coupon
+        Optional<Coupon> optionalCoupon = couponRepository.findById(order.getCoupon().getId());
+        if (optionalCoupon.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy coupon!");
+        }
+        Coupon coupon = optionalCoupon.get();
+        coupon.setMaxUsage(coupon.getMaxUsage() - 1);
+
+        if (ObjectUtils.isEmpty(couponRepository.save(coupon))) {
+            throw new InternalServerException("Không thể cập nhật số lượng tồn kho của sản phẩm!");
+        }
+
+        // save order
         if (!ObjectUtils.isEmpty(orderRepository.save(order))) {
             return BaseResult.success();
         }
