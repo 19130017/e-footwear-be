@@ -1,8 +1,11 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.account;
 
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
+
+import java.io.IOException;
 
 public interface AccountService {
     BaseResult createAccount(AccountDto accountDto);
@@ -25,5 +28,5 @@ public interface AccountService {
 
     BaseResult resetPassword(ResetPasswordDto resetPasswordDto);
 
-    BaseResult uploadAvatar(UploadAvatarDto avatar);
+    BaseResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException;
 }

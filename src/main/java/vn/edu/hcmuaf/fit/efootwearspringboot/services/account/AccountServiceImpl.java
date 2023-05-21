@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.account;
 
+import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import vn.edu.hcmuaf.fit.efootwearspringboot.constants.QUERY;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountLoginResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoRequestDto;
@@ -30,8 +31,8 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.services.mail.MailService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.IOException;
+import java.util.*;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -46,6 +47,8 @@ public class AccountServiceImpl implements AccountService {
     private final JwtService jwtService;
     private final MailService mailService;
 
+    private final CloudinaryService cloudinaryService;
+
     @Autowired
     public AccountServiceImpl(
             AccountRepository accountRepository,
@@ -56,7 +59,8 @@ public class AccountServiceImpl implements AccountService {
             CustomerRepository customerRepository,
             MailService mailService,
             VerifyRepository verifyRepository,
-            AddressDeliveryMapper addressDeliveryMapper
+            AddressDeliveryMapper addressDeliveryMapper,
+            CloudinaryService cloudinaryService
     ) {
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;
@@ -67,6 +71,7 @@ public class AccountServiceImpl implements AccountService {
         this.mailService = mailService;
         this.verifyRepository = verifyRepository;
         this.addressDeliveryMapper = addressDeliveryMapper;
+        this.cloudinaryService = cloudinaryService;
     }
 
 
@@ -224,15 +229,27 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BaseResult uploadAvatar(UploadAvatarDto avatar) {
-        Optional<Account> optional = accountRepository.findById(avatar.getAccountId());
+    public BaseResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException {
+
+        Optional<Account> optional = accountRepository.findById(accountId);
         if (optional.isPresent()) {
             Account account = optional.get();
-            account.getCustomer().setAvatar(avatar.getAvatar());
-            if (ObjectUtils.isEmpty(accountRepository.save(account))) {
-                throw new InternalServerException("Không thể cập nhật ảnh đại diện!");
+            String publicId = "";
+            String result = "";
+            if (account.getCustomer().getAvatar() != null) {
+                publicId = account.getCustomer().getAvatar().substring(account.getCustomer().getAvatar().lastIndexOf("/") + 1, account.getCustomer().getAvatar().lastIndexOf("."));
+                result = cloudinaryService.destroy(publicId);
             }
-            return BaseResult.success();
+            if (result.equals("ok") || account.getCustomer().getAvatar() == null) {
+                publicId = UUID.randomUUID().toString();
+                String url = cloudinaryService.uploadAvatar(publicId, avatar);
+                account.getCustomer().setAvatar(url);
+                if (ObjectUtils.isEmpty(accountRepository.save(account))) {
+                    throw new InternalServerException("Không thể cập nhật ảnh đại diện!");
+                }
+                return BaseResult.success();
+            }
+            throw new InternalServerException("Không tìm thấy ảnh");
         }
         throw new NotFoundException("Không tìm thấy tài khoản");
     }
@@ -267,7 +284,7 @@ public class AccountServiceImpl implements AccountService {
         else account.setRole(Role.ADMIN);
         account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         account.setCustomer(new Customer());
-        account.getCustomer().setAvatar("https://anhnenchat.com/wp-content/uploads/2021/02/chim-canh-cut-chibi-dang-yeu-nhat-cho-dien-thoai-1.png");
+//        account.getCustomer().setAvatar("https://anhnenchat.com/wp-content/uploads/2021/02/chim-canh-cut-chibi-dang-yeu-nhat-cho-dien-thoai-1.png");
         account.setIsBlocked(false);
 
         if (!ObjectUtils.isEmpty(accountRepository.save(account))) {
