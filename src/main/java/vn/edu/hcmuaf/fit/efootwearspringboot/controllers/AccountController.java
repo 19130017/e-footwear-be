@@ -84,7 +84,7 @@ public class AccountController {
         DataResult dataResult = accountService.getAllAccount();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @PutMapping("/change-password")
@@ -116,6 +116,6 @@ public class AccountController {
         DataResult dataResult = accountService.countAccount();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 }

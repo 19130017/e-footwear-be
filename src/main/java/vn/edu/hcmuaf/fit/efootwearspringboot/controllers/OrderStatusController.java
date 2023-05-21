@@ -28,7 +28,7 @@ public class OrderStatusController {
         DataResult dataResult = orderStatusService.getAll();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping("/count")
@@ -36,6 +36,6 @@ public class OrderStatusController {
         DataResult dataResult = orderStatusService.countByDescription();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 }

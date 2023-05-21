@@ -29,7 +29,7 @@ public class OrderController {
         DataResult dataResult = orderService.getOrders();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping("/{id}")
@@ -37,7 +37,7 @@ public class OrderController {
         DataResult dataResult = orderService.getOrder(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
 
@@ -46,7 +46,7 @@ public class OrderController {
         DataResult dataResult = orderService.getOrdersByAccountId(accountId);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @PostMapping()
@@ -63,7 +63,7 @@ public class OrderController {
         BaseResult baseResult = orderService.updateStatus(orderRequestStatusDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @GetMapping("/count")
@@ -71,7 +71,7 @@ public class OrderController {
         DataResult dataResult = orderService.countOrder();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping("/hot")
@@ -79,7 +79,7 @@ public class OrderController {
         DataResult dataResult = orderService.listOrderHot();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping("/total")
@@ -87,7 +87,7 @@ public class OrderController {
         DataResult dataResult = orderService.countByMonth();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping("/totalPrice")
@@ -95,6 +95,6 @@ public class OrderController {
         DataResult dataResult = orderService.totalByMonth();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 }
