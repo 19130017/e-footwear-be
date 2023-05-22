@@ -13,7 +13,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 @RestController
-@RequestMapping("/api/v1/order_status")
+@RequestMapping("/order_status")
 public class OrderStatusController {
 
     private final OrderStatusService orderStatusService;

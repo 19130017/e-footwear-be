@@ -16,7 +16,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 @RestController
-@RequestMapping(path = "/api/v1/products")
+@RequestMapping(path = "/products")
 public class ProductController {
     private final ProductService productService;
 
