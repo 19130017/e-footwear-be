@@ -3,36 +3,36 @@ package vn.edu.hcmuaf.fit.efootwearspringboot.constants;
 public class SecurityConstant {
 
     public final static String[] METHOD_GET_URLS = {
-            "/api/v1/products",
-            "/api/v1/categories",
-            "/api/v1/colors",
-            "/api/v1/sizes",
-            "/api/v1/coupons"
+            "/products",
+            "/categories",
+            "/colors",
+            "/sizes",
+            "/coupons"
     };
 
     public final static String[] PUBLIC_URLS = {
-            "/api/v1/accounts/register",
-            "/api/v1/accounts/login",
-            "/api/v1/accounts/verify/{token}",
-            "/api/v1/accounts/forgot-password/**",
-            "/api/v1/accounts/reset-password",
+            "/accounts/register",
+            "/accounts/login",
+            "/accounts/verify/{token}",
+            "/accounts/forgot-password/**",
+            "/accounts/reset-password",
 
-            "/api/v1/products/slug/**",
-            "/api/v1/products/{id}",
-            "/api/v1/products/category/**",
+            "/products/slug/**",
+            "/products/{id}",
+            "/products/category/**",
 
-            "/api/v1/categories/parent",
-            "/api/v1/categories/slug/**",
-            "/api/v1/categories/{id}",
+            "/categories/parent",
+            "/categories/slug/**",
+            "/categories/{id}",
 
-            "/api/v1/customer/profile",
+            "/customer/profile",
 
-            "/api/v1/details/**",
+            "/details/**",
 
-            "/api/v1/galleries/{type}",
+            "/galleries/{type}",
             "/v2/api-docs",
     };
     public final static String[] REQUIRE_ADMIN_ROLE_URLS = {
-//            "/api/v1/sizes",
+//            "/sizes",
     };
 }

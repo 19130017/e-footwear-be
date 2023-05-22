@@ -15,7 +15,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 @RestController
-@RequestMapping(path = "/api/v1/categories")
+@RequestMapping(path = "/categories")
 public class CategoryController {
 
     private CategoryService categoryService;

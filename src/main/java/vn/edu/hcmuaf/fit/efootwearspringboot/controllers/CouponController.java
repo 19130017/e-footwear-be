@@ -17,7 +17,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 import java.text.ParseException;
 
 @RestController
-@RequestMapping("/api/v1/coupons")
+@RequestMapping("/coupons")
 public class CouponController {
     CouponService couponService;
 

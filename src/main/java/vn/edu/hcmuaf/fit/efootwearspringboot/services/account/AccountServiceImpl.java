@@ -237,6 +237,7 @@ public class AccountServiceImpl implements AccountService {
             throw new InternalServerException("Không thể đếm số lượng tài khoản!");
         }
         return DataResult.success(count);
+    }
 
     public DataResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException {
 
