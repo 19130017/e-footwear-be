@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestStatusDto;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderResponseDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_status.OrderStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
@@ -19,6 +20,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -49,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public DataResult getOrders() {
         List<Order> orders = orderRepository.findAll();
-        return DataResult.success(orderMapper.toDtos(orders));
+        return DataResult.success(orderMapper.toResponseDtos(orders));
     }
 
     @Override
@@ -135,5 +137,41 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException("Không tìm thấy đơn hàng!");
         }
         return DataResult.success(orderMapper.toResponseDto(optional.get()));
+    }
+
+    @Override
+    public DataResult countOrder() {
+        Long count = orderRepository.count();
+        if (ObjectUtils.isEmpty(count)) {
+            throw new InternalServerException("Không thể đếm số lượng đơn hàng");
+        }
+        return DataResult.success(count);
+    }
+
+    @Override
+    public DataResult listOrderHot() {
+        Optional<List<Order>> optional = orderRepository.findOrdersHot();
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy đơn hàng nào!");
+        }
+        return DataResult.success(orderMapper.toResponseDtos(optional.get()));
+    }
+
+    @Override
+    public DataResult countByMonth() {
+        List<Object[]> optional = orderRepository.countByMonth();
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy đơn hàng nào!");
+        }
+        return DataResult.success(optional);
+    }
+
+    @Override
+    public DataResult totalByMonth() {
+        List<Object[]> optional = orderRepository.totalByMonth();
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy đơn hàng nào!");
+        }
+        return DataResult.success(optional);
     }
 }

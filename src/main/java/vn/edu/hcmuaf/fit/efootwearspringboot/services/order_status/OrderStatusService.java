@@ -4,4 +4,6 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 public interface OrderStatusService {
     DataResult getAll();
+
+    DataResult countByDescription();
 }

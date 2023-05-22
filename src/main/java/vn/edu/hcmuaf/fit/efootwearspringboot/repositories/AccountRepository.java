@@ -20,4 +20,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     @Query(value = QUERY.ACCOUNT.FIND_ALL_ACCOUNT, nativeQuery = true)
     Optional<List<Account>> findAllAccount();
+
 }

@@ -230,6 +230,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+
+    public DataResult countAccount() {
+        Long count = accountRepository.count();
+        if (ObjectUtils.isEmpty(count)) {
+            throw new InternalServerException("Không thể đếm số lượng tài khoản!");
+        }
+        return DataResult.success(count);
+
     public DataResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException {
 
         Optional<Account> optional = accountRepository.findById(accountId);
@@ -253,6 +261,7 @@ public class AccountServiceImpl implements AccountService {
             throw new InternalServerException("Không tìm thấy ảnh");
         }
         throw new NotFoundException("Không tìm thấy tài khoản");
+
     }
 
     @Override

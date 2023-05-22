@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountSlimDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.address_delivery.AddressDeliveryDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.coupon.CouponDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_item.OrderItemDto;
@@ -30,4 +31,5 @@ public class OrderResponseDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private ZonedDateTime orderTime;
     private AddressDeliveryDto address;
+    private AccountSlimDto account;
 }

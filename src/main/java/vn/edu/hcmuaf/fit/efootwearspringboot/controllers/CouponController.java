@@ -29,13 +29,13 @@ public class CouponController {
     @GetMapping
     public ResponseEntity<HttpResponse> findCoupons() {
         DataResult dataResult = couponService.findAll();
-        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<HttpResponse> findCoupon(@PathVariable("id") Long id) {
         DataResult dataResult = couponService.findCoupon(id);
-        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @PostMapping
@@ -47,7 +47,7 @@ public class CouponController {
                 .endTime(couponCreateDto.getEndTime())
                 .build();
         BaseResult baseResult = couponService.createCoupon(couponDto);
-        return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success()) : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+        return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success()) : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
 
     }
 
@@ -55,7 +55,7 @@ public class CouponController {
     public ResponseEntity<HttpResponse> updateCoupon(@RequestBody @Valid CouponUpdateDto couponUpdateDto, @PathVariable("id") Long id) {
         CouponDto couponDto = CouponDto.builder().id(id).code(couponUpdateDto.getCode()).maxUsage(couponUpdateDto.getMaxUsage()).price(couponUpdateDto.getPrice()).endTime(couponUpdateDto.getEndTime()).build();
         BaseResult baseResult = couponService.updateCoupon(couponDto);
-        return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success()) : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+        return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success()) : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
 
     }
 }
