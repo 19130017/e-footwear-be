@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.account.AccountService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponse;
@@ -12,6 +13,8 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/accounts")
@@ -46,11 +49,11 @@ public class AccountController {
                 .email(accountCreateDto.getEmail())
                 .build();
 
-        DataResult dataResult = accountService.createAccount(accountDto);
+        BaseResult baseResult = accountService.createAccount(accountDto);
 
-        return dataResult.getSuccess() ?
-                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getMessage()))
-                : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+        return baseResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success("Chúc mừng bạn đăng ký tài khoản thành công. Vui lòng truy cập email để kích hoạt tài khoản."))
+                : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @GetMapping("/verify/{token}")
@@ -117,5 +120,11 @@ public class AccountController {
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+    @PostMapping("/upload-avatar")
+    public ResponseEntity<HttpResponse> uploadAvatar(@RequestParam("avatar") MultipartFile avatar, @RequestParam("accountId") Long accountId) throws IOException {
+        DataResult dataResult = accountService.uploadAvatar(avatar, accountId);
+        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
+                : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+
     }
 }

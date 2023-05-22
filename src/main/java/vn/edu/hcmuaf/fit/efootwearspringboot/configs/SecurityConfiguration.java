@@ -45,7 +45,6 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .sessionManagement()
-
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests()

@@ -1,14 +1,14 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.account;
 
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.ChangePasswordDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoRequestDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.ResetPasswordDto;
+import org.springframework.web.multipart.MultipartFile;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
+import java.io.IOException;
+
 public interface AccountService {
-    DataResult createAccount(AccountDto accountDto);
+    BaseResult createAccount(AccountDto accountDto);
 
     DataResult getProfile(Long accountId);
 
@@ -28,5 +28,9 @@ public interface AccountService {
 
     BaseResult resetPassword(ResetPasswordDto resetPasswordDto);
 
+
     DataResult countAccount();
+
+    DataResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException;
+
 }

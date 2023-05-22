@@ -7,6 +7,7 @@ public class SecurityConstant {
             "/api/v1/categories",
             "/api/v1/colors",
             "/api/v1/sizes",
+            "/api/v1/coupons"
     };
 
     public final static String[] PUBLIC_URLS = {
