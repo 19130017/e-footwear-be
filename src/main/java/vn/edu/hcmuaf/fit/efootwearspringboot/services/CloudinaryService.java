@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.efootwearspringboot.services.account;
+package vn.edu.hcmuaf.fit.efootwearspringboot.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;

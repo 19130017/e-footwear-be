@@ -116,8 +116,8 @@ public class AccountController {
 
     @PostMapping("/upload-avatar")
     public ResponseEntity<HttpResponse> uploadAvatar(@RequestParam("avatar") MultipartFile avatar, @RequestParam("accountId") Long accountId) throws IOException {
-        BaseResult baseResult = accountService.uploadAvatar(avatar, accountId);
-        return baseResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success())
-                : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
+        DataResult dataResult = accountService.uploadAvatar(avatar, accountId);
+        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
+                : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 }

@@ -1,6 +1,5 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.account;
 
-import com.cloudinary.Cloudinary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +26,8 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.AccountRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CustomerRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.VerifyRepository;
+import vn.edu.hcmuaf.fit.efootwearspringboot.services.CloudinaryService;
+import vn.edu.hcmuaf.fit.efootwearspringboot.services.JwtService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.mail.MailService;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
@@ -229,7 +230,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BaseResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException {
+    public DataResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException {
 
         Optional<Account> optional = accountRepository.findById(accountId);
         if (optional.isPresent()) {
@@ -247,7 +248,7 @@ public class AccountServiceImpl implements AccountService {
                 if (ObjectUtils.isEmpty(accountRepository.save(account))) {
                     throw new InternalServerException("Không thể cập nhật ảnh đại diện!");
                 }
-                return BaseResult.success();
+                return DataResult.success(url);
             }
             throw new InternalServerException("Không tìm thấy ảnh");
         }
