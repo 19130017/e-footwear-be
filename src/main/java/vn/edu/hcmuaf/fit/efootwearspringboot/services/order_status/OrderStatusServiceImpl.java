@@ -28,4 +28,13 @@ public class OrderStatusServiceImpl implements OrderStatusService {
 
         return DataResult.success(orderStatusRepository.findAll());
     }
+
+    @Override
+    public DataResult countByDescription() {
+        List<Object[]> optional = orderStatusRepository.countByDescription();
+        if (optional.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy đơn hàng nào!");
+        }
+        return DataResult.success(optional);
+    }
 }

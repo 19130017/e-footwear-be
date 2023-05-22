@@ -15,7 +15,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 @RestController
-@RequestMapping("/api/v1/details")
+@RequestMapping("/details")
 public class DetailController {
 
     private DetailService detailService;
@@ -33,7 +33,7 @@ public class DetailController {
         DataResult dataResult = detailService.findDetailByProduct(size_id, slug, colorId);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping()
@@ -41,7 +41,7 @@ public class DetailController {
         DataResult dataResult = detailService.findAll();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @PostMapping
@@ -54,7 +54,7 @@ public class DetailController {
         BaseResult baseResult = detailService.createDetail(detailDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @DeleteMapping("{id}")
@@ -62,7 +62,7 @@ public class DetailController {
         BaseResult baseResult = detailService.deleteDetail(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @PutMapping("{id}")
@@ -76,6 +76,6 @@ public class DetailController {
         BaseResult baseResult = detailService.updateDetail(detailDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(baseResult.getMessage())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 }

@@ -6,10 +6,14 @@ import org.springframework.stereotype.Repository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.QUERY;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.OrderStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface OrderStatusRepository extends JpaRepository<OrderStatus, Long> {
-    @Query(value = QUERY.ORDER_STATUS.FIND_BY_CODE,nativeQuery = true)
+    @Query(value = QUERY.ORDER_STATUS.FIND_BY_CODE, nativeQuery = true)
     Optional<OrderStatus> findByCode(String confirmation);
+
+    @Query(value = QUERY.ORDER_STATUS.COUNT_BY_DESCRIPTION, nativeQuery = true)
+    List<Object[]> countByDescription();
 }

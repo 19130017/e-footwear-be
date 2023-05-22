@@ -15,7 +15,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 @RestController()
-@RequestMapping("/api/v1/sizes")
+@RequestMapping("/sizes")
 public class SizeController {
     private SizeService sizeService;
 
@@ -29,7 +29,7 @@ public class SizeController {
         DataResult dataResult = sizeService.findAll();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping("/{id}")
@@ -37,7 +37,7 @@ public class SizeController {
         DataResult dataResult = sizeService.findSize(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @PostMapping
@@ -49,7 +49,7 @@ public class SizeController {
         BaseResult baseResult = sizeService.createSize(sizeDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @PutMapping("/{id}")
@@ -62,7 +62,7 @@ public class SizeController {
         BaseResult baseResult = sizeService.updateSize(sizeDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @DeleteMapping("/{id}")
@@ -70,6 +70,6 @@ public class SizeController {
         BaseResult baseResult = sizeService.deleteSize(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 }

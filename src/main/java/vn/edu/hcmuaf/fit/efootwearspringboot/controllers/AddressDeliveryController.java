@@ -15,7 +15,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 @RestController
-@RequestMapping("/api/v1/addresses")
+@RequestMapping("/addresses")
 public class AddressDeliveryController {
 
     private AddressDeliveryService addressDeliveryService;
@@ -30,7 +30,7 @@ public class AddressDeliveryController {
         DataResult dataResult = addressDeliveryService.getAddress(id);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping("/list/{accountId}")
@@ -38,7 +38,7 @@ public class AddressDeliveryController {
         DataResult dataResult = addressDeliveryService.getAddresses(accountId);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @GetMapping()
@@ -46,7 +46,7 @@ public class AddressDeliveryController {
         DataResult dataResult = addressDeliveryService.getAddresses(accountId);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @PostMapping()
@@ -66,7 +66,7 @@ public class AddressDeliveryController {
         BaseResult baseResult = addressDeliveryService.createAddress(addressDeliveryDto, accountId);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @PutMapping()
@@ -87,7 +87,7 @@ public class AddressDeliveryController {
 
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
     @DeleteMapping("/{id}")
@@ -95,6 +95,6 @@ public class AddressDeliveryController {
         BaseResult baseResult = addressDeliveryService.deleteAddress(id);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success()) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 }

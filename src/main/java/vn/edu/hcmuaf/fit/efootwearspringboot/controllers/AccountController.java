@@ -17,7 +17,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/accounts")
 @RequiredArgsConstructor
 public class AccountController {
 
@@ -87,7 +87,7 @@ public class AccountController {
         DataResult dataResult = accountService.getAllAccount();
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getMessage()));
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @PutMapping("/change-password")
@@ -114,10 +114,18 @@ public class AccountController {
                 : ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<HttpResponse> countAccount() {
+        DataResult dataResult = accountService.countAccount();
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+    }
     @PostMapping("/upload-avatar")
     public ResponseEntity<HttpResponse> uploadAvatar(@RequestParam("avatar") MultipartFile avatar, @RequestParam("accountId") Long accountId) throws IOException {
         DataResult dataResult = accountService.uploadAvatar(avatar, accountId);
         return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
                 : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+
     }
 }

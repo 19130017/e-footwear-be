@@ -16,4 +16,14 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query(value = QUERY.ORDER.FIND_ORDER_BY_ID, nativeQuery = true)
     Optional<Order> findByOrderId(String id);
+
+    @Query(value = QUERY.ORDER.FIND_ORDERS_HOT, nativeQuery = true)
+    Optional<List<Order>> findOrdersHot();
+
+    @Query(value = QUERY.ORDER.COUNT_ORDER_BY_MONTH, nativeQuery = true)
+    List<Object[]> countByMonth();
+
+    @Query(value = QUERY.ORDER.TOTAL_ORDER_BY_MONTH, nativeQuery = true)
+    List<Object[]> totalByMonth();
+
 }
