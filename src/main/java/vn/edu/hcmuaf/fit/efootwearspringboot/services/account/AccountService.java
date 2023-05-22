@@ -28,5 +28,5 @@ public interface AccountService {
 
     BaseResult resetPassword(ResetPasswordDto resetPasswordDto);
 
-    BaseResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException;
+    DataResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException;
 }

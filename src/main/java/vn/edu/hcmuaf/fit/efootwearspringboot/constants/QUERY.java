@@ -65,7 +65,7 @@ public class QUERY {
         public static final String FIND_PRODUCT_BY_CATE_SLUG = "select p.* from products p join categories c on c.id = p.category_id where p.state = 'ACTIVE' and c.slug = ? ";
 
         public static final String COUNT_PRODUCT_BY_SLUG = "SELECT COUNT(*) from products where slug = ?";
-        public static final String FIND_PRODUCT_BY_NAME = "select * from products where name like ?";
+        public static final String FIND_PRODUCT_BY_NAME = "select * from products where name like ? and state ='ACTIVE'";
     }
 
     public static class DETAIL {

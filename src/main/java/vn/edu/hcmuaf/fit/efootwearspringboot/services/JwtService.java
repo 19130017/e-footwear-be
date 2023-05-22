@@ -1,4 +1,4 @@
-package vn.edu.hcmuaf.fit.efootwearspringboot.services.account;
+package vn.edu.hcmuaf.fit.efootwearspringboot.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
