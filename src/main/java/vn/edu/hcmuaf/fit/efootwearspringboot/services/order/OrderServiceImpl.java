@@ -80,15 +80,16 @@ public class OrderServiceImpl implements OrderService {
             orderItem.setOrder(order);
         }
         // set usage coupon
-        Optional<Coupon> optionalCoupon = couponRepository.findById(order.getCoupon().getId());
-        if (optionalCoupon.isEmpty()) {
-            throw new NotFoundException("Không tìm thấy coupon!");
-        }
-        Coupon coupon = optionalCoupon.get();
-        coupon.setMaxUsage(coupon.getMaxUsage() - 1);
-
-        if (ObjectUtils.isEmpty(couponRepository.save(coupon))) {
-            throw new InternalServerException("Không thể cập nhật số lượng tồn kho của sản phẩm!");
+        if (order.getCoupon() != null) {
+            Optional<Coupon> optionalCoupon = couponRepository.findById(order.getCoupon().getId());
+            if (optionalCoupon.isEmpty()) {
+                throw new NotFoundException("Không tìm thấy coupon!");
+            }
+            Coupon coupon = optionalCoupon.get();
+            coupon.setMaxUsage(coupon.getMaxUsage() - 1);
+            if (ObjectUtils.isEmpty(couponRepository.save(coupon))) {
+                throw new InternalServerException("Không thể cập nhật số lượng tồn kho của sản phẩm!");
+            }
         }
 
         // save order
