@@ -10,6 +10,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.dto.product.ProductSlimDto;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductImageCreateDto {
+    
     private String imageURL;
     private ProductSlimDto product;
 }
