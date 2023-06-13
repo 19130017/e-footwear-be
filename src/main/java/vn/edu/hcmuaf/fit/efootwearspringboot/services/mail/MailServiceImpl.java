@@ -69,7 +69,7 @@ public class MailServiceImpl implements MailService {
     public BaseResult sendMailVerify(Account account) throws TemplateProcessingException {
         Verify verify = new Verify();
         verify.setType(VerifyType.VERIFY.name());
-        verify.setIsVerified(false);
+        verify.setIsUsed(false);
         verify.setToken(UUID.randomUUID().toString());
         verify.setExpireTime(new Date(System.currentTimeMillis() + (3600 * 1000 * 3)));
         verify.setAccount(account);
@@ -103,7 +103,7 @@ public class MailServiceImpl implements MailService {
     public BaseResult sendMailResetPassword(Account account) {
         Verify verify = new Verify();
         verify.setType(VerifyType.RESET_PASSWORD.name());
-        verify.setIsVerified(false);
+        verify.setIsUsed(false);
         verify.setToken(UUID.randomUUID().toString());
         verify.setExpireTime(new Date(System.currentTimeMillis() + (3600 * 1000 * 3)));
         verify.setAccount(account);

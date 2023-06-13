@@ -12,7 +12,7 @@ public class SecurityConstant {
 
     public final static String[] PUBLIC_URLS = {
             "/accounts/register",
-            "/accounts/login",
+            "/accounts/login/**",
             "/accounts/verify/{token}",
             "/accounts/forgot-password/**",
             "/accounts/reset-password",

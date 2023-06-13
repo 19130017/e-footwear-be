@@ -22,7 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = "accounts")
-public class Account implements Serializable, UserDetails {
+public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -52,43 +52,27 @@ public class Account implements Serializable, UserDetails {
 
     @Column(name = "is_blocked")
     private Boolean isBlocked;
+
+    @Column(name = "gid")
+    private String gid;
+
+    @Column(name = "is_login_gg")
+    private Boolean isLoginGoogle;
+
+    @Column(name = "fid")
+    private String fid;
+
+    @Column(name = "is_login_fb")
+    private Boolean isLoginFacebook;
+
+    @Column(name = "is_verified")
+    private Boolean isVerified;
+
     @OneToMany(mappedBy = "account")
     private List<Order> orders;
+
     @OneToMany(mappedBy = "account")
     private List<AddressDelivery> addresses;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
-    }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

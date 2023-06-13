@@ -4,6 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.*;
@@ -22,10 +25,12 @@ import java.io.IOException;
 public class AccountController {
 
     private AccountService accountService;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, AuthenticationManager authenticationManager) {
         this.accountService = accountService;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/login")
@@ -36,6 +41,13 @@ public class AccountController {
                 .password(accountLoginRequest.getPassword())
                 .build();
         DataResult dataResult = accountService.login(accountDto);
+        AccountLoginResponse accountLoginResponse = (AccountLoginResponse) dataResult.getData();
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        accountLoginResponse.getEmail(),
+                        accountLoginRequest.getPassword()
+                )
+        );
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
                 : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
@@ -58,6 +70,7 @@ public class AccountController {
 
     @GetMapping("/verify/{token}")
     public ResponseEntity<HttpResponse> verifyAccount(@PathVariable("token") String token) {
+        System.out.println(token);
         DataResult dataResult = accountService.verify(token);
         return dataResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getMessage())) :
@@ -121,11 +134,19 @@ public class AccountController {
                 ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
+
     @PostMapping("/upload-avatar")
     public ResponseEntity<HttpResponse> uploadAvatar(@RequestParam("avatar") MultipartFile avatar, @RequestParam("accountId") Long accountId) throws IOException {
         DataResult dataResult = accountService.uploadAvatar(avatar, accountId);
         return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
                 : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
 
+    }
+
+    @PostMapping("/login/google")
+    public ResponseEntity<HttpResponse> loginWithGoogle(@RequestBody @Valid AccountLoginGGRequestDto accountLoginGGRequestDto) {
+        DataResult dataResult = accountService.loginWithGoogle(accountLoginGGRequestDto);
+        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
+                : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 }

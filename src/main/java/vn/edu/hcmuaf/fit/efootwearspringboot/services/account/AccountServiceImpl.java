@@ -1,24 +1,28 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
+import vn.edu.hcmuaf.fit.efootwearspringboot.domain.AccountDomain;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountLoginResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.CustomerInfoResponseDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
-import vn.edu.hcmuaf.fit.efootwearspringboot.constants.VerifyType;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AccountMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.AddressDeliveryMapper;
+import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.CustomerMapper;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Account;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Customer;
 import vn.edu.hcmuaf.fit.efootwearspringboot.models.Verify;
@@ -36,15 +40,16 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
+@Qualifier("userdetailsservice")
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
     private final VerifyRepository verifyRepository;
     private final AccountMapper accountMapper;
+    private final CustomerMapper customerMapper;
     private final AddressDeliveryMapper addressDeliveryMapper;
 
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final MailService mailService;
 
@@ -55,48 +60,44 @@ public class AccountServiceImpl implements AccountService {
             AccountRepository accountRepository,
             AccountMapper accountMapper,
             PasswordEncoder passwordEncoder,
-            AuthenticationManager authenticationManager,
             JwtService jwtService,
             CustomerRepository customerRepository,
             MailService mailService,
             VerifyRepository verifyRepository,
             AddressDeliveryMapper addressDeliveryMapper,
-            CloudinaryService cloudinaryService
+            CloudinaryService cloudinaryService,
+            CustomerMapper customerMapper
     ) {
         this.accountRepository = accountRepository;
         this.accountMapper = accountMapper;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.customerRepository = customerRepository;
         this.mailService = mailService;
         this.verifyRepository = verifyRepository;
         this.addressDeliveryMapper = addressDeliveryMapper;
         this.cloudinaryService = cloudinaryService;
+        this.customerMapper = customerMapper;
     }
 
 
     @Override
     public DataResult login(AccountDto accountDto) {
         // get account
-        Optional<Account> optional = accountRepository.findByUsername(accountDto.getUsername());
+        Account account = accountRepository.findByUsername(accountDto.getUsername()).orElse(null);
 
-
-        if (optional.isPresent()) {
-            Account account = optional.get();
-            if (!account.getUsername().equals("admin")) {
-                Optional<Verify> optional1 = verifyRepository.findByAccountIdAndType(account.getId(), VerifyType.VERIFY.name());
-                Verify verify = optional1.get();
-                if (!verify.getIsVerified())
-                    return DataResult.error(HttpStatus.BAD_REQUEST, "Vui lòng vào email để xác nhận tài khoản");
+        if (account != null) {
+            if (!account.getIsVerified()) {
+                return DataResult.error(HttpStatus.BAD_REQUEST, "Vui lòng vào email để xác nhận tài khoản");
             }
+
             if (!passwordEncoder.matches(accountDto.getPassword(), account.getPassword())) {
                 return DataResult.error(HttpStatus.BAD_REQUEST, "Mật khẩu sai. Vui lòng nhập lại mật khẩu");
             }
 
             // authenticate
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(accountDto.getUsername(), accountDto.getPassword()));
-            String jwtToken = jwtService.generateToken(account, account.getAuthorities());
+            AccountDomain accountDomain = (AccountDomain) loadUserByUsername(account.getEmail());
+            String jwtToken = jwtService.generateToken(account, accountDomain.getAuthorities());
             String jwtRefreshToken = jwtService.refreshToken(account);
             account.setRefreshToken(jwtRefreshToken);
 
@@ -106,8 +107,10 @@ public class AccountServiceImpl implements AccountService {
                         .accountId(account.getId())
                         .avatar(account.getCustomer().getAvatar())
                         .username(account.getUsername())
+                        .email(account.getEmail())
                         .token(jwtToken)
                         .refreshToken(jwtRefreshToken)
+                        .isSocialLogin(false)
                         .build();
                 return DataResult.success(response);
             }
@@ -121,8 +124,14 @@ public class AccountServiceImpl implements AccountService {
         Optional<Verify> optional = verifyRepository.findByToken(token);
         if (optional.isPresent()) {
             Verify verify = optional.get();
-            verify.setIsVerified(true);
-            if (!ObjectUtils.isEmpty(verifyRepository.save(verify))) {
+            Optional<Account> optionalAccount = accountRepository.findById(verify.getAccount().getId());
+            Account account = optionalAccount.get();
+
+            verify.setIsUsed(true);
+            account.setIsVerified(true);
+
+            if (!ObjectUtils.isEmpty(verifyRepository.save(verify))
+                    && !ObjectUtils.isEmpty(accountRepository.save(account))) {
                 return DataResult.success("Xác thực tài khoản thành công");
             }
             throw new InternalServerException("Không thể thay đổi trạng thái của mã xác thực tài khoản!");
@@ -196,10 +205,8 @@ public class AccountServiceImpl implements AccountService {
         if (account.getIsBlocked()) {
             return BaseResult.error(HttpStatus.BAD_REQUEST, "Tài khoản của bạn đã bị khoá!");
         }
-        Optional<Verify> optional1 = verifyRepository.findByAccountIdAndType(account.getId(), VerifyType.VERIFY.name());
-        if (optional1.isPresent()) {
-            Verify verify = optional1.get();
-            if (!verify.getIsVerified()) throw new NotFoundException("Tài khoản của bạn chưa kích hoạt !");
+        if (!account.getIsVerified()) {
+            return BaseResult.error(HttpStatus.BAD_REQUEST, "Tài khoản của bạn chưa kích hoạt !");
         }
         return mailService.sendMailResetPassword(account);
     }
@@ -221,11 +228,12 @@ public class AccountServiceImpl implements AccountService {
             return BaseResult.error(HttpStatus.BAD_REQUEST, "Mật khẩu đã được sử dụng ở lần trước. Vui lòng thay đổi mật khẩu khác");
         }
         account.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
-        verifier.setIsVerified(true);
-
-        if (ObjectUtils.isEmpty(accountRepository.save(account)) && ObjectUtils.isEmpty(verifyRepository.save(verifier))) {
+        if (ObjectUtils.isEmpty(accountRepository.save(account))) {
             throw new InternalServerException("Không thể reset mật khẩu!");
         }
+
+        verifier.setIsUsed(true);
+        verifyRepository.save(verifier);
         return BaseResult.success();
     }
 
@@ -246,11 +254,13 @@ public class AccountServiceImpl implements AccountService {
             Account account = optional.get();
             String publicId = "";
             String result = "";
-            if (account.getCustomer().getAvatar() != null) {
+            // xoa anh
+            String avatarUrl = account.getCustomer().getAvatar();
+            if (avatarUrl.startsWith("http://res.cloudinary.com")) {
                 publicId = account.getCustomer().getAvatar().substring(account.getCustomer().getAvatar().lastIndexOf("/") + 1, account.getCustomer().getAvatar().lastIndexOf("."));
                 result = cloudinaryService.destroy(publicId);
             }
-            if (result.equals("ok") || account.getCustomer().getAvatar() == null) {
+            if (avatarUrl == null || result.equals("ok") || !avatarUrl.startsWith("http://res.cloudinary.com")) {
                 publicId = UUID.randomUUID().toString();
                 String url = cloudinaryService.uploadAvatar(publicId, avatar);
                 account.getCustomer().setAvatar(url);
@@ -263,6 +273,47 @@ public class AccountServiceImpl implements AccountService {
         }
         throw new NotFoundException("Không tìm thấy tài khoản");
 
+    }
+
+    @Override
+    public DataResult loginWithGoogle(AccountLoginGGRequestDto accountLoginGGRequestDto) {
+        Account account = accountRepository.findByGid(accountLoginGGRequestDto.getGid()).orElse(null);
+        if (account == null) {
+            account = accountRepository.findByEmail(accountLoginGGRequestDto.getEmail()).orElse(null);
+            if (account == null) {
+                account = Account.builder()
+                        .gid(accountLoginGGRequestDto.getGid())
+                        .email(accountLoginGGRequestDto.getEmail())
+                        .isLoginGoogle(true)
+                        .isVerified(true)
+                        .role(Role.CUSTOMER)
+                        .customer(customerMapper.toEntity(accountLoginGGRequestDto.getCustomer()))
+                        .build();
+            } else {
+                account.setGid(accountLoginGGRequestDto.getGid());
+                account.setIsLoginGoogle(true);
+                account.setIsVerified(true);
+            }
+            accountRepository.save(account);
+        }
+
+        AccountDomain accountDomain = (AccountDomain) loadUserByUsername(account.getEmail());
+        String jwtToken = jwtService.generateToken(account, accountDomain.getAuthorities());
+        String jwtRefreshToken = jwtService.refreshToken(account);
+        account.setRefreshToken(jwtRefreshToken);
+        if (!ObjectUtils.isEmpty(accountRepository.save(account))) {
+            AccountLoginResponse response = AccountLoginResponse
+                    .builder()
+                    .email(account.getEmail())
+                    .accountId(account.getId())
+                    .avatar(account.getCustomer().getAvatar())
+                    .token(jwtToken)
+                    .refreshToken(jwtRefreshToken)
+                    .isSocialLogin(true)
+                    .build();
+            return DataResult.success(response);
+        }
+        throw new InternalServerException("Không đăng nhập bằng google");
     }
 
     @Override
@@ -294,6 +345,7 @@ public class AccountServiceImpl implements AccountService {
         if (accountDto.getRole() == null) account.setRole(Role.CUSTOMER);
         else account.setRole(Role.ADMIN);
         account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+        account.setIsVerified(false);
         account.setCustomer(new Customer());
 //        account.getCustomer().setAvatar("https://anhnenchat.com/wp-content/uploads/2021/02/chim-canh-cut-chibi-dang-yeu-nhat-cho-dien-thoai-1.png");
         account.setIsBlocked(false);
@@ -306,5 +358,12 @@ public class AccountServiceImpl implements AccountService {
         throw new InternalServerException("Không thể thêm mới dữ liệu.");
     }
 
-
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Account account = accountRepository.findByEmail(email).orElse(null);
+        if (account == null) {
+            throw new UsernameNotFoundException("User not found: " + email);
+        }
+        return new AccountDomain(account);
+    }
 }
