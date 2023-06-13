@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.account;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
@@ -7,7 +8,7 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 import java.io.IOException;
 
-public interface AccountService {
+public interface AccountService extends UserDetailsService {
     BaseResult createAccount(AccountDto accountDto);
 
     DataResult getProfile(Long accountId);
@@ -33,4 +34,5 @@ public interface AccountService {
 
     DataResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException;
 
+    DataResult loginWithGoogle(AccountLoginGGRequestDto accountLoginGGRequestDto);
 }

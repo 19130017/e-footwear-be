@@ -20,10 +20,7 @@ import java.util.List;
 public class CustomerDto {
     private Long id;
     private String avatar;
-
     private String firstName;
-
     private String lastName;
-
     private Date birthday;
 }

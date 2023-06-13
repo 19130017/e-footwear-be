@@ -4,6 +4,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.Role;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.account.AccountDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.account.AccountService;
@@ -29,5 +31,10 @@ public class EFootwearSpringbootApplication {
                     .build();
             service.createAccount(admin);
         };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

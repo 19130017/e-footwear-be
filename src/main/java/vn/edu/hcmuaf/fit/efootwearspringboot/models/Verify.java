@@ -25,8 +25,8 @@ public class Verify implements Serializable {
     @Column(name = "type")
     private String type;
 
-    @Column(name = "is_verified")
-    private Boolean isVerified;
+    @Column(name = "is_used")
+    private Boolean isUsed;
 
     @Column(unique = true, name = "token")
     private String token;
