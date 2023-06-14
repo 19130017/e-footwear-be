@@ -284,14 +284,12 @@ public class AccountServiceImpl implements AccountService {
                 account = Account.builder()
                         .gid(accountLoginGGRequestDto.getGid())
                         .email(accountLoginGGRequestDto.getEmail())
-                        .isLoginGoogle(true)
                         .isVerified(true)
                         .role(Role.CUSTOMER)
                         .customer(customerMapper.toEntity(accountLoginGGRequestDto.getCustomer()))
                         .build();
             } else {
                 account.setGid(accountLoginGGRequestDto.getGid());
-                account.setIsLoginGoogle(true);
                 account.setIsVerified(true);
             }
             accountRepository.save(account);
@@ -325,14 +323,12 @@ public class AccountServiceImpl implements AccountService {
                 account = Account.builder()
                         .fid(accountLoginFBRequestDto.getFid())
                         .email(accountLoginFBRequestDto.getEmail())
-                        .isLoginFacebook(true)
                         .isVerified(true)
                         .role(Role.CUSTOMER)
                         .customer(customerMapper.toEntity(accountLoginFBRequestDto.getCustomer()))
                         .build();
             } else {
                 account.setFid(accountLoginFBRequestDto.getFid());
-                account.setIsLoginFacebook(true);
                 account.setIsVerified(true);
             }
             accountRepository.save(account);

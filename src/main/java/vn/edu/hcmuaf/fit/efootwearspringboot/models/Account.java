@@ -56,14 +56,13 @@ public class Account implements Serializable {
     @Column(name = "gid")
     private String gid;
 
-    @Column(name = "is_login_gg")
-    private Boolean isLoginGoogle;
-
     @Column(name = "fid")
     private String fid;
 
-    @Column(name = "is_login_fb")
-    private Boolean isLoginFacebook;
+    //    @Column(name = "is_login_gg")
+//    private Boolean isLoginGoogle;
+//    @Column(name = "is_login_fb")
+//    private Boolean isLoginFacebook;
 
     @Column(name = "is_verified")
     private Boolean isVerified;
