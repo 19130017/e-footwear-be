@@ -18,6 +18,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
     Optional<Account> findById(Long id);
     Optional<Account> findByGid(String gid);
+    Optional<Account> findByFid(String gid);
+
 
     @Query(value = QUERY.ACCOUNT.FIND_ALL_ACCOUNT, nativeQuery = true)
     Optional<List<Account>> findAllAccount();

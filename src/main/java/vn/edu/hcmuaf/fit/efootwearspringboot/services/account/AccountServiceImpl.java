@@ -317,6 +317,47 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public DataResult loginWithFacebook(AccountLoginFBRequestDto accountLoginFBRequestDto) {
+        Account account = accountRepository.findByFid(accountLoginFBRequestDto.getFid()).orElse(null);
+        if (account == null) {
+            account = accountRepository.findByEmail(accountLoginFBRequestDto.getEmail()).orElse(null);
+            if (account == null) {
+                account = Account.builder()
+                        .fid(accountLoginFBRequestDto.getFid())
+                        .email(accountLoginFBRequestDto.getEmail())
+                        .isLoginFacebook(true)
+                        .isVerified(true)
+                        .role(Role.CUSTOMER)
+                        .customer(customerMapper.toEntity(accountLoginFBRequestDto.getCustomer()))
+                        .build();
+            } else {
+                account.setFid(accountLoginFBRequestDto.getFid());
+                account.setIsLoginFacebook(true);
+                account.setIsVerified(true);
+            }
+            accountRepository.save(account);
+        }
+
+        AccountDomain accountDomain = (AccountDomain) loadUserByUsername(account.getEmail());
+        String jwtToken = jwtService.generateToken(account, accountDomain.getAuthorities());
+        String jwtRefreshToken = jwtService.refreshToken(account);
+        account.setRefreshToken(jwtRefreshToken);
+        if (!ObjectUtils.isEmpty(accountRepository.save(account))) {
+            AccountLoginResponse response = AccountLoginResponse
+                    .builder()
+                    .email(account.getEmail())
+                    .accountId(account.getId())
+                    .avatar(account.getCustomer().getAvatar())
+                    .token(jwtToken)
+                    .refreshToken(jwtRefreshToken)
+                    .isSocialLogin(true)
+                    .build();
+            return DataResult.success(response);
+        }
+        throw new InternalServerException("Không đăng nhập bằng facebook");
+    }
+
+    @Override
     public DataResult getAllAccount() {
         Optional<List<Account>> optional = accountRepository.findAllAccount();
         if (optional.isPresent()) {

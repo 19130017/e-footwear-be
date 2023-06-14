@@ -149,4 +149,13 @@ public class AccountController {
         return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
                 : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
+
+    @PostMapping("/login/facebook")
+    public ResponseEntity<HttpResponse> loginWithFacebook(@RequestBody @Valid AccountLoginFBRequestDto accountLoginFBRequestDto) {
+        DataResult dataResult = accountService.loginWithFacebook(accountLoginFBRequestDto);
+        return dataResult.getSuccess() ? ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData()))
+                : ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+    }
+
+
 }

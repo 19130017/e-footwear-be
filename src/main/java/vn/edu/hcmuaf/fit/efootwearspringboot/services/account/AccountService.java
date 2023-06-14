@@ -35,4 +35,6 @@ public interface AccountService extends UserDetailsService {
     DataResult uploadAvatar(MultipartFile avatar, Long accountId) throws IOException;
 
     DataResult loginWithGoogle(AccountLoginGGRequestDto accountLoginGGRequestDto);
+
+    DataResult loginWithFacebook(AccountLoginFBRequestDto accountLoginFBRequestDto);
 }
