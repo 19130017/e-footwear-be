@@ -1,12 +1,20 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.order;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonObject;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestStatusDto;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderResponseDto;
+
+import static vn.edu.hcmuaf.fit.efootwearspringboot.constants.Momo.*;
+
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.PaymentMethod;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.*;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_status.OrderStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
@@ -16,13 +24,15 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.CouponRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.DetailRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.OrderRepository;
 import vn.edu.hcmuaf.fit.efootwearspringboot.repositories.OrderStatusRepository;
+import vn.edu.hcmuaf.fit.efootwearspringboot.utils.Encoder;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.*;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -55,7 +65,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BaseResult createOrder(OrderRequestDto orderRequestDto) {
+    public BaseResult createOrderCOD(OrderRequestDto orderRequestDto) {
+        Order order = createOrder(orderRequestDto);
+        order.setPaymentMethod(PaymentMethod.COD);
+        OrderStatus orderStatus = orderStatusRepository.findByCode("SUCCESS").orElse(null);
+
+        if (orderStatus != null) {
+            order.setOrderStatus(orderStatus);
+        }
+
+        // save order
+        if (!ObjectUtils.isEmpty(orderRepository.save(order))) {
+            return BaseResult.success();
+        }
+        throw new InternalServerException("Không tạo mới đơn hàng!");
+    }
+
+    private Order createOrder(OrderRequestDto orderRequestDto) {
         Optional<OrderStatus> optional = orderStatusRepository.findByCode("CONFIRMATION");
         if (optional.isEmpty()) {
             throw new NotFoundException("Không tìm thấy dữ liệu!");
@@ -91,12 +117,7 @@ public class OrderServiceImpl implements OrderService {
                 throw new InternalServerException("Không thể cập nhật số lượng tồn kho của sản phẩm!");
             }
         }
-
-        // save order
-        if (!ObjectUtils.isEmpty(orderRepository.save(order))) {
-            return BaseResult.success();
-        }
-        throw new InternalServerException("Không tạo mới đơn hàng!");
+        return order;
     }
 
     @Override
@@ -174,5 +195,80 @@ public class OrderServiceImpl implements OrderService {
             throw new NotFoundException("Không tìm thấy đơn hàng nào!");
         }
         return DataResult.success(optional);
+    }
+
+    @Override
+    public DataResult createOrderMomo(OrderRequestDto orderRequestDto) throws NoSuchAlgorithmException, InvalidKeyException, IOException {
+
+        Order order = createOrder(orderRequestDto);
+        order.setPaymentMethod(PaymentMethod.MOMO);
+        OrderStatus orderStatus = orderStatusRepository.findByCode("PENDING").orElse(null);
+
+        if (orderStatus != null) {
+            order.setOrderStatus(orderStatus);
+        }
+        // save order
+        if (ObjectUtils.isEmpty(orderRepository.save(order))) {
+            throw new InternalServerException("Không tạo mới đơn hàng!");
+        }
+
+        String partnerCode = PARTNER_CODE;
+        String requestId = System.currentTimeMillis() + "";
+        Long amount = Long.valueOf(order.getCost());
+        String orderId = order.getId();
+        String orderInfo = "Thanh toán đơn hàng: " + orderId;
+        String redirectUrl = REDIRECT_URL;
+        String ipnUrl = IPN_URL;
+        String requestType = "captureWallet";
+        String extraData = "";
+        String lang = "vi";
+        String payload = "accessKey=" + ACCESS_KEY + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" +
+                ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode +
+                "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType;
+        String signature = Encoder.signHmacSHA256(payload, SECRET_KEY);
+
+        JsonObject json = new JsonObject();
+        json.addProperty("partnerCode", partnerCode);
+        json.addProperty("partnerName", order.getAddress().getFullName());
+        json.addProperty("requestType", requestType);
+        json.addProperty("ipnUrl", ipnUrl);
+        json.addProperty("redirectUrl", redirectUrl);
+        json.addProperty("orderId", orderId);
+        json.addProperty("amount", amount);
+        json.addProperty("lang", lang);
+        json.addProperty("autoCapture", true);
+        json.addProperty("orderInfo", orderInfo);
+        json.addProperty("requestId", requestId);
+        json.addProperty("extraData", extraData);
+        json.addProperty("signature", signature);
+
+        // response json
+        String response = Request.Post(ENDPOINT)
+                .bodyString(json.toString(), ContentType.APPLICATION_JSON.withCharset(StandardCharsets.UTF_8))
+                .execute().returnContent().asString(StandardCharsets.UTF_8);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (jsonElement, type, context)
+                        -> new Date(jsonElement.getAsJsonPrimitive().getAsLong()))
+                .create();
+        return DataResult.success(gson.fromJson(response, CaptureMoMoResponse.class));
+    }
+
+    @Override
+    public BaseResult updateStatusByCode(OrderRequestStatusDto orderRequestStatusDto) {
+        OrderStatus orderStatus = orderStatusRepository.findByCode(orderRequestStatusDto.getStatus().getCode()).orElse(null);
+        if (orderStatus == null) {
+            throw new NotFoundException("Không tìm thấy trạng thái đơn hàng!");
+        }
+
+        Order order = orderRepository.findByOrderId(orderRequestStatusDto.getId()).orElse(null);
+        if (order == null) {
+            throw new NotFoundException("Không tìm thấy đơn hàng!");
+        }
+
+        order.setOrderStatus(orderStatus);
+        if (ObjectUtils.isEmpty(orderRepository.save(order))) {
+            throw new InternalServerException("Không thể cập nhật trạng thái của đơn hàng!");
+        }
+        return BaseResult.success();
     }
 }

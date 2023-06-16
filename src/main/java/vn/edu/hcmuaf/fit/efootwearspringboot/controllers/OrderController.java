@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.CaptureMomoConfirmResponse;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.services.order.OrderService;
@@ -12,6 +13,10 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseError;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.response.HttpResponseSuccess;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("/orders")
@@ -51,10 +56,26 @@ public class OrderController {
 
     @PostMapping()
     public ResponseEntity<HttpResponse> createOrder(@RequestBody @Valid OrderRequestDto orderRequestDto) {
-        System.out.println(orderRequestDto);
-        BaseResult baseResult = orderService.createOrder(orderRequestDto);
+        BaseResult baseResult = orderService.createOrderCOD(orderRequestDto);
         return baseResult.getSuccess() ?
                 ResponseEntity.ok(HttpResponseSuccess.success("Đặt hàng thành công")) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
+    }
+
+
+    @PostMapping("/payment/momo")
+    public ResponseEntity<HttpResponse> createOrderMomo(@RequestBody @Valid OrderRequestDto orderRequestDto) throws NoSuchAlgorithmException, IOException, InvalidKeyException {
+        DataResult dataResult = orderService.createOrderMomo(orderRequestDto);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+    }
+
+    @PostMapping( "/payment/momo/success")
+    public ResponseEntity<HttpResponse> updateStatusOrderMomo(@RequestBody OrderRequestStatusDto orderRequestStatusDto) {
+        BaseResult baseResult = orderService.updateStatusByCode(orderRequestStatusDto);
+        return baseResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success()) :
                 ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
     }
 

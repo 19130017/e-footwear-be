@@ -79,8 +79,8 @@ public class SecurityConfiguration {
 //                 jwt authentication
                 .authenticationManager(authenticationManager(http))
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

@@ -28,4 +28,5 @@ public class OrderDto {
     private CouponDto coupon;
     private AccountDto account;
     private AddressDeliveryDto address;
+    private String paymentMethod;
 }

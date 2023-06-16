@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.CreationTimestamp;
+import vn.edu.hcmuaf.fit.efootwearspringboot.constants.PaymentMethod;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -33,6 +34,10 @@ public class Order implements Serializable {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "paymentMethod")
+    @Enumerated(value = EnumType.STRING)
+    private PaymentMethod paymentMethod;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
