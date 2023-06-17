@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.services.order;
 
+import jakarta.servlet.http.HttpServletRequest;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.OrderRequestStatusDto;
@@ -26,10 +27,14 @@ public interface OrderService {
     DataResult countOrder();
 
     DataResult listOrderHot();
+
     DataResult countByMonth();
+
     DataResult totalByMonth();
 
     DataResult createOrderMomo(OrderRequestDto orderRequestDto) throws NoSuchAlgorithmException, InvalidKeyException, IOException;
 
-    BaseResult updateStatusByCode(OrderRequestStatusDto orderRequestStatusDto);
+    DataResult updateStatusByCode(OrderRequestStatusDto orderRequestStatusDto);
+
+    DataResult createOrderVNPay(OrderRequestDto orderRequestDto, HttpServletRequest request) throws NoSuchAlgorithmException, InvalidKeyException;
 }

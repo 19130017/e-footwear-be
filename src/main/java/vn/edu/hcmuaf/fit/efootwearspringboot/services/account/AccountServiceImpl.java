@@ -333,11 +333,14 @@ public class AccountServiceImpl implements AccountService {
             }
             accountRepository.save(account);
         }
-
+        if (account.getCustomer().getAvatar().startsWith("https://scontent")) {
+            account.getCustomer().setAvatar(accountLoginFBRequestDto.getCustomer().getAvatar());
+        }
         AccountDomain accountDomain = (AccountDomain) loadUserByUsername(account.getEmail());
         String jwtToken = jwtService.generateToken(account, accountDomain.getAuthorities());
         String jwtRefreshToken = jwtService.refreshToken(account);
         account.setRefreshToken(jwtRefreshToken);
+
         if (!ObjectUtils.isEmpty(accountRepository.save(account))) {
             AccountLoginResponse response = AccountLoginResponse
                     .builder()

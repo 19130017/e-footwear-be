@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import static vn.edu.hcmuaf.fit.efootwearspringboot.constants.Momo.*;
+import static vn.edu.hcmuaf.fit.efootwearspringboot.constants.VNPay.*;
 
 import vn.edu.hcmuaf.fit.efootwearspringboot.constants.PaymentMethod;
 import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order.*;
-import vn.edu.hcmuaf.fit.efootwearspringboot.dto.order_status.OrderStatusDto;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.InternalServerException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.exception.NotFoundException;
 import vn.edu.hcmuaf.fit.efootwearspringboot.mapper.*;
@@ -29,9 +30,11 @@ import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.BaseResult;
 import vn.edu.hcmuaf.fit.efootwearspringboot.utils.result.DataResult;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -82,15 +85,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Order createOrder(OrderRequestDto orderRequestDto) {
-        Optional<OrderStatus> optional = orderStatusRepository.findByCode("CONFIRMATION");
-        if (optional.isEmpty()) {
-            throw new NotFoundException("Không tìm thấy dữ liệu!");
-        }
+//        Optional<OrderStatus> optional = orderStatusRepository.findByCode("CONFIRMATION");
+//        if (optional.isEmpty()) {
+//            throw new NotFoundException("Không tìm thấy dữ liệu!");
+//        }
 
         Order order = orderMapper.requestToEntity(orderRequestDto);
         String orderId = UUID.randomUUID().toString();
         order.setId(orderId);
-        order.setOrderStatus(optional.get());
+//        order.setOrderStatus(optional.get());
 
         // set order and update quantity detail
         for (OrderItem orderItem : order.getItems()) {
@@ -254,21 +257,100 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BaseResult updateStatusByCode(OrderRequestStatusDto orderRequestStatusDto) {
-        OrderStatus orderStatus = orderStatusRepository.findByCode(orderRequestStatusDto.getStatus().getCode()).orElse(null);
-        if (orderStatus == null) {
-            throw new NotFoundException("Không tìm thấy trạng thái đơn hàng!");
-        }
-
+    public DataResult updateStatusByCode(OrderRequestStatusDto orderRequestStatusDto) {
         Order order = orderRepository.findByOrderId(orderRequestStatusDto.getId()).orElse(null);
         if (order == null) {
             throw new NotFoundException("Không tìm thấy đơn hàng!");
+        }
+
+        if (!order.getOrderStatus().getCode().equals("PENDING")) {
+            return DataResult.success(orderMapper.toDto(order));
+        }
+
+        OrderStatus orderStatus = orderStatusRepository.findByCode(orderRequestStatusDto.getStatus().getCode()).orElse(null);
+        if (orderStatus == null) {
+            throw new NotFoundException("Không tìm thấy trạng thái đơn hàng!");
         }
 
         order.setOrderStatus(orderStatus);
         if (ObjectUtils.isEmpty(orderRepository.save(order))) {
             throw new InternalServerException("Không thể cập nhật trạng thái của đơn hàng!");
         }
-        return BaseResult.success();
+        return DataResult.success(orderMapper.toDto(order));
+    }
+
+    @Override
+    public DataResult createOrderVNPay(OrderRequestDto orderRequestDto, HttpServletRequest request) throws NoSuchAlgorithmException, InvalidKeyException {
+        Order order = createOrder(orderRequestDto);
+        order.setPaymentMethod(PaymentMethod.VN_PAY);
+        OrderStatus orderStatus = orderStatusRepository.findByCode("PENDING").orElse(null);
+
+        if (orderStatus != null) {
+            order.setOrderStatus(orderStatus);
+        }
+
+        // save order
+        if (ObjectUtils.isEmpty(orderRepository.save(order))) {
+            throw new InternalServerException("Không tạo mới đơn hàng!");
+        }
+
+        Map<String, String> vnp_Params = new HashMap<>();
+        vnp_Params.put("vnp_Version", vnp_Version);
+        vnp_Params.put("vnp_Command", vnp_Command);
+        vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
+        vnp_Params.put("vnp_Amount", String.valueOf(order.getCost() * 100));
+        vnp_Params.put("vnp_CurrCode", "VND");
+//        vnp_Params.put("vnp_BankCode", "VNBANK");
+        vnp_Params.put("vnp_TxnRef", order.getId());
+        vnp_Params.put("vnp_OrderInfo", order.getId());
+        vnp_Params.put("vnp_OrderType", vnp_OrderType);
+        vnp_Params.put("vnp_ReturnUrl", vnp_ReturnUrl);
+        vnp_Params.put("vnp_IpAddr", request.getLocalAddr());
+        vnp_Params.put("vnp_Locale", "vn");
+
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        String vnp_CreateDate = formatter.format(cld.getTime());
+        vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
+
+        cld.add(Calendar.MINUTE, 15);
+        String vnp_ExpireDate = formatter.format(cld.getTime());
+        //Add Params of 2.1.0 Version
+        vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
+        //Billing
+        vnp_Params.put("vnp_Inv_Email", order.getAddress().getEmail());
+        vnp_Params.put("vnp_Inv_Customer", order.getAddress().getFullName());
+
+
+        // Build data to hash and querystring
+        List<String> fieldNames = new ArrayList<>(vnp_Params.keySet());
+        Collections.sort(fieldNames);
+        StringBuilder hashData = new StringBuilder();
+        StringBuilder query = new StringBuilder();
+        Iterator<String> itr = fieldNames.iterator();
+        while (itr.hasNext()) {
+            String fieldName = itr.next();
+            String fieldValue = vnp_Params.get(fieldName);
+            if ((fieldValue != null) && (fieldValue.length() > 0)) {
+                //Build hash data
+                hashData.append(fieldName);
+                hashData.append('=');
+                hashData.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+
+                //Build query
+                query.append(URLEncoder.encode(fieldName, StandardCharsets.US_ASCII));
+                query.append('=');
+                query.append(URLEncoder.encode(fieldValue, StandardCharsets.US_ASCII));
+
+                if (itr.hasNext()) {
+                    query.append('&');
+                    hashData.append('&');
+                }
+            }
+        }
+        String queryUrl = query.toString();
+        String vnp_SecureHash = Encoder.signHmacSHA512(hashData.toString(), vnp_HashSecret);
+        String redirectUrl = vnp_Url + "?" + queryUrl + "&vnp_SecureHash=" + vnp_SecureHash;
+        return DataResult.success(redirectUrl);
     }
 }

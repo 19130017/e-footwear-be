@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.efootwearspringboot.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -71,12 +72,20 @@ public class OrderController {
                 ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
-    @PostMapping( "/payment/momo/success")
+    @PostMapping("/payment/vn-pay")
+    public ResponseEntity<HttpResponse> createOrderVNPay(@RequestBody OrderRequestDto orderRequestDto, HttpServletRequest request) throws NoSuchAlgorithmException, InvalidKeyException {
+        DataResult dataResult = orderService.createOrderVNPay(orderRequestDto, request);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
+    }
+
+    @PostMapping("/payment/success")
     public ResponseEntity<HttpResponse> updateStatusOrderMomo(@RequestBody OrderRequestStatusDto orderRequestStatusDto) {
-        BaseResult baseResult = orderService.updateStatusByCode(orderRequestStatusDto);
-        return baseResult.getSuccess() ?
-                ResponseEntity.ok(HttpResponseSuccess.success()) :
-                ResponseEntity.badRequest().body(HttpResponseError.error(baseResult.getHttpStatus(), baseResult.getMessage()));
+        DataResult dataResult = orderService.updateStatusByCode(orderRequestStatusDto);
+        return dataResult.getSuccess() ?
+                ResponseEntity.ok(HttpResponseSuccess.success(dataResult.getData())) :
+                ResponseEntity.badRequest().body(HttpResponseError.error(dataResult.getHttpStatus(), dataResult.getMessage()));
     }
 
     @PutMapping()
