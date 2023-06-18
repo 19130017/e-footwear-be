@@ -90,8 +90,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public DataResult findProducts(String query) {
-        Optional<List<Product>> optional = productRepository.findProductsByName("%"+query+"%");
+        Optional<List<Product>> optional = productRepository.findProductsByName("%" + query + "%");
         if (optional.isEmpty()) throw new NotFoundException("Không tìm thấy dữ liệu");
+        setCounter(optional.get());
         return DataResult.success(productMapper.toSlimDtos(optional.get()));
     }
 
