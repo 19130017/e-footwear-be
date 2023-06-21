@@ -8,7 +8,7 @@ public class QUERY {
     }
 
     public static class ORDER {
-        public static final String FIND_ORDERS_BY_ACCOUNT_ID = "select * from orders where account_id=?";
+        public static final String FIND_ORDERS_BY_ACCOUNT_ID = "select * from orders where account_id=? order by order_time desc";
 
         public static final String FIND_ORDER_BY_ID = "select * from orders where id=?";
         public static final String FIND_ORDERS_HOT = "select * from orders order by order_time desc limit 3";
