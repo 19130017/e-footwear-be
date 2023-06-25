@@ -256,7 +256,7 @@ public class AccountServiceImpl implements AccountService {
             String result = "";
             // xoa anh
             String avatarUrl = account.getCustomer().getAvatar();
-            if (avatarUrl.startsWith("http://res.cloudinary.com")) {
+            if (avatarUrl != null && avatarUrl.startsWith("http://res.cloudinary.com")) {
                 publicId = account.getCustomer().getAvatar().substring(account.getCustomer().getAvatar().lastIndexOf("/") + 1, account.getCustomer().getAvatar().lastIndexOf("."));
                 result = cloudinaryService.destroy(publicId);
             }
